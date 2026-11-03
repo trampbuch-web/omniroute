@@ -1,8 +1,9 @@
-// Step 1 of 2: voices the subtitles of hook-sleva-animation.html with RHVoice, adds a generated
+// Step 1 of 2: voices the subtitles of <episode>-animation.html with RHVoice, adds a generated
 // music bed (ducked under speech) and a gong, and writes:
-//   hook-sleva-audio.m4a  — final soundtrack
-//   timing.json           — time map that stretches the animation to the real voiceover
-// Step 2: node video-scripts/render-animation.mjs (renders frames with timing.json, muxes the audio)
+//   <episode>-audio.m4a   — final soundtrack
+//   <episode>-timing.json — time map that stretches the animation to the real voiceover
+// Step 2: node video-scripts/render-animation.mjs (renders frames with the time map, muxes the audio)
+// Episode: EPISODE=midterms node video-scripts/add-audio.mjs (default: hook-sleva)
 // Needs: apt-get install rhvoice rhvoice-russian ffmpeg
 // Usage: node video-scripts/add-audio.mjs [host-voice] [quote-voice] [rate%]
 import { execFileSync } from "node:child_process";
@@ -17,12 +18,14 @@ const quoteVoice = process.argv[3] || "yuriy";
 const rate = process.argv[4] || "145";
 const tmp = mkdtempSync(path.join(tmpdir(), "hook-audio-"));
 const PAD = 0.35; // breath after each line
-const GONG_OLD_T = 78; // gong moment in the original (unstretched) layout
+const ep = process.env.EPISODE || "hook-sleva";
 
 // SUBS in the HTML is the single source of truth for text and layout timing
-const html = readFileSync(path.join(dir, "hook-sleva-animation.html"), "utf8");
+const html = readFileSync(path.join(dir, `${ep}-animation.html`), "utf8");
 const subs = JSON.parse(html.match(/const SUBS = (\[[\s\S]*?\]);/)[1].replace(/,(\s*\])/g, "$1"));
 const oldDuration = Number(html.match(/const DURATION = (\d+)/)[1]);
+// gong moment in the unstretched layout; HTML may override with `const GONG_T = …`
+const gongOldT = Number(html.match(/const GONG_T = ([\d.]+)/)?.[1] ?? 78);
 
 const probe = (f) =>
   Number(
@@ -75,7 +78,7 @@ const fromOld = (o) => {
   const [n1, o1] = map[i];
   return n0 + ((o - o0) / (o1 - o0)) * (n1 - n0);
 };
-writeFileSync(path.join(dir, "timing.json"), JSON.stringify(map));
+writeFileSync(path.join(dir, `${ep}-timing.json`), JSON.stringify(map));
 
 // 3. generated music bed: Am–F–C–G pad + bass, kick on beats, hats on offbeats, 8th-note arp
 const BEAT = 0.6;
@@ -118,7 +121,7 @@ execFileSync("ffmpeg", [
 ]);
 
 // 4. mix: voice lines at their new starts, music ducked under the voice, gong on the final hit
-const gongAt = fromOld(GONG_OLD_T);
+const gongAt = fromOld(gongOldT);
 const inputs = ["-i", music, ...lines.flatMap((l) => ["-i", l.wav])];
 const f = lines.map(
   (l, i) =>
@@ -131,7 +134,7 @@ f.push(
   `aevalsrc='0.7*sin(2*PI*98*t)*exp(-1.5*t)+0.4*sin(2*PI*231*t)*exp(-2.5*t)+0.25*sin(2*PI*412*t)*exp(-4*t)':s=48000:d=2.5,adelay=${Math.round(gongAt * 1000)}:all=1[gong]`,
   `[voice][duck][gong]amix=inputs=3:normalize=0:duration=longest,alimiter=limit=0.95[a]`
 );
-const out = path.join(dir, "hook-sleva-audio.m4a");
+const out = path.join(dir, `${ep}-audio.m4a`);
 execFileSync("ffmpeg", [
   "-y",
   "-v",
@@ -149,4 +152,4 @@ execFileSync("ffmpeg", [
   duration.toFixed(2),
   out,
 ]);
-console.log(`soundtrack: ${out} (${duration.toFixed(1)} s), timing.json written`);
+console.log(`soundtrack: ${out} (${duration.toFixed(1)} s), ${ep}-timing.json written`);
