@@ -77,7 +77,6 @@
       <path d="M402 680 L418 648 L432 676 L446 652 L460 676 Z" fill="#e3262f" />
       <!-- значок на лацкане -->
       <circle cx="232" cy="662" r="13" fill="#e3262f" stroke="#ffd36b" stroke-width="3" />
-      <text x="232" y="666.5" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="900" fill="#ffd36b">ХС</text>
       <!-- петличный микрофон -->
       <path d="M352 612 Q356 640 340 680" stroke="#111" stroke-width="3" fill="none" />
       <rect x="344" y="598" width="16" height="26" rx="7" fill="#0b0b0b" />
