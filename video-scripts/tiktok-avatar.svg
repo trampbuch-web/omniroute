@@ -179,9 +179,8 @@
 
     <!-- нижняя плашка с названием -->
     <path d="M0 900 H1080 V1080 H0 Z" fill="#0b0f1a" opacity="0.45" />
-    <rect x="280" y="858" width="520" height="122" fill="#e3262f" />
-    <text x="540" y="914" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="52" font-weight="900" fill="#fff" letter-spacing="4">ХУК СЛЕВА</text>
-    <text x="540" y="960" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#ffffff" letter-spacing="5">ТИМОФЕЙ БЕСПАРТИЙНЫЙ</text>
+    <rect x="230" y="878" width="620" height="76" fill="#e3262f" />
+    <text x="540" y="927" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="30" font-weight="700" fill="#ffffff" letter-spacing="2">ТИМОФЕЙ БЕСПАРТИЙНЫЙ</text>
 
     <!-- кольцо -->
     <circle cx="540" cy="540" r="528" fill="none" stroke="#e3262f" stroke-width="16" />
