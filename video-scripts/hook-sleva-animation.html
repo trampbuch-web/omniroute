@@ -1,0 +1,581 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Хук слева — анимация</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --red: #e3262f;
+        --text: #f4f4f4;
+        --muted: #9aa3b5;
+      }
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: var(--bg);
+      }
+      body {
+        font-family: "DejaVu Sans", Arial, sans-serif;
+        color: var(--text);
+        position: relative;
+      }
+      .studio {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(ellipse 700px 800px at 380px 620px, #1d2b4f 0%, transparent 70%),
+          linear-gradient(180deg, #0b0f1a 0%, #111a30 100%);
+      }
+      .grid {
+        position: absolute;
+        inset: 0;
+        opacity: 0.05;
+        background-image:
+          linear-gradient(#fff 1px, transparent 1px),
+          linear-gradient(90deg, #fff 1px, transparent 1px);
+        background-size: 80px 80px;
+      }
+      .bgcorner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-top: 300px solid var(--red);
+        border-right: 300px solid transparent;
+      }
+      .bug {
+        position: absolute;
+        right: 60px;
+        top: 50px;
+        font-weight: 900;
+        font-size: 34px;
+        letter-spacing: 2px;
+      }
+      .bug b,
+      h1 b,
+      h2 b,
+      .hl {
+        color: var(--red);
+      }
+      #host {
+        position: absolute;
+        left: 60px;
+        bottom: 0;
+        width: 640px;
+        height: 960px;
+      }
+      .panel {
+        position: absolute;
+        left: 790px;
+        right: 90px;
+        top: 150px;
+        bottom: 210px;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        opacity: 0;
+      }
+      .el {
+        opacity: 0;
+      }
+      h1 {
+        font-size: 120px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        line-height: 1;
+      }
+      h2 {
+        font-size: 60px;
+        font-weight: 900;
+        margin-bottom: 30px;
+        line-height: 1.15;
+      }
+      .tag {
+        display: inline-block;
+        background: var(--red);
+        padding: 8px 20px;
+        font-size: 26px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 30px;
+        align-self: flex-start;
+      }
+      .big {
+        font-size: 42px;
+        line-height: 1.3;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .item {
+        font-size: 40px;
+        margin: 14px 0;
+        display: flex;
+        align-items: flex-start;
+        line-height: 1.25;
+      }
+      .item .n {
+        color: var(--red);
+        font-weight: 900;
+        min-width: 80px;
+      }
+      .bars .row {
+        display: flex;
+        align-items: center;
+        margin: 20px 0;
+        font-size: 34px;
+      }
+      .bars .lbl {
+        width: 220px;
+        color: var(--muted);
+      }
+      .bars .bar {
+        height: 56px;
+        background: var(--red);
+        width: 0;
+      }
+      .bars .val {
+        margin-left: 20px;
+        font-weight: 900;
+        font-size: 40px;
+        white-space: nowrap;
+      }
+      .quote {
+        border-left: 10px solid var(--red);
+        padding-left: 36px;
+        font-size: 54px;
+        font-weight: 700;
+        line-height: 1.25;
+      }
+      .loss {
+        display: flex;
+        gap: 60px;
+        margin-top: 20px;
+      }
+      .loss div {
+        font-size: 72px;
+        font-weight: 900;
+        color: var(--red);
+      }
+      .loss span {
+        display: block;
+        font-size: 32px;
+        color: var(--muted);
+        font-weight: 400;
+      }
+      .lower {
+        position: absolute;
+        left: 60px;
+        bottom: 120px;
+        background: var(--red);
+        padding: 14px 30px;
+        opacity: 0;
+      }
+      .lower b {
+        display: block;
+        font-size: 40px;
+      }
+      .lower span {
+        font-size: 24px;
+        letter-spacing: 2px;
+      }
+      .sub {
+        position: absolute;
+        left: 790px;
+        right: 90px;
+        bottom: 50px;
+        font-size: 32px;
+        text-shadow: 0 2px 8px #000;
+      }
+      .sub span {
+        background: rgba(0, 0, 0, 0.6);
+        padding: 6px 16px;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        line-height: 1.6;
+      }
+      svg text {
+        font-family: "DejaVu Sans", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="studio"></div>
+    <div class="grid"></div>
+    <div class="bgcorner" id="corner"></div>
+    <div class="bug">ХУК <b>СЛЕВА</b></div>
+
+    <!-- Ведущий: стилизованный персонаж по описанию из промта (не фотореалистичная копия человека) -->
+    <svg id="host" viewBox="0 0 600 900">
+      <g id="body">
+        <path
+          d="M40 900 L70 650 Q90 585 215 560 L385 560 Q510 585 530 650 L560 900 Z"
+          fill="#141519"
+        />
+        <path d="M232 560 L300 760 L368 560 Z" fill="#f5f5f5" />
+        <path d="M232 560 L268 640 L300 600 Z M368 560 L332 640 L300 600 Z" fill="#e4e4e4" />
+        <path d="M215 560 L300 800 L250 900 L150 900 L180 640 Z" fill="#1d1e24" />
+        <path d="M385 560 L300 800 L350 900 L450 900 L420 640 Z" fill="#1d1e24" />
+        <circle cx="300" cy="690" r="6" fill="#2a3a6a" />
+      </g>
+      <rect x="262" y="470" width="76" height="105" fill="#e6bea2" />
+      <g id="head">
+        <ellipse cx="180" cy="375" rx="20" ry="32" fill="#e8c0a4" />
+        <ellipse cx="420" cy="375" rx="20" ry="32" fill="#e8c0a4" />
+        <ellipse cx="300" cy="360" rx="122" ry="150" fill="#f0c9ad" />
+        <path
+          d="M165 400 Q140 230 235 185 Q300 155 370 185 Q470 225 438 400 Q432 330 410 300
+             Q395 330 360 318 Q340 335 300 322 Q270 340 240 320 Q210 335 192 305 Q172 330 165 400 Z"
+          fill="#d6ae68"
+        />
+        <path
+          d="M195 310 Q230 250 265 325 M262 322 Q300 250 330 322 M330 318 Q370 255 400 305"
+          fill="none"
+          stroke="#b8924f"
+          stroke-width="5"
+        />
+        <g id="eyes">
+          <ellipse id="eyeL" cx="248" cy="358" rx="8" ry="8" fill="#2b2b2b" />
+          <ellipse id="eyeR" cx="352" cy="358" rx="8" ry="8" fill="#2b2b2b" />
+        </g>
+        <rect
+          x="200"
+          y="328"
+          width="92"
+          height="64"
+          rx="10"
+          fill="rgba(255,255,255,0.07)"
+          stroke="#0d0d0d"
+          stroke-width="11"
+        />
+        <rect
+          x="308"
+          y="328"
+          width="92"
+          height="64"
+          rx="10"
+          fill="rgba(255,255,255,0.07)"
+          stroke="#0d0d0d"
+          stroke-width="11"
+        />
+        <path d="M292 352 L308 352" stroke="#0d0d0d" stroke-width="9" />
+        <path
+          d="M300 385 Q292 410 300 418 Q308 420 314 414"
+          fill="none"
+          stroke="#c99a7e"
+          stroke-width="5"
+        />
+        <ellipse id="mouth" cx="300" cy="452" rx="28" ry="3" fill="#7a2e2e" />
+      </g>
+    </svg>
+
+    <div class="lower" id="lower"><b>Никита Попов</b><span>ВЕДУЩИЙ · «ХУК СЛЕВА»</span></div>
+
+    <!-- data-s / data-e: начало/конец сцены (с); data-d: задержка элемента внутри сцены (с) -->
+    <div class="panel">
+      <div class="scene" data-s="0" data-e="6">
+        <h1 class="el" data-d="0.2">ХУК<br /><b>СЛЕВА</b></h1>
+        <div class="big muted el" data-d="1.4" style="margin-top: 36px">Политика без глянца</div>
+      </div>
+
+      <div class="scene" data-s="6" data-e="13">
+        <div class="tag el" data-d="0">СЕГОДНЯ В ВЫПУСКЕ</div>
+        <div class="item el" data-d="0.8"><span class="n">01</span>Дизельная сделка с Трампом</div>
+        <div class="item el" data-d="2.2"><span class="n">02</span>Мирный план Запада</div>
+        <div class="item el" data-d="3.6">
+          <span class="n">03</span>Экономика, которой сделки не помогают
+        </div>
+      </div>
+
+      <div class="scene" data-s="13" data-e="20">
+        <div class="tag el" data-d="0">ДИЗЕЛЬ</div>
+        <h2 class="el" data-d="0.5">Запрет на экспорт <b>частично снят</b></h2>
+        <div class="big muted el" data-d="1.6">
+          После разговора Путина и Трампа — распоряжение правительства
+        </div>
+      </div>
+
+      <div class="scene" data-s="20" data-e="25">
+        <div class="tag el" data-d="0">ТРАМП ОБЕЩАЕТ</div>
+        <div class="bars">
+          <div class="row el" data-d="0.3">
+            <span class="lbl">Немедленно</span><span class="bar" data-w="170" data-d="0.4"></span
+            ><span class="val">300 тыс. т</span>
+          </div>
+          <div class="row el" data-d="1.1">
+            <span class="lbl">В ноябре</span><span class="bar" data-w="280" data-d="1.2"></span
+            ><span class="val">500 тыс. т</span>
+          </div>
+          <div class="row el" data-d="1.9">
+            <span class="lbl">Затем</span><span class="bar" data-w="560" data-d="2.0"></span
+            ><span class="val">1 млн т</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene" data-s="25" data-e="35">
+        <div class="tag el" data-d="0">ДМИТРИЕВ → МАСКУ</div>
+        <svg class="el" data-d="0.3" width="1000" height="420" viewBox="0 0 1560 650">
+          <path
+            d="M40 120 C 200 60, 420 80, 520 180 S 600 420, 470 470"
+            fill="none"
+            stroke="#9aa3b5"
+            stroke-width="7"
+          />
+          <path
+            d="M1520 140 C 1340 90, 1150 110, 1080 220 S 1010 420, 1140 480"
+            fill="none"
+            stroke="#9aa3b5"
+            stroke-width="7"
+          />
+          <text x="150" y="270" fill="#f4f4f4" font-size="60" font-weight="700">Камчатка</text>
+          <text x="1170" y="320" fill="#f4f4f4" font-size="60" font-weight="700">Аляска</text>
+          <path
+            id="tunnel"
+            d="M520 250 Q 800 380 1080 250"
+            fill="none"
+            stroke="#e3262f"
+            stroke-width="16"
+            stroke-dasharray="620"
+            stroke-dashoffset="620"
+            data-d="1.0"
+            data-dur="3"
+          />
+          <text
+            x="400"
+            y="560"
+            fill="#e3262f"
+            font-size="66"
+            font-weight="900"
+            class="el"
+            data-d="3.8"
+          >
+            Тоннель «Путин — Трамп»
+          </text>
+        </svg>
+      </div>
+
+      <div class="scene" data-s="35" data-e="52">
+        <div class="tag el" data-d="0">МИРНЫЙ ПЛАН · WASHINGTON POST</div>
+        <div class="item el" data-d="1.0">
+          <span class="n">1</span>Восстановление Украины: Всемирный банк и BlackRock
+        </div>
+        <div class="item el" data-d="5.0">
+          <span class="n">2</span>Гарантии по образцу 5-й статьи НАТО
+        </div>
+        <div class="item el" data-d="9.0">
+          <span class="n">3</span>Энергетическая интеграция России, Украины и Европы
+        </div>
+        <div class="item el" data-d="13.0">
+          <span class="n">4</span>Заморозка по нынешней линии фронта
+        </div>
+      </div>
+
+      <div class="scene" data-s="52" data-e="57">
+        <div class="tag el" data-d="0">ПОЧЕМУ ЭТО ВАЖНО</div>
+        <h2 class="el" data-d="0.4">Экспортная пошлина на дизель: <b>0</b></h2>
+        <div class="big muted el" data-d="1.6">
+          С 2023 года экспортёры могут держать выручку за рубежом
+        </div>
+      </div>
+
+      <div class="scene" data-s="57" data-e="61.5">
+        <div class="tag el" data-d="0">ПРОГНОЗ СТАВКИ · ОПРОС БАНКА РОССИИ</div>
+        <div class="bars">
+          <div class="row el" data-d="0.2">
+            <span class="lbl">2026</span><span class="bar" data-w="560" data-d="0.3"></span
+            ><span class="val">14,6%</span>
+          </div>
+          <div class="row el" data-d="0.6">
+            <span class="lbl">2027</span><span class="bar" data-w="491" data-d="0.7"></span
+            ><span class="val">12,8%</span>
+          </div>
+          <div class="row el" data-d="1.0">
+            <span class="lbl">2028</span><span class="bar" data-w="422" data-d="1.1"></span
+            ><span class="val">≈11%</span>
+          </div>
+          <div class="row el" data-d="1.4">
+            <span class="lbl">2029</span><span class="bar" data-w="353" data-d="1.5"></span
+            ><span class="val">&gt;9%</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="scene" data-s="61.5" data-e="65.5">
+        <div class="tag el" data-d="0">РОССТАТ: 11 ОТРАСЛЕЙ В МИНУСЕ</div>
+        <div class="loss">
+          <div class="el" data-d="0.4">−269 млрд ₽<span>металлургия</span></div>
+          <div class="el" data-d="1.2">−178 млрд ₽<span>добыча угля</span></div>
+        </div>
+      </div>
+
+      <div class="scene" data-s="65.5" data-e="72">
+        <div class="quote el" data-d="0.3">
+          Сделки обогащают немногих,<br />а платит за них <span class="hl">вся страна</span>.
+        </div>
+      </div>
+
+      <div class="scene" data-s="72" data-e="80">
+        <div class="big el" data-d="0.2">
+          Торговать можно —<br />выигрывать должна <span class="hl">страна</span>.
+        </div>
+        <h1 class="el" data-d="4.5" style="margin-top: 50px; font-size: 100px">ХУК <b>СЛЕВА</b></h1>
+        <div class="big muted el" data-d="5.2" style="margin-top: 20px">
+          До новых встреч, друзья
+        </div>
+      </div>
+    </div>
+
+    <div class="sub" id="sub"></div>
+
+    <script>
+      // [начало, конец, текст, говорит_ведущий] — текст суфлёра из hook-sleva-diesel.md
+      const SUBS = [
+        [
+          0.3,
+          6,
+          "Здравствуйте, друзья. В эфире «Хук слева», в красном углу ринга — Никита Попов.",
+          1,
+        ],
+        [
+          6,
+          13,
+          "Сегодня у нас три темы: дизельная сделка с Трампом, мирный план Запада и экономика, которой эти сделки почему-то не помогают.",
+          1,
+        ],
+        [
+          13,
+          20,
+          "Начнём с дизеля. После разговора Путина и Трампа правительство моментально частично сняло запрет на экспорт.",
+          1,
+        ],
+        [
+          20,
+          25,
+          "Трамп: «…более 300 000 тонн немедленно, ещё 500 000 в течение ноября и 1 млн тонн сразу после этого».",
+          0,
+        ],
+        [
+          25,
+          31,
+          "Дальше — больше. Кирилл Дмитриев предлагает Илону Маску прорыть тоннель с Камчатки на Аляску.",
+          1,
+        ],
+        [35, 43, "Тем временем Washington Post опубликовала мирный план США и Европы.", 1],
+        [
+          43,
+          52,
+          "Восстановлением Украины займутся Всемирный банк и BlackRock, Киеву обещают гарантии по образцу пятой статьи НАТО, а войну предлагают заморозить по нынешней линии фронта.",
+          1,
+        ],
+        [
+          52,
+          57,
+          "Почему это важно? Экспортной пошлины на дизель нет, а с 2023 года экспортёры могут держать выручку за рубежом.",
+          1,
+        ],
+        [57, 61.5, "А внутри страны ЦБ сам прогнозирует высокую ставку до 2029 года.", 1],
+        [
+          61.5,
+          65.5,
+          "По Росстату, 11 крупнейших отраслей ушли в минус: металлургия потеряла 269 миллиардов рублей, угольщики — 178.",
+          1,
+        ],
+        [65.5, 72, "Сделки обогащают немногих, а платит за них вся страна.", 1],
+        [
+          72,
+          76.5,
+          "Итог простой: торговать можно, но выигрывать должна страна, а не отдельные кошельки.",
+          1,
+        ],
+        [76.5, 80, "Такой хук слева мы провели сегодня. До новых встреч, друзья.", 1],
+      ];
+      const DURATION = 80,
+        FADE = 0.4,
+        IN = 0.6;
+      const clamp = (x) => Math.max(0, Math.min(1, x));
+      const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+      const $ = (id) => document.getElementById(id);
+      const scenes = [...document.querySelectorAll(".scene")];
+
+      function render(t) {
+        for (const sc of scenes) {
+          const s = +sc.dataset.s,
+            e = +sc.dataset.e;
+          const vis = clamp((t - s) / FADE) * clamp((e - t) / FADE);
+          sc.style.opacity = vis;
+          if (!vis) continue;
+          const lt = t - s;
+          sc.querySelectorAll(".el").forEach((el) => {
+            const p = ease((lt - +el.dataset.d) / IN);
+            el.style.opacity = p;
+            el.style.transform = `translateY(${(1 - p) * 40}px)`;
+          });
+          sc.querySelectorAll(".bar").forEach((b) => {
+            b.style.width = ease((lt - +b.dataset.d) / 1.2) * +b.dataset.w + "px";
+          });
+          sc.querySelectorAll("#tunnel").forEach((p) => {
+            p.style.strokeDashoffset = 620 * (1 - ease((lt - +p.dataset.d) / +p.dataset.dur));
+          });
+        }
+
+        const cur = SUBS.find(([a, b]) => t >= a && t < b);
+        const speaking = cur && cur[3];
+        // рот: «слоговой» ритм из двух синусов, пока ведущий говорит
+        $("mouth").setAttribute(
+          "ry",
+          speaking ? 3 + 13 * Math.abs(Math.sin(t * 13) * Math.sin(t * 4.7)) : 3
+        );
+        // моргание раз в ~3.7 с
+        const blink = t % 3.7 < 0.12 ? 1 : 8;
+        $("eyeL").setAttribute("ry", blink);
+        $("eyeR").setAttribute("ry", blink);
+        // лёгкое покачивание головы и дыхание
+        const nod = speaking ? Math.sin(t * 2.1) * 2.2 : Math.sin(t * 0.8) * 0.8;
+        $("head").setAttribute("transform", `rotate(${nod} 300 480)`);
+        $("body").setAttribute("transform", `translate(0 ${Math.sin(t * 1.6) * 2})`);
+        // плашка с именем: 1–6 с
+        $("lower").style.opacity = clamp((t - 1) / FADE) * clamp((6 - t) / FADE);
+        // ведущий уходит в тень на время синхрона Трампа
+        $("host").style.opacity = t > 20 && t < 25 ? 0.45 : 1;
+
+        // удар гонга на 78 с
+        const g = t - 78;
+        const hit = g > 0 && g < 0.6;
+        document.body.style.transform = `translateX(${hit ? Math.sin(g * 60) * 14 * (1 - g / 0.6) : 0}px)`;
+        $("corner").style.filter = hit ? "brightness(1.4)" : "none";
+
+        const txt = cur ? cur[2] : "";
+        const sub = $("sub");
+        if (sub.dataset.txt !== txt) {
+          sub.dataset.txt = txt;
+          sub.innerHTML = txt ? `<span>${txt}</span>` : "";
+        }
+      }
+      window.render = render;
+      window.DURATION = DURATION;
+
+      // в браузере крутится по кругу; ?capture отключает, кадры задаёт рендер-скрипт
+      if (!location.search.includes("capture")) {
+        const t0 = performance.now();
+        const loop = () => {
+          render(((performance.now() - t0) / 1000) % DURATION);
+          requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    </script>
+  </body>
+</html>
