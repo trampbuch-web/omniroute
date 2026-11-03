@@ -1,0 +1,190 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1080" height="1080" viewBox="0 0 1080 1080">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="42%" r="65%">
+      <stop offset="0" stop-color="#26396a" />
+      <stop offset="0.55" stop-color="#121a33" />
+      <stop offset="1" stop-color="#090c16" />
+    </radialGradient>
+    <radialGradient id="skin" cx="45%" cy="38%" r="70%">
+      <stop offset="0" stop-color="#f8d9c0" />
+      <stop offset="0.7" stop-color="#eec5a6" />
+      <stop offset="1" stop-color="#d9a98a" />
+    </radialGradient>
+    <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#f0cf8c" />
+      <stop offset="0.6" stop-color="#d8ae68" />
+      <stop offset="1" stop-color="#b98d4c" />
+    </linearGradient>
+    <linearGradient id="blazer" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2a2c34" />
+      <stop offset="1" stop-color="#0d0e12" />
+    </linearGradient>
+    <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#ffffff" />
+      <stop offset="1" stop-color="#dfe3ea" />
+    </linearGradient>
+    <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#ffffff" stop-opacity="0.22" />
+      <stop offset="0.5" stop-color="#bcd4ff" stop-opacity="0.06" />
+      <stop offset="1" stop-color="#ffffff" stop-opacity="0.12" />
+    </linearGradient>
+    <pattern id="grid" width="36" height="36" patternUnits="userSpaceOnUse">
+      <path d="M36 0H0V36" fill="none" stroke="#ffffff" stroke-opacity="0.05" stroke-width="1" />
+    </pattern>
+    <clipPath id="round"><circle cx="540" cy="540" r="540" /></clipPath>
+  </defs>
+
+  <rect width="1080" height="1080" fill="#090c16" />
+  <g clip-path="url(#round)">
+    <!-- фон студии -->
+    <rect width="1080" height="1080" fill="url(#bg)" />
+    <rect width="1080" height="1080" fill="url(#grid)" />
+    <g fill="#ffffff">
+      <circle cx="170" cy="300" r="26" opacity="0.05" />
+      <circle cx="905" cy="260" r="38" opacity="0.05" />
+      <circle cx="860" cy="430" r="14" opacity="0.08" />
+      <circle cx="230" cy="470" r="10" opacity="0.08" />
+      <circle cx="790" cy="160" r="8" opacity="0.1" />
+      <circle cx="300" cy="150" r="6" opacity="0.1" />
+    </g>
+
+    <!-- ведущий: та же геометрия, что в анимации (viewBox 600×900), с деталями -->
+    <g transform="translate(135 -5) scale(1.35)">
+      <!-- тень за фигурой -->
+      <ellipse cx="300" cy="640" rx="290" ry="90" fill="#000" opacity="0.25" />
+
+      <g transform="translate(0 -45)">
+      <!-- пиджак -->
+      <path d="M40 900 L70 650 Q90 585 215 560 L385 560 Q510 585 530 650 L560 900 Z" fill="url(#blazer)" />
+      <!-- рубашка -->
+      <path d="M232 560 L300 790 L368 560 Z" fill="url(#shirt)" />
+      <path d="M300 600 L300 790" stroke="#c9ced8" stroke-width="2" />
+      <circle cx="300" cy="655" r="5" fill="#f4f4f4" stroke="#b9bec8" stroke-width="2" />
+      <circle cx="300" cy="715" r="5" fill="#f4f4f4" stroke="#b9bec8" stroke-width="2" />
+      <!-- воротник -->
+      <path d="M232 560 L262 648 L300 598 Z" fill="#eef1f5" stroke="#c9ced8" stroke-width="2" />
+      <path d="M368 560 L338 648 L300 598 Z" fill="#eef1f5" stroke="#c9ced8" stroke-width="2" />
+      <path d="M262 648 L300 598 L338 648" fill="none" stroke="#000" stroke-opacity="0.08" stroke-width="6" />
+      <!-- лацканы со строчкой -->
+      <path d="M215 560 L300 820 L250 900 L150 900 L180 640 Z" fill="#1c1d23" />
+      <path d="M385 560 L300 820 L350 900 L450 900 L420 640 Z" fill="#1c1d23" />
+      <path d="M222 580 L292 805" stroke="#4a4d58" stroke-width="2" stroke-dasharray="5 7" fill="none" />
+      <path d="M378 580 L308 805" stroke="#4a4d58" stroke-width="2" stroke-dasharray="5 7" fill="none" />
+      <path d="M190 650 L215 560" stroke="#000" stroke-opacity="0.35" stroke-width="4" />
+      <path d="M410 650 L385 560" stroke="#000" stroke-opacity="0.35" stroke-width="4" />
+      <!-- нагрудный карман и красный платок -->
+      <path d="M392 680 L470 674" stroke="#3a3c45" stroke-width="4" />
+      <path d="M402 680 L418 648 L432 676 L446 652 L460 676 Z" fill="#e3262f" />
+      <!-- значок на лацкане -->
+      <circle cx="232" cy="662" r="13" fill="#e3262f" stroke="#ffd36b" stroke-width="3" />
+      <text x="232" y="666.5" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="11" font-weight="900" fill="#ffd36b">ХС</text>
+      <!-- петличный микрофон -->
+      <path d="M352 612 Q356 640 340 680" stroke="#111" stroke-width="3" fill="none" />
+      <rect x="344" y="598" width="16" height="26" rx="7" fill="#0b0b0b" />
+      <rect x="341" y="618" width="22" height="7" rx="2" fill="#555a66" />
+      <!-- пуговица пиджака -->
+      <circle cx="300" cy="852" r="9" fill="#0b0b0d" stroke="#3a3c45" stroke-width="2" />
+
+      </g>
+      <!-- шея -->
+      <rect x="262" y="465" width="76" height="70" fill="#e6bea2" />
+      <path d="M262 495 Q300 525 338 495 L338 465 L262 465 Z" fill="#c99a7e" opacity="0.55" />
+
+      <g>
+        <!-- уши -->
+        <ellipse cx="180" cy="375" rx="21" ry="33" fill="#e8bfa2" />
+        <ellipse cx="420" cy="375" rx="21" ry="33" fill="#e8bfa2" />
+        <path d="M184 356 Q170 375 186 396" stroke="#c4927a" stroke-width="4" fill="none" />
+        <path d="M416 356 Q430 375 414 396" stroke="#c4927a" stroke-width="4" fill="none" />
+
+        <!-- лицо -->
+        <ellipse cx="300" cy="360" rx="122" ry="150" fill="url(#skin)" />
+        <path d="M195 430 Q230 505 300 512 Q370 505 405 430 Q380 490 300 496 Q220 490 195 430 Z" fill="#c9957a" opacity="0.35" />
+        <ellipse cx="228" cy="430" rx="26" ry="14" fill="#f29b8f" opacity="0.22" />
+        <ellipse cx="372" cy="430" rx="26" ry="14" fill="#f29b8f" opacity="0.22" />
+        <circle cx="388" cy="470" r="2.5" fill="#b07a62" opacity="0.6" />
+
+        <!-- брови -->
+        <path d="M218 318 Q248 304 280 314" stroke="#a87e45" stroke-width="7" stroke-linecap="round" fill="none" />
+        <path d="M320 314 Q352 304 382 318" stroke="#a87e45" stroke-width="7" stroke-linecap="round" fill="none" />
+
+        <!-- глаза -->
+        <ellipse cx="248" cy="360" rx="20" ry="13" fill="#fbfbfb" />
+        <ellipse cx="352" cy="360" rx="20" ry="13" fill="#fbfbfb" />
+        <circle cx="250" cy="361" r="10" fill="#5b7894" />
+        <circle cx="354" cy="361" r="10" fill="#5b7894" />
+        <circle cx="250" cy="361" r="5" fill="#121212" />
+        <circle cx="354" cy="361" r="5" fill="#121212" />
+        <circle cx="254" cy="357" r="2.6" fill="#fff" />
+        <circle cx="358" cy="357" r="2.6" fill="#fff" />
+        <path d="M227 356 Q248 342 270 354" stroke="#3b2a22" stroke-width="3.5" fill="none" stroke-linecap="round" />
+        <path d="M330 354 Q352 342 373 356" stroke="#3b2a22" stroke-width="3.5" fill="none" stroke-linecap="round" />
+        <path d="M232 376 Q248 382 266 376" stroke="#c4927a" stroke-width="2" fill="none" />
+        <path d="M334 376 Q352 382 368 376" stroke="#c4927a" stroke-width="2" fill="none" />
+
+        <!-- очки -->
+        <path d="M200 350 L184 360" stroke="#0d0d0d" stroke-width="8" />
+        <path d="M400 350 L416 360" stroke="#0d0d0d" stroke-width="8" />
+        <rect x="198" y="326" width="96" height="68" rx="12" fill="url(#lens)" stroke="#0d0d0d" stroke-width="12" />
+        <rect x="306" y="326" width="96" height="68" rx="12" fill="url(#lens)" stroke="#0d0d0d" stroke-width="12" />
+        <path d="M294 350 Q300 343 306 350" stroke="#0d0d0d" stroke-width="9" fill="none" />
+        <path d="M212 382 L240 336 M226 386 L248 350" stroke="#ffffff" stroke-opacity="0.35" stroke-width="5" stroke-linecap="round" />
+        <path d="M320 382 L348 336 M334 386 L356 350" stroke="#ffffff" stroke-opacity="0.35" stroke-width="5" stroke-linecap="round" />
+        <circle cx="206" cy="333" r="3" fill="#c9ced8" />
+        <circle cx="394" cy="333" r="3" fill="#c9ced8" />
+        <path d="M202 330 Q246 322 290 330" stroke="#3a3a3a" stroke-width="2" fill="none" />
+        <path d="M310 330 Q354 322 398 330" stroke="#3a3a3a" stroke-width="2" fill="none" />
+
+        <!-- нос -->
+        <path d="M300 378 Q290 410 296 422 Q304 428 314 420" fill="none" stroke="#c4927a" stroke-width="4" stroke-linecap="round" />
+        <ellipse cx="292" cy="420" rx="4" ry="2.5" fill="#b07a62" opacity="0.7" />
+        <ellipse cx="310" cy="420" rx="4" ry="2.5" fill="#b07a62" opacity="0.7" />
+        <path d="M303 382 L305 405" stroke="#fff" stroke-opacity="0.4" stroke-width="3" stroke-linecap="round" />
+
+        <!-- рот: сдержанная полуулыбка -->
+        <path d="M268 452 Q300 446 334 450 Q302 462 268 452 Z" fill="#b5514e" />
+        <path d="M270 453 Q302 476 332 451 Q302 466 270 453 Z" fill="#c9706a" />
+        <path d="M290 466 Q302 469 314 465" stroke="#fff" stroke-opacity="0.35" stroke-width="2" fill="none" />
+        <path d="M264 450 Q262 455 266 458" stroke="#c4927a" stroke-width="2" fill="none" />
+        <path d="M338 448 Q341 453 337 457" stroke="#c4927a" stroke-width="2" fill="none" />
+
+        <!-- волосы: основная масса -->
+        <path d="M165 400 Q140 230 235 185 Q300 155 370 185 Q470 225 438 400 Q432 330 410 300
+                 Q395 330 360 318 Q340 335 300 322 Q270 340 240 320 Q210 335 192 305 Q172 330 165 400 Z" fill="url(#hair)" />
+        <!-- боковые пряди на ушах -->
+        <path d="M165 400 Q158 360 170 320 Q178 360 192 372 Q180 385 165 400 Z" fill="#cfa35e" />
+        <path d="M438 400 Q446 360 432 318 Q424 360 410 372 Q422 385 438 400 Z" fill="#cfa35e" />
+        <!-- чёлка: отдельные пряди -->
+        <path d="M200 300 Q222 260 252 270 Q238 300 232 334 Q220 312 200 300 Z" fill="#e6c07a" />
+        <path d="M246 268 Q282 248 310 268 Q292 290 288 330 Q270 300 246 268 Z" fill="#e9c47e" />
+        <path d="M304 264 Q338 246 368 270 Q352 292 350 330 Q334 296 304 264 Z" fill="#e6c07a" />
+        <path d="M362 268 Q392 262 410 300 Q390 300 380 332 Q378 298 362 268 Z" fill="#dcb46c" />
+        <!-- линии прядей -->
+        <g fill="none" stroke-linecap="round">
+          <path d="M235 200 Q215 250 210 300" stroke="#b8904f" stroke-width="4" />
+          <path d="M268 178 Q250 230 252 278" stroke="#b8904f" stroke-width="4" />
+          <path d="M305 168 Q300 220 300 268" stroke="#b8904f" stroke-width="4" />
+          <path d="M342 176 Q352 225 340 270" stroke="#b8904f" stroke-width="4" />
+          <path d="M380 192 Q400 240 395 290" stroke="#b8904f" stroke-width="4" />
+          <path d="M415 225 Q430 270 425 330" stroke="#b8904f" stroke-width="3" />
+          <path d="M190 232 Q172 280 176 330" stroke="#b8904f" stroke-width="3" />
+          <path d="M250 196 Q240 220 238 250" stroke="#fbe3ad" stroke-width="5" opacity="0.8" />
+          <path d="M318 182 Q326 210 322 240" stroke="#fbe3ad" stroke-width="5" opacity="0.8" />
+          <path d="M370 200 Q384 225 382 250" stroke="#fbe3ad" stroke-width="4" opacity="0.7" />
+          <!-- выбившиеся волоски -->
+          <path d="M440 300 Q458 310 456 330" stroke="#d8ae68" stroke-width="2.5" />
+        </g>
+      </g>
+    </g>
+
+    <!-- нижняя плашка с названием -->
+    <path d="M0 900 H1080 V1080 H0 Z" fill="#0b0f1a" opacity="0.45" />
+    <rect x="280" y="858" width="520" height="122" fill="#e3262f" />
+    <text x="540" y="914" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="52" font-weight="900" fill="#fff" letter-spacing="4">ХУК СЛЕВА</text>
+    <text x="540" y="960" text-anchor="middle" font-family="DejaVu Sans, Arial, sans-serif" font-size="25" fill="#ffffff" letter-spacing="5">ТИМОФЕЙ БЕСПАРТИЙНЫЙ</text>
+
+    <!-- кольцо -->
+    <circle cx="540" cy="540" r="528" fill="none" stroke="#e3262f" stroke-width="16" />
+    <circle cx="540" cy="540" r="508" fill="none" stroke="#ffffff" stroke-opacity="0.15" stroke-width="3" />
+  </g>
+</svg>
