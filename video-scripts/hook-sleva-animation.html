@@ -138,7 +138,7 @@
         font-size: 34px;
       }
       .bars .lbl {
-        width: 220px;
+        width: 250px;
         color: var(--muted);
       }
       .bars .bar {
@@ -281,7 +281,9 @@
       </g>
     </svg>
 
-    <div class="lower" id="lower"><b>Никита Попов</b><span>ВЕДУЩИЙ · «ХУК СЛЕВА»</span></div>
+    <div class="lower" id="lower">
+      <b>Тимофей Беспартийный</b><span>ВЕДУЩИЙ · «ХУК СЛЕВА»</span>
+    </div>
 
     <!-- data-s / data-e: начало/конец сцены (с); data-d: задержка элемента внутри сцены (с) -->
     <div class="panel">
@@ -446,7 +448,7 @@
         [
           0.3,
           6,
-          "Здравствуйте, друзья. В эфире «Хук слева», в красном углу ринга — Никита Попов.",
+          "Здравствуйте, друзья. В эфире «Хук слева», в красном углу ринга — Тимофей Беспартийный.",
           1,
         ],
         [
@@ -564,7 +566,23 @@
           sub.innerHTML = txt ? `<span>${txt}</span>` : "";
         }
       }
-      window.render = render;
+      // timeMap: [[newT, oldT], ...] from add-audio.mjs — stretches the layout above to the real voiceover
+      let timeMap = null;
+      const toOld = (t) => {
+        if (!timeMap) return t;
+        const i = timeMap.findIndex(([n]) => n > t);
+        if (i <= 0) return i === 0 ? timeMap[0][1] : timeMap[timeMap.length - 1][1];
+        const [n0, o0] = timeMap[i - 1],
+          [n1, o1] = timeMap[i];
+        return o0 + ((t - n0) / (n1 - n0)) * (o1 - o0);
+      };
+      window.setTimeMap = (m) => {
+        timeMap = m;
+        window.DURATION = m[m.length - 1][0];
+      };
+      // top-level `function render` is window.render itself, so keep a reference before wrapping
+      const draw = render;
+      window.render = (t) => draw(toOld(t));
       window.DURATION = DURATION;
 
       // в браузере крутится по кругу; ?capture отключает, кадры задаёт рендер-скрипт
