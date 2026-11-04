@@ -210,14 +210,20 @@
         $("fgs").appendChild(f);
         fgEls.push(f);
       }
-      const WALKERS = Array.from({ length: 4 }, (_, i) => {
+      const COATS = ["#3d4a63", "#6b3a3f", "#4a5a46", "#5a4a6b", "#2f3442", "#7a5a3a"];
+      const HAIRS = ["#2a1c14", "#5a3522", "#c9a26a", "#1c1c1c", "#7a4a2a"];
+      const SCARVES = ["#e3262f", "#e8b23a", "#3a7ab8", "#f4f4f4", "#3c9a5c"];
+      const WALKERS = Array.from({ length: 5 }, (_, i) => {
         const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         el.setAttribute("width", "10");
         el.setAttribute("height", "10");
-        el.innerHTML = walker(["#141824", "#1d1a26", "#22202c", "#171c22"][i]);
+        const pick = (a) => a[Math.floor(rnd() * a.length)];
+        el.innerHTML = walker(pick(COATS), pick(HAIRS), pick(SCARVES), rnd() < 0.4 ? pick(["#3b2418", "#1d1f27", "#6b2d3a"]) : "");
+        el.style.transformOrigin = "0 0";
         $("walkers").appendChild(el);
-        return { el, x0: rnd() * 1400 - 200, v: (rnd() < 0.5 ? -1 : 1) * (60 + rnd() * 80), s: 0.55 + rnd() * 0.25, ph: rnd() * 6 };
+        return { el, x0: rnd() * 1500, v: (rnd() < 0.5 ? -1 : 1) * (70 + rnd() * 60), s: 0.5 + rnd() * 0.18, ph: rnd() * 6 };
       });
+      WALKERS.sort((a, b) => a.s - b.s).forEach((w) => $("walkers").appendChild(w.el)); // nearer ones on top
 
       // arms: shoulder°, elbow° (right arm is mirrored)
       const POSE = {
@@ -235,7 +241,7 @@
       }
       document.querySelector("#tim defs #arm").remove();
       function setArm(el, [a1, a2], wiggle) {
-        const base = el.id === "armL" ? "translate(110 600)" : "translate(490 600) scale(-1 1)";
+        const base = el.id === "armL" ? "translate(158 600)" : "translate(442 600) scale(-1 1)";  // shoulders of the slim build
         el.setAttribute("transform", `${base} rotate(${a1})`);
         el.querySelector(".fore").setAttribute("transform", `translate(0 185) rotate(${a2 + wiggle})`);
         el.querySelector(".finger").setAttribute("opacity", 0);
@@ -279,16 +285,18 @@
 
         // background walkers on outdoor scenes
         const outdoor = ["redsquare", "street", "arbat"].includes(seg.loc);
-        WALKERS.forEach((w, i) => {
+        WALKERS.forEach((w) => {
           w.el.style.display = outdoor ? "block" : "none";
           if (!outdoor) return;
-          const x = ((((w.x0 + w.v * t) % 1500) + 1500) % 1500) - 200;
+          const x = ((((w.x0 + w.v * t) % 1700) + 1700) % 1700) - 300;
+          const step = Math.sin(t * 6.5 + w.ph);
           w.el.style.left = x + "px";
-          w.el.style.top = 1290 + i * 18 + "px";
+          w.el.style.top = 1270 + (w.s - 0.5) * 420 + Math.abs(step) * -4 + "px";
           w.el.style.transform = `scale(${w.s * (w.v < 0 ? -1 : 1)}, ${w.s})`;
-          const sw = Math.sin(t * 7 + w.ph) * 14;
-          w.el.querySelector(".lg1").setAttribute("transform", `rotate(${sw} -23 -115)`);
-          w.el.querySelector(".lg2").setAttribute("transform", `rotate(${-sw} 23 -115)`);
+          w.el.querySelector(".lg1").setAttribute("transform", `rotate(${step * 16} -17 -150)`);
+          w.el.querySelector(".lg2").setAttribute("transform", `rotate(${-step * 16} 17 -150)`);
+          w.el.querySelector(".ar1").setAttribute("transform", `rotate(${-step * 14} -47 -330)`);
+          w.el.querySelector(".ar2").setAttribute("transform", `rotate(${step * 14} 47 -330)`);
         });
 
         // host placement
@@ -395,8 +403,22 @@
         pb.style.opacity = pv;
         pb.style.transform = `translateX(${(1 - pv) * 220}px)`;
         const po = clamp(pTalk * 1.8);
-        pb.querySelector(".pMouth").setAttribute("ry", 3 + po * 14);
-        pb.querySelector(".pEyes").setAttribute("transform", `translate(${-5} 0) translate(150 190) scale(1 ${((t + 1.1) % 3.7) < 0.13 ? 0.1 : 1}) translate(-150 -190)`);
+        const pLine = seg.lines.find((l) => l.who === "P");
+        const pSince = pLine ? t - pLine.t0 : -9;
+        const pSpeaking = pLine && t >= pLine.t0 && t < pLine.t1 + 0.2;
+        // alive while listening too: breathing, weight shift, glances at the host
+        pb.querySelector(".pBody").setAttribute("transform", `translate(150 876) rotate(${Math.sin(t * 0.9) * 1.6}) scale(1 ${1 + Math.sin(t * 2.4) * 0.006}) translate(-150 -876)`);
+        const pNod = pSpeaking ? Math.sin(t * 4.4) * 4 + Math.sin(t * 2.1) * 2 : Math.sin(t * 1.1) * 1.5 + (t % 4.5 < 0.5 ? Math.sin((t % 4.5) / 0.5 * Math.PI) * 5 : 0);
+        pb.querySelector(".pHead").setAttribute("transform", `rotate(${pNod + (pSpeaking ? 0 : -4)} 150 300)`);
+        pb.querySelector(".pHair").setAttribute("transform", `translate(${Math.sin(t * 1.3) * 2} 0)`);
+        const gest = pSpeaking ? ease(pSince / 0.4) : 0;
+        pb.querySelector(".pArmR").setAttribute("transform", `rotate(${-gest * (14 + Math.sin(t * 5) * 6)} 242 355)`);
+        pb.querySelector(".pMouth").setAttribute("ry", 3 + po * 13);
+        const pBlink = (t + 1.1) % 3.7 < 0.13 ? 0.1 : 1;
+        pb.querySelector(".pEyes").setAttribute("transform", `translate(150 194) scale(1 ${pBlink}) translate(-150 -194)`);
+        pb.querySelector(".pIris").setAttribute("transform", `translate(${pSpeaking ? (Math.sin(t * 0.7) > 0.3 ? 0 : -5) : -6} 0)`);
+        const pRaise = pSince > 0 && pSince < 0.8 ? Math.sin((pSince / 0.8) * Math.PI) * 7 : 0;
+        pb.querySelector(".pBrows").setAttribute("transform", `translate(0 ${-pRaise})`);
 
         // overlays
         $("place").textContent = "📍 " + seg.place;

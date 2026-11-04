@@ -22,10 +22,49 @@ const windows = (x, y, w, h, cols, rows, lit = 0.6) => {
   return s;
 };
 
-const facade = (x, w, top, col) =>
-  `<rect x="${x}" y="${top}" width="${w}" height="${1250 - top}" fill="${col}"/>` +
-  `<rect x="${x - 6}" y="${top - 18}" width="${w + 12}" height="22" fill="#00000033"/>` +
-  windows(x + 10, top + 30, w - 20, 1250 - top - 200, Math.max(2, Math.round(w / 90)), Math.max(3, Math.round((1250 - top - 200) / 120)));
+// Facades on a strict floor grid: plinth with shop front, cornices between floors, framed windows.
+const SIGNS = ["КАФЕ", "КНИГИ", "ЦВЕТЫ", "АПТЕКА", "ПЕКАРНЯ", "ЧАЙ", "СУВЕНИРЫ", "ОПТИКА"];
+const shade = (hex, k) => "#" + hex.slice(1).match(/../g).map((h) => Math.max(0, Math.min(255, Math.round(parseInt(h, 16) * k))).toString(16).padStart(2, "0")).join("");
+const facade = (x, w, floors, col, base = 1250) => {
+  const fh = 118, gh = 190, top = base - gh - floors * fh;
+  const cols = Math.max(2, Math.round(w / 110)), cw = w / cols;
+  let s = `<rect x="${x}" y="${top}" width="${w}" height="${base - top}" fill="${col}"/>`;
+  s += `<rect x="${x}" y="${top}" width="10" height="${base - top}" fill="${shade(col, 0.8)}"/><rect x="${x + w - 10}" y="${top}" width="10" height="${base - top}" fill="${shade(col, 0.8)}"/>`;
+  s += `<rect x="${x - 10}" y="${top - 26}" width="${w + 20}" height="26" fill="${shade(col, 0.72)}"/><rect x="${x - 4}" y="${top - 34}" width="${w + 8}" height="10" fill="${shade(col, 1.15)}"/>`;
+  for (let f = 0; f < floors; f++) {
+    const fy = top + f * fh;
+    if (f) s += `<rect x="${x}" y="${fy - 4}" width="${w}" height="8" fill="${shade(col, 1.12)}"/>`;
+    for (let c = 0; c < cols; c++) {
+      const wx = x + c * cw + cw * 0.27, ww = cw * 0.46, wy = fy + 22, wh = fh * 0.62;
+      const on = rnd() < 0.62;
+      s += `<rect x="${wx - 5}" y="${wy - 5}" width="${ww + 10}" height="${wh + 10}" rx="3" fill="${shade(col, 1.25)}"/>`;
+      s += `<rect x="${wx}" y="${wy}" width="${ww}" height="${wh}" rx="2" fill="${on ? (rnd() < 0.5 ? "#ffd27a" : "#ffe6a6") : "#1b2131"}"/>`;
+      s += `<path d="M${wx + ww / 2} ${wy} V${wy + wh} M${wx} ${wy + wh * 0.38} H${wx + ww}" stroke="${shade(col, 1.25)}" stroke-width="3"/>`;
+      s += `<rect x="${wx - 8}" y="${wy + wh + 4}" width="${ww + 16}" height="6" fill="${shade(col, 0.8)}"/>`;
+    }
+  }
+  // ground floor: shop windows, door, awning, sign
+  const gy = base - gh;
+  s += `<rect x="${x}" y="${gy}" width="${w}" height="${gh}" fill="${shade(col, 0.78)}"/>`;
+  const sign = SIGNS[Math.floor(rnd() * SIGNS.length)];
+  s += `<rect x="${x + w / 2 - 90}" y="${gy + 8}" width="180" height="34" rx="4" fill="#1d1f27"/><text x="${x + w / 2}" y="${gy + 34}" text-anchor="middle" font-family="DejaVu Sans, Arial" font-size="22" font-weight="700" fill="#ffd27a" letter-spacing="2">${sign}</text>`;
+  const sw = (w - 140) / 2;
+  for (const sx of [x + 30, x + w - 30 - sw]) s += `<rect x="${sx}" y="${gy + 60}" width="${sw}" height="${gh - 70}" rx="3" fill="#ffd994" opacity="0.85"/><rect x="${sx}" y="${gy + 60}" width="${sw}" height="${gh - 70}" rx="3" fill="none" stroke="${shade(col, 0.55)}" stroke-width="6"/>`;
+  s += `<rect x="${x + w / 2 - 30}" y="${gy + 70}" width="60" height="${gh - 70}" fill="#2a2116"/>`;
+  const aw = rnd() < 0.5 ? "#7a1f24" : "#1f4a3a";
+  s += `<path d="M${x + 22} ${gy + 52} H${x + w - 22} L${x + w - 38} ${gy + 82} H${x + 38} Z" fill="${aw}"/>`;
+  return s;
+};
+// a row of buildings: widths and heights on the grid, no gaps
+const row = (x0, x1, palette, minF = 3, maxF = 5, base = 1250) => {
+  let s = "", x = x0;
+  while (x < x1) {
+    const w = 330 + Math.floor(rnd() * 3) * 60;
+    s += facade(x, w, minF + Math.floor(rnd() * (maxF - minF + 1)), palette[Math.floor(rnd() * palette.length)], base);
+    x += w;
+  }
+  return s;
+};
 
 const paving = (y0, col) => {
   let s = `<rect y="${y0}" width="${W}" height="${1920 - y0}" fill="${col}"/>`;
@@ -73,9 +112,7 @@ const SCENES = {
   },
   street() {
     let s = sky("#0c1430", "#252848");
-    const cols = ["#5b4a6b", "#6e5442", "#4b5a6e", "#7a5d4a", "#56606b", "#6b4a4a"];
-    let x = 0;
-    while (x < W) { const w = 280 + rnd() * 200; s += facade(x, w, 520 + rnd() * 260, cols[Math.floor(rnd() * cols.length)]); x += w; }
+    s += row(0, W, ["#8a6d5a", "#6f7d8c", "#9a7b6b", "#7d6a86", "#8c8070", "#a0806a"], 4, 6);
     // Nikolskaya-style garlands over the street
     for (let g = 0; g < 4; g++) {
       const y = 220 + g * 120;
@@ -89,9 +126,8 @@ const SCENES = {
     let s = sky("#101a3c", "#3a2c4e");
     // Foreign Ministry skyscraper at the end of the street
     s += `<g fill="#1c2236"><rect x="1050" y="420" width="300" height="830"/><rect x="1120" y="250" width="160" height="180"/><rect x="1165" y="150" width="70" height="110"/><path d="M1180 150 L1200 30 L1220 150 Z"/></g>` + windows(1070, 460, 260, 700, 6, 9, 0.5);
-    const cols = ["#c9a27a", "#b9c2a3", "#d0b3a1", "#a7b6c9", "#c7a8b8"];
-    let x = 0;
-    while (x < W) { const w = 300 + rnd() * 160; if (x + w < 1000 || x > 1400) s += facade(x, w, 640 + rnd() * 180, cols[Math.floor(rnd() * cols.length)]); x += w; }
+    const pal = ["#c9a27a", "#b9c2a3", "#d0b3a1", "#a7b6c9", "#c7a8b8"];
+    s += row(-120, 1000, pal, 3, 4) + row(1420, W, pal, 3, 4);
     s += paving(1250, "#4a4250");
     for (let lx = 150; lx < W; lx += 520) s += lamp(lx, 1250, 460);
     return { bg: s };
@@ -143,9 +179,7 @@ const SCENES = {
   },
   car() {
     let s = sky("#081024", "#1e2442");
-    const cols = ["#2b3247", "#33293f", "#26343f", "#3a3040"];
-    let x = 0;
-    while (x < W) { const w = 220 + rnd() * 240; s += facade(x, w, 420 + rnd() * 400, cols[Math.floor(rnd() * cols.length)]); x += w; }
+    s += row(0, W, ["#4a5468", "#55485e", "#3f5260", "#5a4c50"], 5, 7);
     s += `<rect y="1250" width="${W}" height="670" fill="#22252e"/>`;
     for (let dx = 0; dx < W; dx += 240) s += `<rect x="${dx}" y="1560" width="130" height="16" fill="#e8e8e8" opacity="0.8"/>`;
     for (let lx = 100; lx < W; lx += 480) s += lamp(lx, 1250, 560);
@@ -164,24 +198,48 @@ const SCENES = {
   },
 };
 
-// passer-by for interviews: a young woman in a coat and red scarf (viewBox 0 0 300 900)
-const PASSERBY = `<g>
-  <rect x="95" y="610" width="44" height="250" rx="18" fill="#2b2f3a"/><rect x="160" y="610" width="44" height="250" rx="18" fill="#2b2f3a"/>
-  <ellipse cx="112" cy="868" rx="34" ry="14" fill="#111"/><ellipse cx="186" cy="868" rx="34" ry="14" fill="#111"/>
-  <path d="M60 330 Q150 290 240 330 L262 640 L38 640 Z" fill="#c9a77a"/>
-  <path d="M150 340 V640" stroke="#a88a60" stroke-width="3"/>
-  <rect x="30" y="345" width="40" height="230" rx="20" fill="#c9a77a"/><rect x="230" y="345" width="40" height="230" rx="20" fill="#c9a77a"/>
-  <path d="M40 120 Q40 40 150 40 Q260 40 260 120 L268 330 Q220 300 150 300 Q80 300 32 330 Z" fill="#5a3522"/>
-  <rect x="128" y="250" width="44" height="60" fill="#efc7aa"/>
-  <ellipse cx="150" cy="190" rx="78" ry="92" fill="#f2cdb2"/>
-  <path d="M72 170 Q90 90 150 92 Q215 92 228 170 Q200 120 150 118 Q100 120 72 170 Z" fill="#5a3522"/>
-  <g class="pEyes"><ellipse cx="122" cy="190" rx="9" ry="11" fill="#2a2a33"/><ellipse cx="178" cy="190" rx="9" ry="11" fill="#2a2a33"/></g>
-  <path d="M108 168 Q122 160 136 168 M164 168 Q178 160 192 168" stroke="#5a3522" stroke-width="4" fill="none"/>
-  <ellipse cx="102" cy="222" rx="13" ry="7" fill="#f2a0a0" opacity="0.6"/><ellipse cx="198" cy="222" rx="13" ry="7" fill="#f2a0a0" opacity="0.6"/>
-  <ellipse class="pMouth" cx="150" cy="242" rx="16" ry="3" fill="#a3343c"/>
-  <path d="M70 300 Q150 340 230 300 L236 350 Q150 380 64 350 Z" fill="#e3262f"/><rect x="180" y="330" width="34" height="110" rx="10" fill="#e3262f"/>
+// passer-by for interviews: a young woman in a coat and red scarf (viewBox 0 0 300 900).
+// Groups pBody / pHead / pArmR / pHair are animated by the page.
+const PASSERBY = `<g class="pBody">
+  <ellipse cx="150" cy="876" rx="110" ry="14" fill="#000" opacity="0.25"/>
+  <g class="pLegs"><rect x="104" y="610" width="38" height="250" rx="16" fill="#2b2f3a"/><rect x="158" y="610" width="38" height="250" rx="16" fill="#2b2f3a"/>
+  <path d="M96 856 Q120 846 146 856 L146 872 L92 872 Z" fill="#3b2418"/><path d="M154 856 Q180 846 204 856 L208 872 L154 872 Z" fill="#3b2418"/></g>
+  <path d="M68 330 Q150 296 232 330 L250 650 Q150 668 50 650 Z" fill="#cba77c"/>
+  <path d="M150 336 V650" stroke="#a88a60" stroke-width="3"/><circle cx="162" cy="420" r="5" fill="#8a6d48"/><circle cx="162" cy="490" r="5" fill="#8a6d48"/><circle cx="162" cy="560" r="5" fill="#8a6d48"/>
+  <rect x="70" y="520" width="56" height="10" rx="4" fill="#a88a60"/><rect x="176" y="520" width="56" height="10" rx="4" fill="#a88a60"/>
+  <g class="pArmL"><rect x="40" y="345" width="36" height="240" rx="18" fill="#cba77c"/><ellipse cx="58" cy="594" rx="17" ry="20" fill="#f0c9ad"/>
+    <rect x="18" y="520" width="58" height="80" rx="10" fill="#6b2d3a"/><path d="M28 520 Q47 488 66 520" stroke="#6b2d3a" stroke-width="6" fill="none"/></g>
+  <g class="pArmR"><rect x="224" y="345" width="36" height="240" rx="18" fill="#cba77c"/><ellipse cx="242" cy="594" rx="17" ry="20" fill="#f0c9ad"/></g>
+  <g class="pHead">
+    <path class="pHair" d="M48 130 Q44 40 150 38 Q256 40 252 130 L262 330 Q214 304 150 304 Q86 304 38 330 Z" fill="#5a3522"/>
+    <rect x="130" y="250" width="40" height="60" fill="#e8bea0"/>
+    <ellipse cx="150" cy="190" rx="76" ry="90" fill="#f2cdb2"/>
+    <path d="M74 172 Q86 92 150 92 Q216 92 226 172 Q206 124 164 120 Q120 150 74 172 Z" fill="#5a3522"/>
+    <g class="pEyes"><ellipse cx="122" cy="194" rx="11" ry="12" fill="#fff"/><ellipse cx="178" cy="194" rx="11" ry="12" fill="#fff"/>
+      <g class="pIris"><circle cx="122" cy="195" r="7" fill="#4a3a2a"/><circle cx="178" cy="195" r="7" fill="#4a3a2a"/><circle cx="124" cy="192" r="2" fill="#fff"/><circle cx="180" cy="192" r="2" fill="#fff"/></g>
+      <path d="M110 186 Q122 178 134 186 M166 186 Q178 178 190 186" stroke="#3a2418" stroke-width="3" fill="none"/></g>
+    <path class="pBrows" d="M106 168 Q122 160 138 166 M162 166 Q178 160 194 168" stroke="#5a3522" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <path d="M150 200 Q144 222 152 226" stroke="#d9a58a" stroke-width="3" fill="none"/>
+    <ellipse cx="102" cy="226" rx="13" ry="7" fill="#f2a0a0" opacity="0.6"/><ellipse cx="198" cy="226" rx="13" ry="7" fill="#f2a0a0" opacity="0.6"/>
+    <ellipse class="pMouth" cx="150" cy="246" rx="16" ry="3" fill="#8e2a33"/><path d="M134 244 Q150 238 166 244" stroke="#c45a63" stroke-width="3" fill="none"/>
+    <circle cx="76" cy="206" r="5" fill="#ffd27a"/><circle cx="224" cy="206" r="5" fill="#ffd27a"/>
+  </g>
+  <path d="M72 300 Q150 344 228 300 L236 352 Q150 386 64 352 Z" fill="#e3262f"/><rect x="176" y="334" width="34" height="120" rx="10" fill="#e3262f"/>
+  <path d="M182 444 V462 M194 444 V462 M206 444 V462" stroke="#b81d25" stroke-width="3"/>
 </g>`;
 
-// background walkers for street scenes
-const walker = (col) => `<g><ellipse cx="0" cy="-330" rx="34" ry="40" fill="${col}"/><path d="M-50 -290 Q0 -305 50 -290 L60 -110 L-60 -110 Z" fill="${col}"/>
-  <rect class="lg1" x="-38" y="-115" width="30" height="115" rx="12" fill="${col}"/><rect class="lg2" x="8" y="-115" width="30" height="115" rx="12" fill="${col}"/></g>`;
+// background passers-by: coat, scarf, head with hair, swinging arms and legs (origin at the feet)
+const walker = (coat, hair, scarf, bag) => `<g>
+  <ellipse cx="0" cy="0" rx="60" ry="10" fill="#000" opacity="0.25"/>
+  <g class="lg1"><rect x="-30" y="-150" width="26" height="150" rx="11" fill="#22252e"/><ellipse cx="-17" cy="-4" rx="20" ry="8" fill="#111"/></g>
+  <g class="lg2"><rect x="4" y="-150" width="26" height="150" rx="11" fill="#22252e"/><ellipse cx="17" cy="-4" rx="20" ry="8" fill="#111"/></g>
+  <g class="ar1"><rect x="-58" y="-330" width="22" height="150" rx="11" fill="${shade(coat, 0.85)}"/>${bag ? `<rect x="-70" y="-190" width="44" height="54" rx="8" fill="${bag}"/>` : ""}</g>
+  <path d="M-44 -340 Q0 -356 44 -340 L54 -140 L-54 -140 Z" fill="${coat}"/>
+  <path d="M0 -340 V-140" stroke="${shade(coat, 0.75)}" stroke-width="3"/>
+  <g class="ar2"><rect x="36" y="-330" width="22" height="150" rx="11" fill="${shade(coat, 0.85)}"/></g>
+  <path d="M-34 -346 Q0 -326 34 -346 L32 -326 Q0 -310 -32 -326 Z" fill="${scarf}"/>
+  <rect x="-9" y="-366" width="18" height="22" fill="#e2b896"/>
+  <ellipse cx="0" cy="-394" rx="30" ry="34" fill="#f0c9ad"/>
+  <path d="M-31 -398 Q-30 -432 0 -432 Q30 -432 31 -398 Q16 -414 0 -412 Q-16 -414 -31 -398 Z" fill="${hair}"/>
+  <circle cx="-10" cy="-392" r="3" fill="#2a2a33"/><circle cx="10" cy="-392" r="3" fill="#2a2a33"/>
+</g>`;

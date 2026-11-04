@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 EP_DIR = os.path.abspath(sys.argv[1])
 FPS = 25
 MAX_LEN = 60.0
-VOICES = {"H": ("ru-RU-DmitryNeural", "+20%", "+8Hz"), "P": ("ru-RU-SvetlanaNeural", "+10%", "+4Hz")}
+VOICES = {"H": ("ru-RU-DmitryNeural", "+15%", "+8Hz"), "P": ("ru-RU-SvetlanaNeural", "+10%", "+4Hz")}
 LEAD = {"coffee": 1.3, "eat": 1.3}  # silent sip / bite before he talks
 GAP_LINE, GAP_SEG = 0.3, 0.45
 
@@ -33,10 +33,10 @@ for s in ep["segments"]:
         mp3 = os.path.join(seg_dir, f"{i}.mp3")
         meta = os.path.join(seg_dir, f"{i}.txt")
         if not (os.path.exists(mp3) and os.path.exists(meta) and open(meta).read() == who + txt):
-            for k in range(6):
+            for k in range(12):
                 if subprocess.run(["python3", os.path.join(HERE, "tts_words.py"), *VOICES[who], txt, mp3], capture_output=True).returncode == 0:
                     break
-                time.sleep(2)
+                time.sleep(5)  # edge-tts drops requests in bursts
             else:
                 raise SystemExit(f"tts failed: {txt}")
             open(meta, "w").write(who + txt)
@@ -100,16 +100,24 @@ host_src = open(os.path.join(HERE, "..", "midterms-animation.html")).read()
 host = re.search(r'<svg id="host" viewBox="0 0 600 900">(.*?)\n      </svg>', host_src, re.S).group(1)
 LEGS = """
   <g id="legs">
-    <g id="legL"><rect x="178" y="930" width="112" height="250" rx="40" fill="#15161b"/>
-      <g class="shin"><rect x="184" y="1150" width="100" height="250" rx="36" fill="#15161b"/><ellipse cx="226" cy="1410" rx="72" ry="30" fill="#0b0b0d"/></g></g>
-    <g id="legR"><rect x="310" y="930" width="112" height="250" rx="40" fill="#15161b"/>
-      <g class="shin"><rect x="316" y="1150" width="100" height="250" rx="36" fill="#15161b"/><ellipse cx="374" cy="1410" rx="72" ry="30" fill="#0b0b0d"/></g></g>
+    <g id="legL"><rect x="212" y="930" width="74" height="250" rx="30" fill="#15161b"/>
+      <g class="shin"><rect x="216" y="1150" width="66" height="250" rx="28" fill="#15161b"/><ellipse cx="246" cy="1408" rx="52" ry="24" fill="#0b0b0d"/></g></g>
+    <g id="legR"><rect x="314" y="930" width="74" height="250" rx="30" fill="#15161b"/>
+      <g class="shin"><rect x="318" y="1150" width="66" height="250" rx="28" fill="#15161b"/><ellipse cx="354" cy="1408" rx="52" ry="24" fill="#0b0b0d"/></g></g>
   </g>
+  <g transform="translate(300 0) scale(0.72 1) translate(-300 0)">
   <path d="M40 850 L560 850 L568 975 L330 982 L300 950 L270 982 L32 975 Z" fill="url(#blazer)"/>
   <path d="M150 850 L250 850 L270 982 L140 978 Z" fill="#1c1d23"/><path d="M350 850 L450 850 L460 978 L330 982 Z" fill="#1c1d23"/>
+  </g>
 """
 assert '<g id="torso">' in host
 host = host.replace('<g id="torso">', LEGS + '<g id="torso">', 1)
+# slimmer build: narrow the blazer around the centre line, thinner sleeves (head untouched)
+assert host.count('<g transform="translate(0 -45)">') == 1
+host = host.replace('<g transform="translate(0 -45)">', '<g transform="translate(300 0) scale(0.72 1) translate(-300 -45)">', 1)
+host = host.replace('<rect x="-36" y="-10" width="72" height="200" rx="34" fill="url(#sleeve)" />', '<rect x="-27" y="-10" width="54" height="200" rx="26" fill="url(#sleeve)" />', 1)
+host = host.replace('<rect x="-30" y="-12" width="60" height="165" rx="28" fill="url(#sleeve)" />', '<rect x="-23" y="-12" width="46" height="165" rx="22" fill="url(#sleeve)" />', 1)
+host = host.replace('<rect x="-29" y="138" width="58" height="18" rx="6" fill="#f2f4f8" />', '<rect x="-23" y="138" width="46" height="18" rx="6" fill="#f2f4f8" />', 1)
 HAND_ITEMS = """<g class="hand" transform="translate(0 178)">
                 <g class="mic" opacity="0"><rect x="-10" y="-72" width="20" height="112" rx="8" fill="#1b1b1f"/>
                   <rect x="-24" y="-66" width="48" height="34" rx="5" fill="#e3262f"/><text x="0" y="-42" font-size="17" font-weight="900" text-anchor="middle" fill="#fff" font-family="DejaVu Sans, Arial">ВЦР</text>
