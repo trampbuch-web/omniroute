@@ -1,0 +1,5 @@
+__pycache__/
+seg/
+voice-*.wav
+episode.html
+check-*.jpg
