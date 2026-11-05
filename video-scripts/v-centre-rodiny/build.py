@@ -76,7 +76,9 @@ assert D <= MAX_LEN, f"episode is {D:.1f} s, must be <= {MAX_LEN} s: shorten the
 
 # 3. voice tracks per speaker + lip-sync envelope
 lines = [l for s in segs for l in s["lines"]]
-env = {}
+env, mouth = {}, {}
+sys.path.insert(0, os.path.join(HERE, ".."))
+import lipsync  # noqa: E402
 for who in ("H", "P"):
     mine = [l for l in lines if l["who"] == who]
     out = os.path.join(EP_DIR, f"voice-{who}.wav")
@@ -94,6 +96,7 @@ for who in ("H", "P"):
     e = np.clip(rms / ref, 0, 1.2)
     e = np.convolve(e, [0.25, 0.5, 0.25], "same")  # soften frame-to-frame jitter
     env[who] = [round(float(x), 3) for x in e]
+    mouth[who] = lipsync.frames(out, D)  # Rhubarb mouth shapes for real lip-sync
 
 # 4. page
 host_src = open(os.path.join(HERE, "..", "midterms-animation.html")).read()
@@ -119,9 +122,9 @@ host = host.replace('<rect x="-36" y="-10" width="72" height="200" rx="34" fill=
 host = host.replace('<rect x="-30" y="-12" width="60" height="165" rx="28" fill="url(#sleeve)" />', '<rect x="-23" y="-12" width="46" height="165" rx="22" fill="url(#sleeve)" />', 1)
 host = host.replace('<rect x="-29" y="138" width="58" height="18" rx="6" fill="#f2f4f8" />', '<rect x="-23" y="138" width="46" height="18" rx="6" fill="#f2f4f8" />', 1)
 HAND_ITEMS = """<g class="hand" transform="translate(0 178)">
-                <g class="mic" opacity="0"><rect x="-10" y="-72" width="20" height="112" rx="8" fill="#1b1b1f"/>
+                <g class="mic" opacity="0"><g transform="translate(-16 58)"><rect x="-10" y="-72" width="20" height="112" rx="8" fill="#1b1b1f"/>
                   <rect x="-24" y="-66" width="48" height="34" rx="5" fill="#e3262f"/><text x="0" y="-42" font-size="17" font-weight="900" text-anchor="middle" fill="#fff" font-family="DejaVu Sans, Arial">ВЦР</text>
-                  <circle cx="0" cy="-92" r="27" fill="#3a3d46"/><path d="M-20 -100 H20 M-24 -90 H24 M-20 -80 H20" stroke="#5c606b" stroke-width="3"/></g>
+                  <circle cx="0" cy="-92" r="27" fill="#3a3d46"/><path d="M-20 -100 H20 M-24 -90 H24 M-20 -80 H20" stroke="#5c606b" stroke-width="3"/></g></g>
                 <g class="cup" opacity="0"><g transform="scale(1.4)"><rect x="-24" y="-46" width="48" height="56" rx="7" fill="#f4f4f4"/>
                   <rect x="-24" y="-30" width="48" height="11" fill="#e3262f"/><path d="M-24 -36 Q-46 -32 -44 -18 Q-42 -6 -24 -8" stroke="#f4f4f4" stroke-width="7" fill="none"/></g></g>
                 <g class="fork" opacity="0"><rect x="-4" y="-110" width="8" height="125" rx="3" fill="#cfd5e2"/>
@@ -130,7 +133,7 @@ HAND_ITEMS = """<g class="hand" transform="translate(0 178)">
 assert host.count('<g class="hand" transform="translate(0 178)">') == 1
 host = host.replace('<g class="hand" transform="translate(0 178)">', HAND_ITEMS, 1)
 
-data = {"D": D, "fps": FPS, "seed": zlib.crc32(ep["date"].encode()) % 2147483646 + 1, "env": env,
+data = {"D": D, "fps": FPS, "seed": zlib.crc32(ep["date"].encode()) % 2147483646 + 1, "env": env, "mouth": mouth,
         "segs": [{**s, "lines": [{k2: v for k2, v in l.items() if k2 not in ("audio", "at")} for l in s["lines"]]} for s in segs]}
 page = open(os.path.join(HERE, "city.html")).read()
 page = page.replace("__HOST__", host).replace("__SCENES__", open(os.path.join(HERE, "scenes.js")).read()).replace("__EP__", json.dumps(data, ensure_ascii=False))
