@@ -240,6 +240,7 @@ const walker = (coat, hair, scarf, bag) => `<g>
   <path d="M-34 -346 Q0 -326 34 -346 L32 -326 Q0 -310 -32 -326 Z" fill="${scarf}"/>
   <rect x="-9" y="-366" width="18" height="22" fill="#e2b896"/>
   <ellipse cx="0" cy="-394" rx="30" ry="34" fill="#f0c9ad"/>
-  <path d="M-31 -398 Q-30 -432 0 -432 Q30 -432 31 -398 Q16 -414 0 -412 Q-16 -414 -31 -398 Z" fill="${hair}"/>
-  <circle cx="-10" cy="-392" r="3" fill="#2a2a33"/><circle cx="10" cy="-392" r="3" fill="#2a2a33"/>
+  <path d="M-32 -390 Q-34 -434 0 -434 Q28 -434 30 -404 Q10 -416 -4 -412 Q-14 -400 -32 -390 Z" fill="${hair}"/>
+  <circle cx="4" cy="-392" r="3" fill="#2a2a33"/><circle cx="20" cy="-392" r="3" fill="#2a2a33"/>
+  <path d="M28 -390 L36 -380 L27 -377" stroke="#d9a58a" stroke-width="3" fill="#f0c9ad"/>
 </g>`;

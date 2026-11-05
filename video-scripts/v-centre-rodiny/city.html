@@ -288,7 +288,9 @@
         WALKERS.forEach((w) => {
           w.el.style.display = outdoor ? "block" : "none";
           if (!outdoor) return;
-          const x = ((((w.x0 + w.v * t) % 1700) + 1700) % 1700) - 300;
+          // walk on the ground, not on the screen: add the background pan so nobody slides backwards
+          const drift = -Math.min(36, 1320 / (seg.t1 - seg.t0)) * lt;
+          const x = ((((w.x0 + w.v * t + drift) % 1700) + 1700) % 1700) - 300;
           const step = Math.sin(t * 6.5 + w.ph);
           w.el.style.left = x + "px";
           w.el.style.top = 1270 + (w.s - 0.5) * 420 + Math.abs(step) * -4 + "px";
