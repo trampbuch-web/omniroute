@@ -8,7 +8,7 @@ TRIM="silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove
 mkdir -p seg; i=0
 while IFS=$'\t' read -r who txt; do
   if [ "$who" = T ]; then v=en-US-BrianMultilingualNeural r=+0% p=-4Hz f="highpass=f=250,lowpass=f=5000,"  # quote voice, not a clone
-  else v=ru-RU-DmitryNeural r=+15% p=+8Hz f=""; fi
+  else v=silero:aidar r=+15% p=+0Hz f=""; fi  # young narrator (Silero, CC BY-NC)
   for try in 1 2 3 4 5; do python3 "$U/tts.py" $v $r $p "$txt" seg/r$i.mp3 </dev/null 2>/dev/null && break; sleep 2; done  # edge-tts is flaky
   ffmpeg -nostdin -v error -y -i seg/r$i.mp3 -af "${f}$TRIM" -ar 44100 -ac 2 seg/$i.wav; i=$((i+1))
 done < script.tsv
