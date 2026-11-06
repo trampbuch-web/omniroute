@@ -8,7 +8,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 EP_DIR = os.path.abspath(sys.argv[1])
 FPS = 25
 MAX_LEN = 60.0
-VOICES = {"H": ("silero:aidar", "+15%", "+0Hz"), "P": ("ru-RU-SvetlanaNeural", "+10%", "+4Hz")}
+VOICES = {"H": ("ru-RU-DmitryNeural", "+15%", "+8Hz"), "P": ("ru-RU-SvetlanaNeural", "+10%", "+4Hz")}
 LEAD = {"coffee": 1.3, "eat": 1.3}  # silent sip / bite before he talks
 GAP_LINE, GAP_SEG = 0.3, 0.45
 
