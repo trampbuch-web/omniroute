@@ -158,6 +158,13 @@
         color: rgba(255, 255, 255, 0.55);
         font-size: 20px;
       }
+      #prog {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 12px;
+        background: #ffd400;
+      }
       #flash {
         position: absolute;
         inset: 0;
@@ -183,6 +190,7 @@
     <div id="caps"></div>
     <div id="credit">Иллюстрация · «В центре Родины»</div>
     <div id="flash"></div>
+    <div id="prog"></div>
     <script>
       __SCENES__
       document.getElementById("pb").innerHTML = PASSERBY;
@@ -190,6 +198,8 @@
       seed = EP.seed;
       const FPS = EP.fps;
       const $ = (id) => document.getElementById(id);
+      if (EP.brand) document.querySelector("#brand b").textContent = EP.brand;
+      if (EP.credit) document.getElementById("credit").textContent = EP.credit;
       const clamp = (x) => Math.max(0, Math.min(1, x));
       const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
       const lerp = (a, b, p) => a + (b - a) * p;
@@ -274,8 +284,17 @@
           }
         });
         const fl = lt < 0.3 && si > 0 ? 1 - lt / 0.3 : 0;
-        $("flash").style.opacity = fl * 0.8;
-        $("stage").style.transform = `scale(${1 + fl * 0.06})`;
+        $("flash").style.opacity = fl * (seg.action === "talk" ? 0.3 : 0.8);
+        // TikTok-style jump cuts: every other line punches in on the face
+        let punch = 1;
+        if (EP.punch) {
+          const li = seg.lines.findIndex((l) => t >= l.t0 - 0.15 && t < l.t1 + 0.3);
+          const n = EP.segs.slice(0, si).reduce((a, s2) => a + s2.lines.length, 0) + Math.max(0, li);
+          punch = n % 2 ? 1.22 : 1;
+        }
+        $("stage").style.transform = `scale(${(1 + fl * 0.06) * punch})`;
+        $("stage").style.transformOrigin = punch > 1 ? "540px 640px" : "540px 900px";
+        $("prog").style.width = (t / EP.D) * 100 + "%";
 
         // who speaks now
         const line = seg.lines.find((l) => t >= l.t0 && t < l.t1 + 0.25);
@@ -311,11 +330,13 @@
           tim.style.left = "300px";
           tim.style.top = 808 + Math.sin(t * 9) * 3 + "px";
         } else {
-          const x = seg.action === "interview" ? 140 : 220;
-          tim.style.width = "640px";
-          tim.style.height = "1412px";
+          const x = seg.action === "interview" ? 140 : seg.action === "talk" ? 160 : 220;
+          const sit = seg.action === "talk" ? 40 : 0; // sits lower behind the studio desk
+          const big = seg.action === "talk"; // studio: closer, face-forward framing
+          tim.style.width = big ? "760px" : "640px";
+          tim.style.height = big ? "1677px" : "1412px";
           tim.style.left = x + Math.sin(t * 0.7) * 8 + "px";
-          tim.style.top = 330 + bob + "px";
+          tim.style.top = 330 + sit + bob + "px";
         }
         $("legs").style.display = car ? "none" : "";
         const car$ = fgEls[si].querySelector("#car");
@@ -343,7 +364,7 @@
           R = POSE.mic,
           rTilt = 0;
         const beat = hTalk > 0.05 ? Math.sin(t * 5.2) * 8 + Math.sin(t * 2.3) * 5 : 0;
-        if (seg.action === "walk" || seg.action === "interview") {
+        if (seg.action === "walk" || seg.action === "interview" || seg.action === "talk") {
           L = Math.floor(t / 2.2) % 2 ? POSE.explain : POSE.open;
           if (walking) L = POSE.rest;
         }
@@ -428,7 +449,7 @@
         pb.querySelector(".pBrows").setAttribute("transform", `translate(0 ${-pRaise})`);
 
         // overlays
-        $("place").textContent = "📍 " + seg.place;
+        $("place").textContent = (seg.action === "talk" ? "" : "📍 ") + seg.place;
         const card = $("card");
         const cv = ease((lt - 0.5) / 0.5) * clamp((seg.t1 - t - 0.2) / 0.3);
         card.style.opacity = seg.card ? cv : 0;

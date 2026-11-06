@@ -177,6 +177,30 @@ const SCENES = {
       <rect x="800" y="1110" width="80" height="130" rx="10" fill="#c2273a" opacity="0.85"/><rect x="800" y="1110" width="80" height="20" fill="#fff" opacity="0.5"/>`;
     return { bg: s, fg };
   },
+  studio() {
+    let s = `<defs><radialGradient id="sbg" cx="50%" cy="35%" r="70%"><stop offset="0" stop-color="#26396a"/><stop offset="0.6" stop-color="#121a33"/><stop offset="1" stop-color="#080b16"/></radialGradient>
+      <radialGradient id="glow"><stop offset="0" stop-color="#ffd98a" stop-opacity="0.9"/><stop offset="1" stop-color="#ffd98a" stop-opacity="0"/></radialGradient>
+      <linearGradient id="beam" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ffffff" stop-opacity="0.16"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></linearGradient></defs>
+      <rect width="${W}" height="1920" fill="url(#sbg)"/>`;
+    for (let x = 0; x < W; x += 60) s += `<path d="M${x} 0 V1250" stroke="#fff" stroke-opacity="0.035" stroke-width="2"/>`;
+    for (let y = 0; y < 1250; y += 60) s += `<path d="M0 ${y} H${W}" stroke="#fff" stroke-opacity="0.035" stroke-width="2"/>`;
+    // video wall panels with a big question mark and red accents
+    for (const [x, w] of [[300, 520], [1580, 520]]) s += `<rect x="${x}" y="300" width="${w}" height="700" rx="18" fill="#0d1428" stroke="#e3262f" stroke-width="6"/><text x="${x + w / 2}" y="800" text-anchor="middle" font-family="DejaVu Sans, Arial" font-size="460" font-weight="900" fill="#e3262f" opacity="0.85">?</text>`;
+    s += `<rect x="900" y="260" width="600" height="780" rx="18" fill="#0d1428" stroke="#ffd36b" stroke-width="6"/>` +
+      `<text x="1200" y="560" text-anchor="middle" font-family="DejaVu Sans, Arial" font-size="96" font-weight="900" fill="#ffd36b">ФАКТ</text>` +
+      `<text x="1200" y="760" text-anchor="middle" font-family="DejaVu Sans, Arial" font-size="160" font-weight="900" fill="#fff">!</text>`;
+    for (const x of [500, 1200, 1900]) s += `<path d="M${x - 40} 0 L${x - 260} 1250 L${x + 260} 1250 L${x + 40} 0 Z" fill="url(#beam)"/><circle cx="${x}" cy="40" r="60" fill="url(#glow)"/>`;
+    s += `<rect y="1250" width="${W}" height="670" fill="#0c1020"/><path d="M0 1250 H${W}" stroke="#e3262f" stroke-width="8"/>`;
+    // anchor desk in front: hides the legs so he sits at it
+    const fg = `<path d="M60 1290 Q540 1250 1020 1290 L1000 1340 Q540 1300 80 1340 Z" fill="#3a4256"/>
+      <path d="M80 1340 Q540 1300 1000 1340 L960 1920 L120 1920 Z" fill="#141a2a"/>
+      <path d="M100 1660 Q540 1625 980 1660" stroke="#e3262f" stroke-width="10" fill="none"/>
+      <text x="540" y="1760" text-anchor="middle" font-family="DejaVu Sans, Arial" font-size="58" font-weight="900" fill="#f4f4f4" letter-spacing="5">ИНТЕРЕСНЫЙ <tspan fill="#ffd36b">ФАКТ</tspan></text>
+      <rect x="790" y="1222" width="52" height="60" rx="7" fill="#f4f4f4"/><rect x="790" y="1238" width="52" height="12" fill="#e3262f"/>
+      <path d="M842 1232 Q866 1238 864 1252 Q862 1266 842 1266" stroke="#f4f4f4" stroke-width="7" fill="none"/>
+      <path d="M200 1282 L330 1274 L340 1290 L208 1298 Z" fill="#f1f1f1"/>`;
+    return { bg: s, fg };
+  },
   car() {
     let s = sky("#081024", "#1e2442");
     s += row(0, W, ["#4a5468", "#55485e", "#3f5260", "#5a4c50"], 5, 7);

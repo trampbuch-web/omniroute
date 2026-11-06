@@ -72,6 +72,7 @@ for s in ep["segments"]:
     segs.append(seg)
 D = round(t + 0.6, 2)
 segs[-1]["t1"] = D
+MAX_LEN = ep.get("max_len", MAX_LEN)
 assert D <= MAX_LEN, f"episode is {D:.1f} s, must be <= {MAX_LEN} s: shorten the text"
 
 # 3. voice tracks per speaker + lip-sync envelope
@@ -133,7 +134,7 @@ HAND_ITEMS = """<g class="hand" transform="translate(0 178)">
 assert host.count('<g class="hand" transform="translate(0 178)">') == 1
 host = host.replace('<g class="hand" transform="translate(0 178)">', HAND_ITEMS, 1)
 
-data = {"D": D, "fps": FPS, "seed": zlib.crc32(ep["date"].encode()) % 2147483646 + 1, "env": env, "mouth": mouth,
+data = {"D": D, "fps": FPS, "seed": zlib.crc32(ep["date"].encode()) % 2147483646 + 1, "env": env, "mouth": mouth, "brand": ep.get("brand"), "credit": ep.get("credit"), "punch": ep.get("punch", False),
         "segs": [{**s, "lines": [{k2: v for k2, v in l.items() if k2 not in ("audio", "at")} for l in s["lines"]]} for s in segs]}
 page = open(os.path.join(HERE, "city.html")).read()
 page = page.replace("__HOST__", host).replace("__SCENES__", open(os.path.join(HERE, "scenes.js")).read()).replace("__EP__", json.dumps(data, ensure_ascii=False))
@@ -157,7 +158,7 @@ fc = "".join(f"[{i}]" for i in range(nv)) + f"amix=inputs={nv}:normalize=0,loudn
      f"[v2][md]amix=inputs=2:normalize=0:duration=first,alimiter=limit=0.95[a]"
 mix = os.path.join(EP_DIR, "mix.wav")
 sh("ffmpeg", "-nostdin", "-v", "error", "-y", *inputs, "-i", bed, "-filter_complex", fc, "-map", "[a]", "-t", str(D), "-ar", "44100", "-ac", "2", mix)
-final = os.path.join(EP_DIR, f"v-centre-rodiny-{os.path.basename(EP_DIR)}.mp4")
+final = os.path.join(EP_DIR, f"{ep.get('slug', 'v-centre-rodiny')}-{os.path.basename(EP_DIR)}.mp4")
 sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", video, "-i", mix, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-t", str(D), final)
 for f in (video, mix, os.path.join(EP_DIR, "voice-H.wav"), os.path.join(EP_DIR, "voice-P.wav")):
     if os.path.exists(f):
