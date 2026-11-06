@@ -10,4 +10,5 @@
   субтитры по словам, рендер и музыка. `--frames 5,20,40` — только скриншоты для проверки.
 - Локации рисует `scenes.js` (окна и огни меняются от даты), ведущий — из `../midterms-animation.html`.
 - Губы — по Rhubarb Lip Sync (`../lipsync.py`, скачивается сам).
+- Превью: `python3 build.py <дата> --frames 1`, затем `node preview.mjs <дата> <секунда> "<дата · вечерний выпуск>" "<заголовок>" "тег|тег|тег"`.
 - Нужно: `pip install edge-tts numpy`, ffmpeg, Playwright с Chromium.
