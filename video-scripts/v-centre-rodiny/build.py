@@ -22,6 +22,8 @@ def dur(f):
 
 
 ep = json.load(open(os.path.join(EP_DIR, "episode.json")))
+if ep.get("voice_h"):
+    VOICES["H"] = tuple(ep["voice_h"])  # e.g. ["silero:aidar", "+15%", "+0Hz"]
 seg_dir = os.path.join(EP_DIR, "seg")
 os.makedirs(seg_dir, exist_ok=True)
 
@@ -32,14 +34,14 @@ for s in ep["segments"]:
         i = len(items)
         mp3 = os.path.join(seg_dir, f"{i}.mp3")
         meta = os.path.join(seg_dir, f"{i}.txt")
-        if not (os.path.exists(mp3) and os.path.exists(meta) and open(meta).read() == who + txt):
+        if not (os.path.exists(mp3) and os.path.exists(meta) and open(meta).read() == " ".join(VOICES[who]) + who + txt):
             for k in range(12):
                 if subprocess.run(["python3", os.path.join(HERE, "tts_words.py"), *VOICES[who], txt, mp3], capture_output=True).returncode == 0:
                     break
                 time.sleep(5)  # edge-tts drops requests in bursts
             else:
                 raise SystemExit(f"tts failed: {txt}")
-            open(meta, "w").write(who + txt)
+            open(meta, "w").write(" ".join(VOICES[who]) + who + txt)
         items.append((who, mp3, json.load(open(mp3[:-4] + ".words.json"))))
 
 # 2. timeline
