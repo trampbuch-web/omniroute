@@ -106,6 +106,16 @@
         padding: 18px;
         font-size: 1.2rem;
       }
+      .msg + .msg {
+        margin-top: 12px;
+        padding-top: 12px;
+        border-top: 1px solid #8883;
+      }
+      .live {
+        display: block;
+        color: var(--muted);
+        font-style: italic;
+      }
       .mic.on {
         animation: pulse 1s infinite;
       }
@@ -192,8 +202,18 @@
 
     <script>
       const LANG = {
-        ru: { name: "Russian", speech: "ru-RU", other: "zh", listening: "Слушаю…" },
-        zh: { name: "Simplified Chinese", speech: "zh-CN", other: "ru", listening: "正在听…" },
+        ru: {
+          name: "Russian",
+          speech: "ru-RU",
+          other: "zh",
+          listening: "Слушаю… (нажмите ещё раз — стоп)",
+        },
+        zh: {
+          name: "Simplified Chinese",
+          speech: "zh-CN",
+          other: "ru",
+          listening: "正在听…（再按一次停止）",
+        },
       };
       const $ = (id) => document.getElementById(id);
       const store = {
@@ -265,9 +285,12 @@ Reply ONLY with JSON: {"translation": "...", "note": "..."}.
         return { to, ...parseReply(data.choices?.[0]?.message?.content ?? "") };
       }
 
+      // Append a message to a panel's transcript (kept above the live line).
       function show(id, mine, main, note) {
         const el = $(id);
-        el.textContent = "";
+        if (el.dataset.fresh !== "0") ((el.textContent = ""), (el.dataset.fresh = "0"));
+        const msg = document.createElement("div");
+        msg.className = "msg";
         for (const [cls, t] of [
           ["mine", mine],
           ["", main],
@@ -278,31 +301,49 @@ Reply ONLY with JSON: {"translation": "...", "note": "..."}.
           if (cls) span.className = cls;
           else span.style.display = "block";
           span.textContent = t; // textContent: model output is never parsed as HTML
-          el.append(span);
+          msg.append(span);
         }
+        el.insertBefore(msg, el.querySelector(".live"));
+        el.scrollTop = el.scrollHeight;
+      }
+
+      // Interim (not yet final) speech of the current speaker, replaced on every update.
+      function showLive(lang, text) {
+        const el = $(`out-${lang}`);
+        if (el.dataset.fresh !== "0") ((el.textContent = ""), (el.dataset.fresh = "0"));
+        let live = el.querySelector(".live");
+        if (!live)
+          ((live = document.createElement("span")), (live.className = "live"), el.append(live));
+        live.textContent = text;
+        el.scrollTop = el.scrollHeight;
       }
 
       function speak(text, lang) {
         if (store.get("tr.voice", "1") !== "1" || !window.speechSynthesis || !text) return;
         const u = new SpeechSynthesisUtterance(text);
         u.lang = LANG[lang].speech;
-        speechSynthesis.cancel();
-        speechSynthesis.speak(u);
+        speechSynthesis.speak(u); // queued, so phrases are read in order
       }
 
-      async function handle(from, text) {
+      // Each phrase is translated as soon as it is recognized; requests run in parallel,
+      // but results are shown and spoken strictly in the order phrases were said.
+      let order = Promise.resolve();
+      function handle(from, text) {
         text = text.trim();
         if (!text) return;
-        $("status").textContent = "Перевожу… / 翻译中…";
         show(`out-${from}`, "", text, "");
-        try {
-          const r = await translate(from, text);
-          show(`out-${r.to}`, text, r.translation, r.note);
-          speak(r.translation, r.to);
-          $("status").textContent = "Готово / 完成";
-        } catch (e) {
-          $("status").textContent = e.message;
-        }
+        $("status").textContent = "Перевожу… / 翻译中…";
+        const pending = translate(from, text);
+        order = order.then(async () => {
+          try {
+            const r = await pending;
+            show(`out-${r.to}`, text, r.translation, r.note);
+            speak(r.translation, r.to);
+            $("status").textContent = "Готово / 完成";
+          } catch (e) {
+            $("status").textContent = e.message;
+          }
+        });
       }
 
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -314,28 +355,38 @@ Reply ONLY with JSON: {"translation": "...", "note": "..."}.
           return;
         }
         if (active) {
+          const wasSame = active.lang === LANG[lang].speech;
+          active.keepOn = false;
           active.stop();
-          return;
+          if (wasSame) return; // same button again = stop; other side's button = switch speaker
         }
         const rec = new SR();
         rec.lang = LANG[lang].speech;
+        rec.continuous = true; // keep listening: translate phrase by phrase while the person talks
         rec.interimResults = true;
-        let finalText = "";
+        rec.keepOn = true;
         rec.onresult = (e) => {
-          finalText = Array.from(e.results)
-            .map((r) => r[0].transcript)
-            .join("");
-          show(`out-${lang}`, "", finalText, "");
+          let interim = "";
+          for (let i = e.resultIndex; i < e.results.length; i++) {
+            const t = e.results[i][0].transcript;
+            // While the translation is read aloud the mic hears it too; dropping it avoids a
+            // translate-the-translation loop. shortcut: also drops real speech said over the
+            // voice; with headphones, turn this guard off.
+            if (e.results[i].isFinal && !speechSynthesis?.speaking) handle(lang, t);
+            else interim += t;
+          }
+          showLive(lang, interim);
         };
         rec.onerror = (e) => {
-          $("status").textContent = `Mic: ${e.error}`;
+          if (e.error !== "no-speech") $("status").textContent = `Mic: ${e.error}`;
+          if (e.error === "not-allowed") rec.keepOn = false;
         };
         rec.onend = () => {
-          active = null;
+          showLive(lang, "");
+          if (rec.keepOn) return rec.start(); // browsers end the session after a pause; resume
+          if (active === rec) active = null;
           btn.classList.remove("on");
-          handle(lang, finalText);
         };
-        speechSynthesis?.cancel(); // don't let the speaker's own translation be heard by the mic
         rec.start();
         active = rec;
         btn.classList.add("on");
