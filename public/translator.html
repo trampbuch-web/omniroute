@@ -138,6 +138,10 @@
         color: var(--muted);
         padding: 4px 8px;
       }
+      .bar button[aria-pressed="true"] {
+        color: var(--zh);
+        font-weight: 600;
+      }
       dialog {
         border: 0;
         border-radius: 16px;
@@ -175,6 +179,7 @@
 
     <div class="bar">
       <span id="status">Готово</span>
+      <button id="auto" aria-pressed="false">🎧 Авто: говорят оба</button>
       <button id="open-settings" aria-label="Настройки">⚙︎ Настройки</button>
     </div>
 
@@ -195,6 +200,8 @@
         <input id="s-key" type="password" autocomplete="off" />
         <label for="s-model">Модель (например <code>openai/gpt-4o</code> или имя комбо)</label>
         <input id="s-model" />
+        <label for="s-stt">Модель распознавания для режима «Авто»</label>
+        <input id="s-stt" placeholder="groq/whisper-large-v3-turbo" />
         <label><input id="s-voice" type="checkbox" style="width: auto" /> Озвучивать перевод</label>
         <button>Сохранить</button>
       </form>
@@ -346,6 +353,116 @@ Reply ONLY with JSON: {"translation": "...", "note": "..."}.
         });
       }
 
+      // ---- Auto mode: mic always on, no buttons; Whisper detects the language of each phrase ----
+      const detectLang = (text) => (/[\u3400-\u9fff]/.test(text) ? "zh" : "ru");
+      const STEP_MS = 50;
+      const END_SILENCE_MS = 700; // pause that ends a phrase
+      const MIN_VOICED_MS = 300; // shorter = cough/click; also stops Whisper hallucinating on noise
+      const MAX_PHRASE_MS = 20000;
+      let auto = null;
+      let sttOrder = Promise.resolve();
+
+      async function transcribe(blob) {
+        const key = store.get("tr.key", "");
+        const fd = new FormData();
+        fd.append("file", blob, blob.type.includes("mp4") ? "speech.mp4" : "speech.webm");
+        fd.append("model", store.get("tr.stt", "") || "groq/whisper-large-v3-turbo");
+        const pending = fetch("/v1/audio/transcriptions", {
+          method: "POST",
+          headers: key ? { Authorization: `Bearer ${key}` } : {},
+          body: fd,
+        }).then(async (res) => {
+          if (!res.ok)
+            throw new Error(`STT HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+          return String((await res.json()).text ?? "").trim();
+        });
+        // phrases are recognized in parallel but handed to translation in the order spoken
+        sttOrder = sttOrder.then(async () => {
+          try {
+            const text = await pending;
+            if (text) handle(detectLang(text), text);
+          } catch (e) {
+            $("status").textContent = e.message;
+          }
+        });
+      }
+
+      async function startAuto(btn) {
+        if (auto) return auto.stop();
+        if (active) ((active.keepOn = false), active.stop());
+        let stream;
+        try {
+          stream = await navigator.mediaDevices.getUserMedia({
+            audio: { echoCancellation: true, noiseSuppression: true },
+          });
+        } catch (e) {
+          $("status").textContent = `Mic: ${e.message}`;
+          return;
+        }
+        const ctx = new AudioContext();
+        const analyser = ctx.createAnalyser();
+        analyser.fftSize = 1024;
+        ctx.createMediaStreamSource(stream).connect(analyser);
+        const buf = new Float32Array(analyser.fftSize);
+        let rec, voicedMs, silentMs, startedAt;
+        let noise = 0.01;
+        let tainted = false;
+
+        // Recording runs continuously and is cut at pauses, so the first syllable is never lost.
+        const newRec = () => {
+          const chunks = [];
+          rec = new MediaRecorder(stream);
+          rec.ondataavailable = (e) => chunks.push(e.data);
+          rec.chunks = chunks;
+          rec.start();
+          voicedMs = silentMs = 0;
+          startedAt = Date.now();
+        };
+        const cut = (send) => {
+          const r = rec;
+          const enough = send && voicedMs >= MIN_VOICED_MS;
+          r.onstop = () => enough && transcribe(new Blob(r.chunks, { type: r.mimeType }));
+          r.stop();
+          newRec();
+        };
+        newRec();
+
+        const timer = setInterval(() => {
+          // While a translation is read aloud the mic hears it; drop that audio so the app
+          // does not translate its own voice. shortcut: speech said over the voice is lost too.
+          if (window.speechSynthesis?.speaking) return void (tainted = true);
+          if (tainted) return ((tainted = false), cut(false));
+          analyser.getFloatTimeDomainData(buf);
+          let sum = 0;
+          for (const x of buf) sum += x * x;
+          const rms = Math.sqrt(sum / buf.length);
+          const loud = rms > Math.max(0.015, noise * 3); // adapts to room noise
+          if (loud) ((voicedMs += STEP_MS), (silentMs = 0));
+          else ((silentMs += STEP_MS), (noise = noise * 0.95 + rms * 0.05));
+          const age = Date.now() - startedAt;
+          if (voicedMs && (silentMs >= END_SILENCE_MS || age >= MAX_PHRASE_MS)) cut(true);
+          else if (!voicedMs && age >= 5000) cut(false); // only silence so far: discard, start fresh
+        }, STEP_MS);
+
+        auto = {
+          stop() {
+            clearInterval(timer);
+            rec.onstop = null;
+            rec.stop();
+            stream.getTracks().forEach((t) => t.stop());
+            ctx.close();
+            auto = null;
+            btn.setAttribute("aria-pressed", "false");
+            btn.textContent = "🎧 Авто: говорят оба";
+            $("status").textContent = "Готово / 完成";
+          },
+        };
+        btn.setAttribute("aria-pressed", "true");
+        btn.textContent = "⏹ Стоп / 停止";
+        $("status").textContent = "Слушаю всех… / 都在听…";
+      }
+      $("auto").onclick = (e) => startAuto(e.currentTarget);
+
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       let active = null;
       function listen(lang, btn) {
@@ -354,6 +471,7 @@ Reply ONLY with JSON: {"translation": "...", "note": "..."}.
             "Браузер не поддерживает распознавание речи — используйте Chrome/Safari";
           return;
         }
+        if (auto) auto.stop();
         if (active) {
           const wasSame = active.lang === LANG[lang].speech;
           active.keepOn = false;
@@ -414,12 +532,14 @@ Reply ONLY with JSON: {"translation": "...", "note": "..."}.
         $("s-key").value = store.get("tr.key", "");
         $("s-model").value = store.get("tr.model", "");
         $("s-voice").checked = store.get("tr.voice", "1") === "1";
+        $("s-stt").value = store.get("tr.stt", "");
         $("settings").showModal();
       };
       $("settings").addEventListener("close", () => {
         store.set("tr.key", $("s-key").value.trim());
         store.set("tr.model", $("s-model").value.trim());
         store.set("tr.voice", $("s-voice").checked ? "1" : "0");
+        store.set("tr.stt", $("s-stt").value.trim());
       });
 
       // self-check of the reply parser
