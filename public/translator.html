@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>RU ⇄ 中文</title>
+    <style>
+      :root {
+        --bg: #f5f5f7;
+        --card: #fff;
+        --text: #111;
+        --muted: #666;
+        --ru: #2563eb;
+        --zh: #dc2626;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #0f0f10;
+          --card: #1c1c1e;
+          --text: #f2f2f2;
+          --muted: #999;
+        }
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        height: 100%;
+        background: var(--bg);
+        color: var(--text);
+        font-family:
+          system-ui,
+          -apple-system,
+          "PingFang SC",
+          "Microsoft YaHei",
+          sans-serif;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      .half {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+        gap: 12px;
+        min-height: 0;
+      }
+      .half.zh {
+        transform: rotate(180deg);
+      } /* face-to-face: Chinese speaker sits opposite */
+      .out {
+        flex: 1;
+        overflow-y: auto;
+        background: var(--card);
+        border-radius: 16px;
+        padding: 16px;
+        font-size: 1.4rem;
+        line-height: 1.4;
+      }
+      .out .note {
+        display: block;
+        margin-top: 8px;
+        font-size: 0.95rem;
+        color: var(--muted);
+      }
+      .out .mine {
+        display: block;
+        font-size: 0.95rem;
+        color: var(--muted);
+        margin-bottom: 6px;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+      }
+      .row input {
+        flex: 1;
+        min-width: 0;
+        font-size: 1rem;
+        padding: 12px;
+        border-radius: 12px;
+        border: 1px solid #8884;
+        background: var(--card);
+        color: var(--text);
+      }
+      button {
+        border: 0;
+        border-radius: 12px;
+        padding: 12px 16px;
+        font-size: 1rem;
+        color: #fff;
+        cursor: pointer;
+      }
+      .ru button {
+        background: var(--ru);
+      }
+      .zh button {
+        background: var(--zh);
+      }
+      .mic {
+        width: 100%;
+        padding: 18px;
+        font-size: 1.2rem;
+      }
+      .mic.on {
+        animation: pulse 1s infinite;
+      }
+      @keyframes pulse {
+        50% {
+          opacity: 0.6;
+        }
+      }
+      .bar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 4px 16px;
+        font-size: 0.85rem;
+        color: var(--muted);
+        border-block: 1px solid #8883;
+      }
+      .bar button {
+        background: transparent;
+        color: var(--muted);
+        padding: 4px 8px;
+      }
+      dialog {
+        border: 0;
+        border-radius: 16px;
+        background: var(--card);
+        color: var(--text);
+        width: min(420px, calc(100% - 32px));
+      }
+      dialog label {
+        display: block;
+        margin: 10px 0 4px;
+        font-size: 0.9rem;
+      }
+      dialog input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 10px;
+        border: 1px solid #8884;
+        background: var(--bg);
+        color: var(--text);
+      }
+      dialog button {
+        background: var(--ru);
+        margin-top: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <section class="half zh" lang="zh">
+      <div class="out" id="out-zh" aria-live="polite">按下按钮，说中文。</div>
+      <div class="row">
+        <input id="txt-zh" placeholder="或者在这里输入…" /><button data-send="zh">发送</button>
+      </div>
+      <button class="mic" data-mic="zh">🎤 说话</button>
+    </section>
+
+    <div class="bar">
+      <span id="status">Готово</span>
+      <button id="open-settings" aria-label="Настройки">⚙︎ Настройки</button>
+    </div>
+
+    <section class="half ru">
+      <div class="out" id="out-ru" aria-live="polite">Нажмите кнопку и говорите по-русски.</div>
+      <div class="row">
+        <input id="txt-ru" placeholder="Или напишите здесь…" /><button data-send="ru">
+          Отправить
+        </button>
+      </div>
+      <button class="mic" data-mic="ru">🎤 Говорить</button>
+    </section>
+
+    <dialog id="settings">
+      <form method="dialog">
+        <strong>Настройки OmniRoute</strong>
+        <label for="s-key">API-ключ (Dashboard → API Keys)</label>
+        <input id="s-key" type="password" autocomplete="off" />
+        <label for="s-model">Модель (например <code>openai/gpt-4o</code> или имя комбо)</label>
+        <input id="s-model" />
+        <label><input id="s-voice" type="checkbox" style="width: auto" /> Озвучивать перевод</label>
+        <button>Сохранить</button>
+      </form>
+    </dialog>
+
+    <script>
+      const LANG = {
+        ru: { name: "Russian", speech: "ru-RU", other: "zh", listening: "Слушаю…" },
+        zh: { name: "Simplified Chinese", speech: "zh-CN", other: "ru", listening: "正在听…" },
+      };
+      const $ = (id) => document.getElementById(id);
+      const store = {
+        get: (k, d) => {
+          try {
+            return localStorage.getItem(k) ?? d;
+          } catch {
+            return d;
+          }
+        },
+        set: (k, v) => {
+          try {
+            localStorage.setItem(k, v);
+          } catch {}
+        },
+      };
+      const history = []; // last turns give the model context for hints and running jokes
+
+      function systemPrompt(from, to) {
+        return `You are a live interpreter between a Russian speaker and a Chinese speaker talking face to face.
+Translate the message from ${LANG[from].name} into ${LANG[to].name}.
+Convey meaning, not words: keep the speaker's tone, politeness level, humor, irony, sarcasm, idioms and hints.
+Replace idioms with natural equivalents in the target culture. Use the earlier conversation to resolve hints and references.
+The input comes from speech recognition and may have errors or no punctuation; infer what was meant.
+Reply ONLY with JSON: {"translation": "...", "note": "..."}.
+"note" is written in ${LANG[to].name}: one short sentence explaining hidden meaning, irony, a hint, or emotional tone ONLY if a literal reading would miss it; otherwise "".`;
+      }
+
+      function parseReply(text) {
+        const s = String(text).replace(/^\s*```(?:json)?\s*|\s*```\s*$/g, "");
+        try {
+          const j = JSON.parse(s.slice(s.indexOf("{"), s.lastIndexOf("}") + 1));
+          return { translation: String(j.translation ?? ""), note: String(j.note ?? "") };
+        } catch {
+          return { translation: s.trim(), note: "" }; // model ignored JSON format: show raw text
+        }
+      }
+
+      async function translate(from, text) {
+        const to = LANG[from].other;
+        const key = store.get("tr.key", "");
+        const model = store.get("tr.model", "");
+        if (!model) {
+          $("settings").showModal();
+          throw new Error("Укажите модель в настройках");
+        }
+        const res = await fetch("/v1/chat/completions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            ...(key && { Authorization: `Bearer ${key}` }),
+          },
+          body: JSON.stringify({
+            model,
+            stream: false,
+            temperature: 0.3,
+            messages: [
+              { role: "system", content: systemPrompt(from, to) },
+              ...history
+                .slice(-10)
+                .map((h) => ({ role: "user", content: `[${h.from}] ${h.text}` })),
+              { role: "user", content: text },
+            ],
+          }),
+        });
+        if (!res.ok) throw new Error(`HTTP ${res.status}: ${(await res.text()).slice(0, 200)}`);
+        const data = await res.json();
+        history.push({ from, text });
+        return { to, ...parseReply(data.choices?.[0]?.message?.content ?? "") };
+      }
+
+      function show(id, mine, main, note) {
+        const el = $(id);
+        el.textContent = "";
+        for (const [cls, t] of [
+          ["mine", mine],
+          ["", main],
+          ["note", note],
+        ]) {
+          if (!t) continue;
+          const span = document.createElement("span");
+          if (cls) span.className = cls;
+          else span.style.display = "block";
+          span.textContent = t; // textContent: model output is never parsed as HTML
+          el.append(span);
+        }
+      }
+
+      function speak(text, lang) {
+        if (store.get("tr.voice", "1") !== "1" || !window.speechSynthesis || !text) return;
+        const u = new SpeechSynthesisUtterance(text);
+        u.lang = LANG[lang].speech;
+        speechSynthesis.cancel();
+        speechSynthesis.speak(u);
+      }
+
+      async function handle(from, text) {
+        text = text.trim();
+        if (!text) return;
+        $("status").textContent = "Перевожу… / 翻译中…";
+        show(`out-${from}`, "", text, "");
+        try {
+          const r = await translate(from, text);
+          show(`out-${r.to}`, text, r.translation, r.note);
+          speak(r.translation, r.to);
+          $("status").textContent = "Готово / 完成";
+        } catch (e) {
+          $("status").textContent = e.message;
+        }
+      }
+
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      let active = null;
+      function listen(lang, btn) {
+        if (!SR) {
+          $("status").textContent =
+            "Браузер не поддерживает распознавание речи — используйте Chrome/Safari";
+          return;
+        }
+        if (active) {
+          active.stop();
+          return;
+        }
+        const rec = new SR();
+        rec.lang = LANG[lang].speech;
+        rec.interimResults = true;
+        let finalText = "";
+        rec.onresult = (e) => {
+          finalText = Array.from(e.results)
+            .map((r) => r[0].transcript)
+            .join("");
+          show(`out-${lang}`, "", finalText, "");
+        };
+        rec.onerror = (e) => {
+          $("status").textContent = `Mic: ${e.error}`;
+        };
+        rec.onend = () => {
+          active = null;
+          btn.classList.remove("on");
+          handle(lang, finalText);
+        };
+        speechSynthesis?.cancel(); // don't let the speaker's own translation be heard by the mic
+        rec.start();
+        active = rec;
+        btn.classList.add("on");
+        $("status").textContent = LANG[lang].listening;
+      }
+
+      document
+        .querySelectorAll("[data-mic]")
+        .forEach((b) => b.addEventListener("click", () => listen(b.dataset.mic, b)));
+      document.querySelectorAll("[data-send]").forEach((b) =>
+        b.addEventListener("click", () => {
+          const input = $(`txt-${b.dataset.send}`);
+          handle(b.dataset.send, input.value);
+          input.value = "";
+        })
+      );
+      ["ru", "zh"].forEach((l) =>
+        $(`txt-${l}`).addEventListener(
+          "keydown",
+          (e) => e.key === "Enter" && document.querySelector(`[data-send=${l}]`).click()
+        )
+      );
+
+      $("open-settings").onclick = () => {
+        $("s-key").value = store.get("tr.key", "");
+        $("s-model").value = store.get("tr.model", "");
+        $("s-voice").checked = store.get("tr.voice", "1") === "1";
+        $("settings").showModal();
+      };
+      $("settings").addEventListener("close", () => {
+        store.set("tr.key", $("s-key").value.trim());
+        store.set("tr.model", $("s-model").value.trim());
+        store.set("tr.voice", $("s-voice").checked ? "1" : "0");
+      });
+
+      // self-check of the reply parser
+      console.assert(
+        parseReply('```json\n{"translation":"你好","note":""}\n```').translation === "你好"
+      );
+      console.assert(parseReply("просто текст").translation === "просто текст");
+    </script>
+  </body>
+</html>
