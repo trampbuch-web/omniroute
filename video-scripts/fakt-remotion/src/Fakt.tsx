@@ -57,7 +57,7 @@ const Captions: React.FC<{ s: Seg }> = ({ s }) => {
       {c.map((w, i) => {
         const on = f >= w[0] && f < w[1] + 3;
         return (
-          <span key={i} style={{ display: "inline-block", margin: "0 18px", fontSize: 78, fontWeight: 900, textTransform: "uppercase", color: on ? "#ffd400" : "#fff", WebkitTextStroke: "4px #000", paintOrder: "stroke fill", textShadow: "0 8px 0 #000", scale: on ? "1.08" : "1" }}>{w[2]}</span>
+          <span key={i} style={{ display: "inline-block", margin: "0 18px", fontSize: 78, fontWeight: 900, textTransform: "uppercase", color: on ? "#ffd400" : "#fff", WebkitTextStroke: "4px #000", paintOrder: "stroke fill", textShadow: "0 8px 0 #000", translate: on ? "0px -6px" : "0px 0px" }}>{w[2]}</span>
         );
       })}
     </div>
