@@ -103,6 +103,7 @@ js = f'''      const SUBS = {json.dumps(subs, ensure_ascii=False)};
         count: [[15, -112], [18, -158]],
         both: [[22, -128], [22, -128]],
         drink: [[15, -112], [-75, -111]],
+        reach: [[15, -112], [86, -98]],
         windup: [[120, 60], [15, -112]],
         strike: [[120, -142], [15, -112]],
       }};
@@ -128,14 +129,15 @@ html = html.replace(old_host, '''        const up = standAt(t);
           `translate(${sway + up * 70}px, ${-up * 120 + Math.sin(t * 1.6) * 2}px) rotate(${lean + Math.sin(t * 0.6) * 0.6 - up * 1.5}deg)`;
 
         // глоток из кружки: кружка переезжает со стола в правую руку
-        const dr = pose.name === "drink" ? ease(pose.since / 0.55) : 0;
+        // mug: reach -> grab -> sip -> reach back -> let go (it only swaps desk/hand where the hand is)
         const armR = $("armR");
         const [ra1, ra2] = pose.arms[1];
-        const sip = pose.name === "drink" ? clamp((pose.since - 0.6) / 0.5) * clamp((3.2 - pose.since) / 0.4) : 0;
-        armR.querySelector(".cup").setAttribute("opacity", pose.name === "drink" ? 1 : 0);
+        const holding = pose.name === "drink" || (pose.name === "reach" && (pose.prev === "drink" ? pose.since < 0.35 : pose.since >= 0.35));
+        const sip = pose.name === "drink" ? clamp((pose.since - 0.45) / 0.3) * clamp((1.05 - pose.since) / 0.25) : 0;
+        armR.querySelector(".cup").setAttribute("opacity", holding ? 1 : 0);
         armR.querySelector(".cupR").setAttribute("transform", `rotate(${-(ra1 + ra2) + sip * 35}) scale(1.45)`);
-        $("deskMug").setAttribute("opacity", pose.name === "drink" ? 0 : 1);
-        $("steam").style.visibility = pose.name === "drink" ? "hidden" : "visible";
+        $("deskMug").setAttribute("opacity", holding ? 0 : 1);
+        $("steam").style.visibility = holding ? "hidden" : "visible";
 ''', 1)
 # head tips back when sipping, mouth closed
 html = html.replace('const tilt = listening ? 5 : pose.name === "point" ? 3 : 0;',
@@ -184,5 +186,15 @@ html = html.replace('$("deskMug").setAttribute', """const strk = pose.name === "
 html = html.replace("const open = speaking ? Math.abs(Math.sin(t * 13) * Math.sin(t * 4.7)) : 0;",
   "const mo = MOUTH[Math.min(MOUTH.length - 1, Math.floor(t * 25))] || [0, 1];\n        const open = mo[0];\n        $(\"mouthOpen\").setAttribute(\"rx\", 27 * mo[1]);", 1)
 assert "MOUTH[Math.min" in html
+html = html.replace("          name: cur[1],", "          name: cur[1],\n          prev: prev[1],", 1)
+assert "prev: prev[1]" in html
+# Russian tricolour instead of the US flag on the side panel
+html = html.replace("background: repeating-linear-gradient(180deg, #b5222a 0 40px, #e9e9ee 40px 80px);\n        opacity: 0.28;",
+                    "background: linear-gradient(180deg, #f4f4f4 0 33.4%, #1c3faa 33.4% 66.7%, #d52b1e 66.7%);\n        height: 100%;\n        opacity: 0.9;", 1)
+html = html.replace('<div class="stars"></div>', "", 1)
+html = html.replace('<div class="lbl">USA 2026</div>', '<div class="lbl">РОССИЯ 2026</div>', 1)
+html = html.replace("$(\"stripes\").style.transform = `translateY(${-((t * 30) % 80)}px)`;",
+                    "$(\"stripes\").style.transform = `skewY(${Math.sin(t * 1.4) * 1.2}deg)`; // gentle flutter", 1)
+assert "РОССИЯ 2026" in html and "#1c3faa" in html and "gentle flutter" in html
 open("udar-animation.html", "w").write(html)
 print("D", D, "starts", st)

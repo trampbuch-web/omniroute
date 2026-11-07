@@ -46,7 +46,7 @@ open(os.path.join(ep, "script.tsv"), "w").write("".join(f'{s.get("who", "H")}\t{
 
 pause = {i: s.get("pause", 0.4) for i, s in enumerate(sc_) if i}
 for i in drink:
-    pause[i] = max(pause.get(i, 0), 1.6)  # silent sip before this line
+    pause[i] = max(pause.get(i, 0), 2.8)  # silent: reach, sip, put the mug back
 scenes = ",\n".join(
     f" sc({a},{b},'{body(sc_[a])}'" + (', "scene ru"' if sc_[a].get("ru") else "") + ")" for a, b in groups)
 
@@ -55,7 +55,7 @@ alt = ["open", "point", "both", "explain"]
 gest = ['[0,"wave"]', '[G(0,2.6),"rest"]']
 for k, s in enumerate(sc_[1:], 1):
     if k in drink:
-        gest += [f'[G({k},-1.5),"drink"]', f'[G({k},-0.1),"rest"]']
+        gest += [f'[G({k},-2.7),"reach"]', f'[G({k},-2.1),"drink"]', f'[G({k},-0.95),"reach"]', f'[G({k},-0.35),"rest"]']
     if s.get("who") == "T":
         gest.append(f'[G({k},-0.1),"rest"]')
         continue
