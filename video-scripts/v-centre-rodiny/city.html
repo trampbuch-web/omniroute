@@ -1,0 +1,495 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>В центре Родины</title>
+    <style>
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #000;
+        font-family: "DejaVu Sans", Arial, sans-serif;
+      }
+      #stage {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        transform-origin: 540px 900px;
+      }
+      .loc {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 2400px;
+        height: 1920px;
+        opacity: 0;
+      }
+      .fg {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1080px;
+        height: 1920px;
+        opacity: 0;
+      }
+      #walkers {
+        position: absolute;
+        inset: 0;
+      }
+      #walkers svg {
+        position: absolute;
+        overflow: visible;
+      }
+      #tim {
+        position: absolute;
+        overflow: visible;
+      }
+      #pb {
+        position: absolute;
+        left: 690px;
+        top: 860px;
+        width: 330px;
+        height: 990px;
+        overflow: visible;
+        opacity: 0;
+      }
+      #brand {
+        position: absolute;
+        left: 40px;
+        top: 70px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      #brand b {
+        background: #e3262f;
+        color: #fff;
+        font-size: 34px;
+        font-weight: 900;
+        letter-spacing: 3px;
+        padding: 12px 20px;
+        border-radius: 10px;
+      }
+      #place {
+        position: absolute;
+        left: 44px;
+        top: 150px;
+        color: #fff;
+        font-size: 30px;
+        font-weight: 700;
+        background: rgba(0, 0, 0, 0.45);
+        padding: 8px 18px;
+        border-radius: 30px;
+      }
+      #card {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        top: 230px;
+        background: rgba(255, 255, 255, 0.95);
+        border-radius: 28px;
+        padding: 26px 34px 30px;
+        box-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+        opacity: 0;
+      }
+      #card .tag {
+        display: inline-block;
+        background: #e3262f;
+        color: #fff;
+        font-weight: 900;
+        font-size: 26px;
+        letter-spacing: 2px;
+        padding: 6px 14px;
+        border-radius: 8px;
+      }
+      #card .big {
+        font-size: 64px;
+        font-weight: 900;
+        color: #111;
+        margin-top: 12px;
+        line-height: 1.05;
+      }
+      #card .small {
+        font-size: 30px;
+        color: #444;
+        margin-top: 10px;
+      }
+      #caps {
+        position: absolute;
+        left: 40px;
+        right: 40px;
+        top: 1330px;
+        text-align: center;
+        font-size: 74px;
+        font-weight: 900;
+        line-height: 1.1;
+        color: #fff;
+        text-transform: uppercase;
+        -webkit-text-stroke: 3px #000;
+        paint-order: stroke fill;
+        text-shadow: 0 6px 0 #000;
+      }
+      #caps .on {
+        color: #ffd400;
+      }
+      #caps.p {
+        color: #ffd1e0;
+      }
+      #caps .who {
+        display: block;
+        font-size: 30px;
+        -webkit-text-stroke: 0;
+        text-shadow: none;
+        color: #fff;
+        margin-bottom: 8px;
+      }
+      #caps .who span {
+        background: #e3262f;
+        padding: 4px 14px;
+        border-radius: 8px;
+      }
+      #credit {
+        position: absolute;
+        left: 30px;
+        bottom: 24px;
+        color: rgba(255, 255, 255, 0.55);
+        font-size: 20px;
+      }
+      #prog {
+        position: absolute;
+        left: 0;
+        top: 0;
+        height: 12px;
+        background: #ffd400;
+      }
+      #flash {
+        position: absolute;
+        inset: 0;
+        background: #fff;
+        opacity: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="stage">
+      <div id="locs"></div>
+      <div id="walkers"></div>
+      <svg id="tim" viewBox="-40 -20 680 1500">__HOST__</svg>
+      <svg id="pb" viewBox="0 0 300 900"></svg>
+      <div id="fgs"></div>
+    </div>
+    <div id="brand"><b>В ЦЕНТРЕ РОДИНЫ</b></div>
+    <div id="place"></div>
+    <div id="card"><span class="tag"></span>
+      <div class="big"></div>
+      <div class="small"></div>
+    </div>
+    <div id="caps"></div>
+    <div id="credit">Иллюстрация · «В центре Родины»</div>
+    <div id="flash"></div>
+    <div id="prog"></div>
+    <script>
+      __SCENES__
+      document.getElementById("pb").innerHTML = PASSERBY;
+      const EP = __EP__;
+      seed = EP.seed;
+      const FPS = EP.fps;
+      const $ = (id) => document.getElementById(id);
+      if (EP.brand) document.querySelector("#brand b").textContent = EP.brand;
+      if (EP.credit) document.getElementById("credit").textContent = EP.credit;
+      const clamp = (x) => Math.max(0, Math.min(1, x));
+      const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+      const lerp = (a, b, p) => a + (b - a) * p;
+
+      // build location layers once
+      const locEls = [],
+        fgEls = [];
+      for (const s of EP.segs) {
+        const sc = SCENES[s.loc]();
+        const d = document.createElement("div");
+        d.className = "loc";
+        d.innerHTML = `<svg width="2400" height="1920" viewBox="0 0 2400 1920">${sc.bg}</svg>`;
+        $("locs").appendChild(d);
+        locEls.push(d);
+        const f = document.createElement("div");
+        f.className = "fg";
+        if (sc.fg) f.innerHTML = `<svg width="1080" height="1920" viewBox="0 0 1080 1920">${sc.fg}</svg>`;
+        $("fgs").appendChild(f);
+        fgEls.push(f);
+      }
+      const COATS = ["#3d4a63", "#6b3a3f", "#4a5a46", "#5a4a6b", "#2f3442", "#7a5a3a"];
+      const HAIRS = ["#2a1c14", "#5a3522", "#c9a26a", "#1c1c1c", "#7a4a2a"];
+      const SCARVES = ["#e3262f", "#e8b23a", "#3a7ab8", "#f4f4f4", "#3c9a5c"];
+      const WALKERS = Array.from({ length: 5 }, (_, i) => {
+        const el = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+        el.setAttribute("width", "10");
+        el.setAttribute("height", "10");
+        const pick = (a) => a[Math.floor(rnd() * a.length)];
+        el.innerHTML = walker(pick(COATS), pick(HAIRS), pick(SCARVES), rnd() < 0.4 ? pick(["#3b2418", "#1d1f27", "#6b2d3a"]) : "");
+        el.style.transformOrigin = "0 0";
+        $("walkers").appendChild(el);
+        return { el, x0: rnd() * 1500, v: (rnd() < 0.5 ? -1 : 1) * (70 + rnd() * 60), s: 0.5 + rnd() * 0.18, ph: rnd() * 6 };
+      });
+      WALKERS.sort((a, b) => a.s - b.s).forEach((w) => $("walkers").appendChild(w.el)); // nearer ones on top
+
+      // arms: shoulder°, elbow° (right arm is mirrored)
+      const POSE = {
+        rest: [15, -112],
+        explain: [20, -150],
+        open: [34, 96],
+        drink: [-75, -111],
+        mic: [-47, -129],
+        offer: [77, 113],
+      };
+      for (const id of ["armL", "armR"]) {
+        const g = $(id);
+        g.replaceChildren(document.querySelector("#arm").cloneNode(true));
+        g.firstChild.removeAttribute("id");
+      }
+      document.querySelector("#tim defs #arm").remove();
+      function setArm(el, [a1, a2], wiggle) {
+        const base = el.id === "armL" ? "translate(158 600)" : "translate(442 600) scale(-1 1)";  // shoulders of the slim build
+        el.setAttribute("transform", `${base} rotate(${a1})`);
+        el.querySelector(".fore").setAttribute("transform", `translate(0 185) rotate(${a2 + wiggle})`);
+        el.querySelector(".finger").setAttribute("opacity", 0);
+        return a1 + a2 + wiggle;
+      }
+      const mix = (A, B, p) => [lerp(A[0], B[0], p), lerp(A[1], B[1], p)];
+      const env = (who, t) => (EP.env[who] || [])[Math.floor(t * FPS)] || 0;
+      const mouthAt = (who, t) => (EP.mouth[who] || [])[Math.floor(t * FPS)] || [0, 1];
+
+      function segAt(t) {
+        let i = EP.segs.findIndex((s) => t < s.t1);
+        return i === -1 ? EP.segs.length - 1 : i;
+      }
+
+      function render(t) {
+        const si = segAt(t),
+          seg = EP.segs[si],
+          lt = t - seg.t0,
+          dur = seg.t1 - seg.t0;
+        // location crossfade
+        locEls.forEach((el, i) => {
+          const s = EP.segs[i];
+          const vis = i === si ? 1 : 0;
+          el.style.opacity = vis;
+          fgEls[i].style.opacity = vis;
+          if (vis) {
+            const range = 2400 - 1080;
+            const v = s.loc === "car" ? range / dur : Math.min(36, range / dur);
+            el.style.transform = `translateX(${-Math.min(range, (t - s.t0) * v) - (s.loc === "car" ? 0 : 60)}px)`;
+          }
+        });
+        const fl = lt < 0.3 && si > 0 ? 1 - lt / 0.3 : 0;
+        $("flash").style.opacity = fl * (seg.action === "talk" ? 0.3 : 0.8);
+        // TikTok-style jump cuts: every other line punches in on the face
+        let punch = 1;
+        if (EP.punch) {
+          const li = seg.lines.findIndex((l) => t >= l.t0 - 0.15 && t < l.t1 + 0.3);
+          const n = EP.segs.slice(0, si).reduce((a, s2) => a + s2.lines.length, 0) + Math.max(0, li);
+          punch = n % 2 ? 1.22 : 1;
+        }
+        $("stage").style.transform = `scale(${(1 + fl * 0.06) * punch})`;
+        $("stage").style.transformOrigin = punch > 1 ? "540px 640px" : "540px 900px";
+        $("prog").style.width = (t / EP.D) * 100 + "%";
+
+        // who speaks now
+        const line = seg.lines.find((l) => t >= l.t0 && t < l.t1 + 0.25);
+        const hTalk = env("H", t),
+          pTalk = env("P", t);
+        const walking = seg.action === "walk" || (seg.action === "interview" && lt < 1.4);
+        const car = seg.action === "drive";
+
+        // background walkers on outdoor scenes
+        const outdoor = ["redsquare", "street", "arbat"].includes(seg.loc);
+        WALKERS.forEach((w) => {
+          w.el.style.display = outdoor ? "block" : "none";
+          if (!outdoor) return;
+          // walk on the ground, not on the screen: add the background pan so nobody slides backwards
+          const drift = -Math.min(36, 1320 / (seg.t1 - seg.t0)) * lt;
+          const x = ((((w.x0 + w.v * t + drift) % 1700) + 1700) % 1700) - 300;
+          const step = Math.sin(t * 6.5 + w.ph);
+          w.el.style.left = x + "px";
+          w.el.style.top = 1270 + (w.s - 0.5) * 420 + Math.abs(step) * -4 + "px";
+          w.el.style.transform = `scale(${w.s * (w.v < 0 ? -1 : 1)}, ${w.s})`;
+          w.el.querySelector(".lg1").setAttribute("transform", `rotate(${step * 16} -17 -150)`);
+          w.el.querySelector(".lg2").setAttribute("transform", `rotate(${-step * 16} 17 -150)`);
+          w.el.querySelector(".ar1").setAttribute("transform", `rotate(${-step * 14} -47 -330)`);
+          w.el.querySelector(".ar2").setAttribute("transform", `rotate(${step * 14} 47 -330)`);
+        });
+
+        // host placement
+        const tim = $("tim");
+        const bob = walking ? Math.abs(Math.sin(t * 6.2)) * -14 : Math.sin(t * 1.6) * 3;
+        if (car) {
+          tim.style.width = "374px";
+          tim.style.height = "825px";
+          tim.style.left = "300px";
+          tim.style.top = 808 + Math.sin(t * 9) * 3 + "px";
+        } else {
+          const x = seg.action === "interview" ? 140 : seg.action === "talk" ? 160 : 220;
+          const sit = seg.action === "talk" ? 40 : 0; // sits lower behind the studio desk
+          const big = seg.action === "talk"; // studio: closer, face-forward framing
+          tim.style.width = big ? "760px" : "640px";
+          tim.style.height = big ? "1677px" : "1412px";
+          tim.style.left = x + Math.sin(t * 0.7) * 8 + "px";
+          tim.style.top = 330 + sit + bob + "px";
+        }
+        $("legs").style.display = car ? "none" : "";
+        const car$ = fgEls[si].querySelector("#car");
+        if (car$) car$.setAttribute("transform", `translate(0 ${Math.sin(t * 11) * 4})`);
+        fgEls[si].querySelectorAll(".wheel").forEach((w) => {
+          const tr = w.getAttribute("transform").replace(/ rotate\(.*\)/, "");
+          w.setAttribute("transform", `${tr} rotate(${t * 400})`);
+        });
+
+        // legs: front view, feet lift alternately while walking
+        const ph = t * 6.2;
+        for (const [id, off] of [
+          ["legL", 0],
+          ["legR", Math.PI],
+        ]) {
+          const lift = walking ? Math.max(0, Math.sin(ph + off)) : 0;
+          $(id).setAttribute("transform", `translate(0 ${-lift * 38})`);
+          $(id).querySelector(".shin").setAttribute("transform", `translate(0 ${-lift * 22})`);
+        }
+
+        // arms by action
+        const lead = seg.lead || 0;
+        const inLead = lt < lead;
+        let L = POSE.rest,
+          R = POSE.mic,
+          rTilt = 0;
+        const beat = hTalk > 0.05 ? Math.sin(t * 5.2) * 8 + Math.sin(t * 2.3) * 5 : 0;
+        if (seg.action === "walk" || seg.action === "interview" || seg.action === "talk") {
+          L = Math.floor(t / 2.2) % 2 ? POSE.explain : POSE.open;
+          if (walking) L = POSE.rest;
+        }
+        if (seg.action === "interview" && line && line.who === "P") {
+          const p = ease((t - line.t0) / 0.45);
+          R = mix(POSE.mic, POSE.offer, p);
+          rTilt = -28 * p;
+        } else if (seg.action === "interview" && line && line.who === "H") {
+          const prevP = seg.lines.find((l) => l.who === "P" && l.t1 <= t);
+          if (prevP) R = mix(POSE.offer, POSE.mic, ease((t - prevP.t1) / 0.45));
+        }
+        let sip = 0;
+        if (seg.action === "coffee" || seg.action === "eat") {
+          const toMouth = inLead ? ease(lt / 0.5) * (1 - ease((lt - lead + 0.4) / 0.4)) : 0;
+          L = mix(POSE.explain, POSE.drink, toMouth);
+          sip = toMouth;
+        }
+        if (car) L = POSE.rest;
+        const swing = walking ? Math.sin(ph) * 10 : 0;
+        const aL = setArm($("armL"), L, (L === POSE.rest ? swing : beat * 0.6));
+        const aR = setArm($("armR"), R, beat * 0.25);
+        const armL = $("armL"),
+          armR = $("armR");
+        armR.querySelector(".mic").setAttribute("opacity", 1);
+        armR.querySelector(".mic").setAttribute("transform", `rotate(${-aR + rTilt})`);
+        armL.querySelector(".mic").setAttribute("opacity", 0);
+        armL.querySelector(".cup").setAttribute("opacity", seg.action === "coffee" ? 1 : 0);
+        armL.querySelector(".cup").setAttribute("transform", `rotate(${-aL - sip * 30})`);
+        armL.querySelector(".fork").setAttribute("opacity", seg.action === "eat" ? 1 : 0);
+        armL.querySelector(".fork").setAttribute("transform", `rotate(${-aL - 20 - sip * 20})`);
+        armR.querySelector(".cup").setAttribute("opacity", 0);
+        armR.querySelector(".fork").setAttribute("opacity", 0);
+
+        // lip-sync: Rhubarb mouth shapes (open, width)
+        const mh = mouthAt("H", t);
+        const open = inLead && sip > 0.5 ? 0 : mh[0];
+        $("mouthOpen").setAttribute("ry", open * 15);
+        $("mouthOpen").setAttribute("rx", 27 * mh[1]);
+        $("teeth").setAttribute("height", open * 5);
+        $("lowLip").setAttribute("transform", `translate(0 ${open * 12})`);
+        const listening = line && line.who === "P";
+        const lineStart = line ? t - line.t0 : 9;
+        const raise = (lineStart < 0.9 ? Math.sin((lineStart / 0.9) * Math.PI) : 0) + (listening ? 0.8 : 0);
+        $("brows").setAttribute("transform", `translate(0 ${-raise * 8})`);
+        const bt = (t + Math.sin(t * 0.37) * 0.8) % 3.3;
+        const lid = bt < 0.13 ? 0.08 : 1;
+        const look = seg.action === "interview" && lt > 1.4 ? 6 : Math.sin(t * 0.5) * 1.5;
+        for (const [id, cx0] of [
+          ["eyeL", 248],
+          ["eyeR", 352],
+        ]) {
+          $(id).setAttribute("transform", `translate(${cx0} 360) scale(1 ${lid}) translate(${-cx0} -360)`);
+          $(id).querySelector(".iris").setAttribute("transform", `translate(${look} 0)`);
+        }
+        const nod = hTalk > 0.05 ? Math.sin(t * 2.1) * 2.4 + Math.sin(t * 3.7) : Math.sin(t * 0.8) * 0.8;
+        const tilt = sip > 0.5 ? -7 : listening ? 5 : 0;
+        $("head").setAttribute("transform", `rotate(${nod + tilt} 300 480)`);
+
+        // passer-by
+        const pb = $("pb");
+        const pv = seg.action === "interview" ? ease((lt - 0.8) / 0.6) : 0;
+        pb.style.opacity = pv;
+        pb.style.transform = `translateX(${(1 - pv) * 220}px)`;
+        const po = clamp(pTalk * 1.8);
+        const pLine = seg.lines.find((l) => l.who === "P");
+        const pSince = pLine ? t - pLine.t0 : -9;
+        const pSpeaking = pLine && t >= pLine.t0 && t < pLine.t1 + 0.2;
+        // alive while listening too: breathing, weight shift, glances at the host
+        pb.querySelector(".pBody").setAttribute("transform", `translate(150 876) rotate(${Math.sin(t * 0.9) * 1.6}) scale(1 ${1 + Math.sin(t * 2.4) * 0.006}) translate(-150 -876)`);
+        const pNod = pSpeaking ? Math.sin(t * 4.4) * 4 + Math.sin(t * 2.1) * 2 : Math.sin(t * 1.1) * 1.5 + (t % 4.5 < 0.5 ? Math.sin((t % 4.5) / 0.5 * Math.PI) * 5 : 0);
+        pb.querySelector(".pHead").setAttribute("transform", `rotate(${pNod + (pSpeaking ? 0 : -4)} 150 300)`);
+        pb.querySelector(".pHair").setAttribute("transform", `translate(${Math.sin(t * 1.3) * 2} 0)`);
+        const gest = pSpeaking ? ease(pSince / 0.4) : 0;
+        pb.querySelector(".pArmR").setAttribute("transform", `rotate(${-gest * (14 + Math.sin(t * 5) * 6)} 242 355)`);
+        const mp = mouthAt("P", t);
+        pb.querySelector(".pMouth").setAttribute("ry", 3 + mp[0] * 13);
+        pb.querySelector(".pMouth").setAttribute("rx", 16 * mp[1]);
+        const pBlink = (t + 1.1) % 3.7 < 0.13 ? 0.1 : 1;
+        pb.querySelector(".pEyes").setAttribute("transform", `translate(150 194) scale(1 ${pBlink}) translate(-150 -194)`);
+        pb.querySelector(".pIris").setAttribute("transform", `translate(${pSpeaking ? (Math.sin(t * 0.7) > 0.3 ? 0 : -5) : -6} 0)`);
+        const pRaise = pSince > 0 && pSince < 0.8 ? Math.sin((pSince / 0.8) * Math.PI) * 7 : 0;
+        pb.querySelector(".pBrows").setAttribute("transform", `translate(0 ${-pRaise})`);
+
+        // overlays
+        $("place").textContent = (seg.action === "talk" ? "" : "📍 ") + seg.place;
+        const card = $("card");
+        const cv = ease((lt - 0.5) / 0.5) * clamp((seg.t1 - t - 0.2) / 0.3);
+        card.style.opacity = seg.card ? cv : 0;
+        card.style.transform = `translateY(${(1 - cv) * -60}px)`;
+        if (seg.card && card.dataset.si != si) {
+          card.dataset.si = si;
+          card.querySelector(".tag").textContent = seg.card.tag || "";
+          card.querySelector(".big").textContent = seg.card.big || "";
+          card.querySelector(".small").textContent = seg.card.small || "";
+        }
+
+        // TikTok captions: chunk of words, current word highlighted
+        const caps = $("caps");
+        let html = "",
+          cls = "";
+        if (line) {
+          const ch = line.chunks.find((c) => t >= c.t0 && t < c.t1) || (t >= line.t0 ? line.chunks[line.chunks.length - 1] : null);
+          if (ch && t < line.t1 + 0.25) {
+            cls = line.who === "P" ? "p" : "";
+            html =
+              (line.who === "P" ? `<span class="who"><span>ПРОХОЖАЯ</span></span>` : "") +
+              ch.words.map((w) => `<span class="${t >= w[0] && t < w[1] + 0.08 ? "on" : ""}">${w[2]}</span>`).join(" ");
+          }
+        }
+        if (caps.dataset.h !== html) {
+          caps.dataset.h = html;
+          caps.innerHTML = html;
+          caps.className = cls;
+        }
+      }
+      window.render = render;
+      window.DURATION = EP.D;
+      if (!location.search.includes("capture")) {
+        const t0 = performance.now();
+        const loop = () => {
+          render(((performance.now() - t0) / 1000) % EP.D);
+          requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    </script>
+  </body>
+</html>
