@@ -9,7 +9,10 @@ mkdir -p seg; i=0
 while IFS=$'\t' read -r who txt; do
   if [ "$who" = T ]; then v=en-US-BrianMultilingualNeural r=+0% p=-4Hz f="highpass=f=250,lowpass=f=5000,"  # quote voice, not a clone
   else v=ru-RU-DmitryNeural r=+15% p=+8Hz f=""; fi
-  for try in $(seq 12); do python3 "$U/tts.py" $v $r $p "$txt" seg/r$i.mp3 </dev/null 2>/dev/null && [ -s seg/r$i.mp3 ] && break; sleep 8; done  # edge-tts drops requests in bursts
+  if [ -s seg/r$i.mp3 ] && [ "$(cat seg/r$i.txt 2>/dev/null)" = "$v$txt" ]; then :; else  # reuse audio from an interrupted run
+  for try in $(seq 30); do python3 "$U/tts.py" $v $r $p "$txt" seg/r$i.mp3 </dev/null 2>/dev/null && [ -s seg/r$i.mp3 ] && break; sleep 15; done  # edge-tts drops requests in bursts
+  [ -s seg/r$i.mp3 ] || { echo "tts failed: $txt" >&2; exit 1; }
+  echo -n "$v$txt" > seg/r$i.txt; fi
   ffmpeg -nostdin -v error -y -i seg/r$i.mp3 -af "${f}$TRIM" -ar 44100 -ac 2 seg/$i.wav; i=$((i+1))
 done < script.tsv
 python3 build.py
