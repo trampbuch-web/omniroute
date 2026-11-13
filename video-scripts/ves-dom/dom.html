@@ -1,0 +1,388 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Весь дом в курсе</title>
+    <style>
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #070b24; font-family: "DejaVu Sans", Arial, sans-serif; }
+      #cam { position: absolute; left: 0; top: 0; transform-origin: 0 0; will-change: transform; }
+      #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 45%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, 0.5) 100%); }
+      #brand { position: absolute; left: 36px; top: 64px; display: flex; align-items: center; gap: 12px; }
+      #brand b { background: #e3262f; color: #fff; font-size: 32px; font-weight: 900; letter-spacing: 2px; padding: 12px 18px; border-radius: 10px; box-shadow: 0 6px 0 rgba(0, 0, 0, 0.35); }
+      #brand i { font-style: normal; color: #fff; font-size: 26px; font-weight: 700; background: rgba(0, 0, 0, 0.5); padding: 10px 16px; border-radius: 10px; }
+      #place { position: absolute; left: 40px; top: 146px; color: #fff; font-size: 30px; font-weight: 700; background: rgba(0, 0, 0, 0.55); padding: 8px 18px; border-radius: 30px; opacity: 0; }
+      #card { position: absolute; left: 50px; right: 150px; top: 224px; background: rgba(255, 255, 255, 0.96); border-radius: 26px; padding: 22px 30px 26px; box-shadow: 0 16px 36px rgba(0, 0, 0, 0.4); opacity: 0; border-left: 14px solid #e3262f; }
+      #card .tag { display: inline-block; background: #e3262f; color: #fff; font-weight: 900; font-size: 24px; letter-spacing: 2px; padding: 6px 12px; border-radius: 8px; }
+      #card .big { font-size: 62px; font-weight: 900; color: #111; margin-top: 10px; line-height: 1.04; }
+      #card .small { font-size: 28px; color: #444; margin-top: 8px; line-height: 1.2; }
+      #floors { position: absolute; right: 30px; top: 224px; width: 92px; background: rgba(10, 12, 24, 0.82); border-radius: 22px; padding: 12px 0; border: 3px solid #3a3d46; }
+      #floors div { height: 58px; line-height: 58px; text-align: center; color: #5a6072; font-size: 34px; font-weight: 900; font-family: "DejaVu Sans Mono", monospace; }
+      #floors div.on { color: #111; background: #ffd400; border-radius: 12px; margin: 0 10px; }
+      #floors div.done { color: #ffd400; }
+      #caps { position: absolute; left: 40px; right: 40px; top: 1360px; text-align: center; font-size: 76px; font-weight: 900; line-height: 1.1; color: #fff; text-transform: uppercase; -webkit-text-stroke: 3px #000; paint-order: stroke fill; text-shadow: 0 6px 0 #000; }
+      #caps .on { color: #ffd400; display: inline-block; transform: translateY(-8px); }
+      #caps .who { display: block; font-size: 32px; -webkit-text-stroke: 0; text-shadow: none; color: #fff; margin-bottom: 10px; }
+      #caps .who span { padding: 6px 16px; border-radius: 10px; }
+      #caps .tr { display: block; font-size: 44px; color: #ffd400; text-transform: none; margin-top: 8px; }
+      #hook { position: absolute; left: 0; right: 0; top: 250px; text-align: center; color: #fff; font-weight: 900; text-transform: uppercase; line-height: 1.02; -webkit-text-stroke: 4px #000; paint-order: stroke fill; text-shadow: 0 8px 0 #000; }
+      #hook div { font-size: 118px; }
+      #hook div:nth-child(2) { color: #ffd400; }
+      #hook small { display: inline-block; font-size: 34px; -webkit-text-stroke: 0; text-shadow: none; background: #e3262f; padding: 8px 20px; border-radius: 10px; margin-top: 22px; letter-spacing: 1px; }
+      #cta { position: absolute; left: 40px; right: 40px; top: 1420px; text-align: center; color: #111; opacity: 0; }
+      #cta span { display: inline-block; background: #ffd400; font-size: 44px; font-weight: 900; padding: 18px 26px; border-radius: 18px; box-shadow: 0 8px 0 rgba(0, 0, 0, 0.45); line-height: 1.15; }
+      #prog { position: absolute; left: 0; top: 0; height: 12px; background: #ffd400; }
+      template { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="cam"></div>
+    <div id="vig"></div>
+    <div id="brand"><b>ВЕСЬ ДОМ В КУРСЕ</b><i id="date"></i></div>
+    <div id="place"></div>
+    <div id="card"><span class="tag"></span><div class="big"></div><div class="small"></div></div>
+    <div id="floors"></div>
+    <div id="hook"></div>
+    <div id="caps"></div>
+    <div id="cta"><span></span></div>
+    <div id="prog"></div>
+    <template id="hostT"><svg xmlns="http://www.w3.org/2000/svg">__HOST__</svg></template>
+    <script>
+      __HOUSE__
+      const EP = __EP__;
+      seed = EP.seed;
+      const FPS = EP.fps, $ = (id) => document.getElementById(id), $$ = (q) => [...document.querySelectorAll(q)];
+      const clamp = (x) => Math.max(0, Math.min(1, x));
+      const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+      const io = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
+      const lerp = (a, b, p) => a + (b - a) * p;
+      const NAMES = { Z: ["БАБА ЗИНА · 1 этаж", "#c8323c"], T: ["ДЯДЯ ТОЛЯ · 2 этаж", "#2b4a8a"], K: ["КРИСТИНА · 3 этаж", "#e0457a"], G: ["ГОША · 4 этаж", "#2e7a5c"], P: ["ПЕТЯ · 5 этаж", "#3b6bd6"], B: ["БАРСИК · крыша", "#c46a1a"] };
+
+      $("cam").innerHTML = houseSVG();
+      $("tim").innerHTML = $("hostT").content.querySelector("svg").innerHTML;
+      $("date").textContent = EP.date.replace(/ \d{4}$/, "");
+      const [d0, m0] = EP.date.split(" ");
+      $("calDay").textContent = d0;
+      $("calMon").textContent = (m0 || "").toUpperCase().replace(/Я$/, "Ь").replace(/А$/, "");
+      $("hook").innerHTML = EP.hook.map((h) => `<div>${h}</div>`).join("") + `<small>новости дня · по этажам</small>`;
+      $("cta").firstChild.textContent = EP.cta;
+      $("floors").innerHTML = ["К", 5, 4, 3, 2, 1].map((n) => `<div data-n="${n}">${n}</div>`).join("");
+
+      // ----- host rig (same as the street show): arms are a shoulder + elbow chain -----
+      const POSE = { rest: [15, -112], explain: [20, -150], open: [34, 96], mic: [-47, -129], offer: [77, 113], low: [12, -60] };
+      for (const id of ["armL", "armR"]) {
+        const g = $(id);
+        g.replaceChildren(document.querySelector("#tim #arm").cloneNode(true));
+        g.firstChild.removeAttribute("id");
+      }
+      document.querySelector("#tim defs #arm").remove();
+      function setArm(el, [a1, a2], wiggle) {
+        const base = el.id === "armL" ? "translate(158 600)" : "translate(442 600) scale(-1 1)";
+        el.setAttribute("transform", `${base} rotate(${a1})`);
+        el.querySelector(".fore").setAttribute("transform", `translate(0 185) rotate(${a2 + wiggle})`);
+        el.querySelector(".finger").setAttribute("opacity", 0);
+        return a1 + a2 + wiggle;
+      }
+      const mix2 = (A, B, p) => [lerp(A[0], B[0], p), lerp(A[1], B[1], p)];
+      const mouthAt = (who, t) => (EP.mouth[who] || [])[Math.floor(t * FPS)] || [0, 1];
+
+      // ----- timeline helpers -----
+      const SEGS = EP.segs, STOPS = SEGS.filter((s) => s.floor !== "roof"), ROOFSEG = SEGS[SEGS.length - 1];
+      const allLines = [EP.intro, ...SEGS.flatMap((s) => s.lines)];
+      const lineAt = (t) => allLines.find((l) => t >= l.t0 && t < l.t1 + 0.22);
+      function liftAt(t) {
+        // y of the cabin floor, the stop it stands at (or null while moving), where it is heading
+        let y = fy(STOPS[0].floor), at = STOPS[0], to = STOPS[0];
+        for (let i = 1; i < STOPS.length; i++) {
+          const s = STOPS[i], [a, b] = s.ride;
+          if (t >= a) {
+            const u = io((t - a) / (b - a));
+            y = lerp(fy(STOPS[i - 1].floor), fy(s.floor), u);
+            to = s;
+            at = t >= b ? s : null;
+            if (t >= b) y += 9 * Math.exp(-7 * (t - b)) * Math.sin(24 * (t - b)); // the cabin settles
+          }
+        }
+        if (t < STOPS[0].ride[1] - 0.1) at = null;
+        if (at && t > at.t1 - 0.12) at = null; // doors close just before it leaves
+        return { y, at, to };
+      }
+
+      // ----- camera: key shots, eased; `cut` jumps, `bump` pulls back mid-move (lift rides) -----
+      const WIDE = { x: 2100, y: WH / 2, z: 1920 / WH };
+      const hostShot = (n, z = 1.5) => ({ x: SH0 + 250, y: fy(n) - 470, z });
+      const twoShot = (n, z = 0.86) => ({ x: 2110, y: fy(n) - 540, z });
+      const resShot = (n, z) => { const k = RES_S["ZTKGP"[n - 1]]; return { x: RES_X[n] - 6, y: fy(n) - 22 - 430 * k, z: z || (k < 0.8 ? 1.75 : 1.5) }; };
+      const roofShot = { x: 2560, y: 960, z: 1 }, catShot = { x: 2420, y: ROOF - 320, z: 1.55 };
+      const K = [{ t: 0, ...WIDE }];
+      const key = (t, shot, o = {}) => K.push({ t, ...shot, ...o });
+      SEGS.forEach((s, i) => {
+        const n = s.floor, [a, b] = s.ride;
+        key(a, i ? K[K.length - 1] : { ...WIDE, z: WIDE.z * 1.14 });
+        if (n === "roof") {
+          key(b + 0.1, roofShot, { bump: 0.25 });
+          for (const l of s.lines) {
+            if (l.who === "B") { key(l.t0 - 0.1, catShot, { cut: 1 }); key(l.t1 + 0.6, { ...catShot, z: catShot.z * 1.1 }); }
+            else key(l.t1, { ...roofShot, z: 1.06 });
+          }
+          return;
+        }
+        key(b + 0.15, hostShot(n), i ? { bump: 0.5 } : {});
+        let prevWho = "H";
+        for (const l of s.lines) {
+          if (l.who === "H") {
+            const tm = l.t0 + Math.min(2.2, (l.t1 - l.t0) * 0.5);
+            if (prevWho !== "H") key(l.t0 - 0.1, hostShot(n), { cut: 1 });
+            key(tm, hostShot(n, 1.6));
+            key(tm + 0.6, twoShot(n));
+            key(l.t1, twoShot(n, 0.9));
+          } else {
+            key(l.t0 - 0.1, resShot(n), { cut: 1 });
+            const r = resShot(n);
+            key(l.t1, { ...r, z: r.z * 1.09 });
+          }
+          prevWho = l.who;
+        }
+      });
+      key(EP.out0, K[K.length - 1]);
+      key(EP.out0 + 1.3, WIDE);
+      key(EP.D, WIDE);
+      function camAt(t) {
+        let i = K.findIndex((k) => k.t > t);
+        if (i === -1) return K[K.length - 1];
+        if (i === 0) return K[0];
+        const A = K[i - 1], B = K[i];
+        if (B.cut) return A;
+        const u = io((t - A.t) / (B.t - A.t));
+        // zoom is interpolated in log space so a dive feels even
+        const z = Math.exp(lerp(Math.log(A.z), Math.log(B.z), u)) * (1 - (B.bump || 0) * Math.sin(Math.PI * u));
+        return { x: lerp(A.x, B.x, u), y: lerp(A.y, B.y, u), z };
+      }
+
+      // ----- cached nodes -----
+      const N = {
+        snow: $$(".snow").map((e) => ({ e, x: +e.dataset.x, y: +e.dataset.y, v: +e.dataset.v, p: +e.dataset.p })),
+        wsnow: $$(".wsnow").map((e) => ({ e, x: +e.dataset.x, y0: +e.dataset.y0, h: +e.dataset.h, v: +e.dataset.v, p: +e.dataset.p })),
+        tw: $$(".tw"), nw: $$(".nw"), doors: $$(".door"), calls: $$(".callLed"), btns: $$(".btn"), steam: $$(".steam"), bulbs: $$(".bulb"), mb: $$(".mb"),
+        leds: $$(".led"), rgb: $$(".rgb"), rgbf: $$(".rgbf"), keys: $$(".key"), leaves: $$(".leaf"), flames: $$(".flame"), gstars: $$(".gstar"),
+        planets: $$(".planet"), fish: $$(".fish"), bubs: $$(".bub"), smoke: $$(".smoke"), pigeons: $$(".pigeon"), fl: $$("#floors div"),
+      };
+      const RES = {};
+      for (const who of "ZTKGPB") {
+        const g = $("res-" + who), q = (c) => g.querySelector(c);
+        const sx = (el) => (el ? +el.getAttribute("transform").match(/translate\(([-\d.]+) ([-\d.]+)/)[1] : 0);
+        RES[who] = { g, body: q(".rBody"), head: q(".rHead"), eyes: q(".rEyes"), iris: q(".rIris"), brows: q(".rBrows"), mouth: q(".rMouth"), lip: q(".rLip"), aL: q(".rArmL"), aR: q(".rArmR"), sh: sx(q(".rArmR")) };
+      }
+      // resident arm poses: shoulder°, elbow° (outwards positive)
+      const RP = { rest: [5, 6], hold: [18, -95], talkA: [32, 100], talkB: [50, 66], up: [84, 58], phone: [54, 104], sip: [34, 150], point: [70, 20] };
+      const IDLE = { Z: ["hold", "hold"], T: ["rest", "talkB"], K: ["rest", "phone"], G: ["rest", "sip"], P: ["rest", "up"] };
+      function resArm(r, side, [a1, a2]) {
+        const el = side === "L" ? r.aL : r.aR;
+        el.setAttribute("transform", `translate(${side === "L" ? -r.sh : r.sh} -388)${side === "L" ? " scale(-1 1)" : ""} rotate(${-a1})`);
+        el.querySelector(".fore").setAttribute("transform", `translate(0 100) rotate(${-a2})`);
+        el.querySelector(".prop").setAttribute("transform", `rotate(${a1 + a2})`);
+      }
+
+      function render(t) {
+        const lift = liftAt(t), line = lineAt(t), who = line ? line.who : "";
+        // camera with a breath of hand-held drift
+        const c = camAt(t), dz = c.z > 0.5 ? 1 : 0;
+        const cx = c.x + (Math.sin(t * 0.9) * 5 * dz) / c.z, cy = c.y + (Math.sin(t * 1.3 + 1) * 4 * dz) / c.z;
+        $("cam").style.transform = `translate(${540 - cx * c.z}px, ${960 - cy * c.z}px) scale(${c.z})`;
+        $("prog").style.width = (t / EP.D) * 100 + "%";
+
+        // lift machinery
+        $("lift").setAttribute("transform", `translate(0 ${lift.y})`);
+        $("cables").setAttribute("d", `M${SH0 + 110} ${ROOF - 230} V${lift.y - 850} M${SH0 + 270} ${ROOF - 230} V${lift.y - 850} M${SH0 + 18} ${ROOF - 230} V${ROOF + F1 - lift.y + 40}`);
+        $("cweight").setAttribute("transform", `translate(0 ${ROOF + F1 - lift.y + 40})`);
+        $("mwheel").setAttribute("transform", `translate(210 -160) rotate(${(F1 - lift.y) * 0.5})`);
+        const near = Math.max(1, Math.min(5, Math.round((F1 - lift.y) / FH) + 1));
+        $("liftDisp").textContent = near;
+        $("liftLamp").setAttribute("opacity", !lift.at && Math.sin(t * 37) > 0.93 ? 0.4 : 1);
+        N.btns.forEach((b) => b.setAttribute("fill", +b.dataset.n === lift.to.floor ? "#ffd400" : "#3a3d46"));
+        N.doors.forEach((d) => {
+          const n = +d.dataset.n, s = lift.at && lift.at.floor === n ? lift.at : null;
+          const o = s ? ease((t - s.ride[1]) / 0.3) * clamp((s.t1 - 0.12 - t) / 0.12 + 1) : 0;
+          d.setAttribute("height", 834 * (1 - o));
+        });
+        N.calls.forEach((l, i) => l.setAttribute("fill", lift.at && lift.at.floor === i + 1 ? "#4fe3a8" : near === i + 1 ? "#ffd400" : "#5a6072"));
+
+        // host
+        const atStop = !!lift.at, hTalk = who === "H", listening = atStop && who && who !== "H";
+        const acc = (liftAt(t + 0.04).y - 2 * lift.y + liftAt(t - 0.04).y) * 1.6; // he feels the lift start and stop
+        $("tim").setAttribute("y", -772 + Math.max(-12, Math.min(12, -acc)) + Math.sin(t * 1.6) * 2);
+        const beat = hTalk ? Math.sin(t * 5.2) * 8 + Math.sin(t * 2.3) * 5 : 0;
+        let Lp = POSE.rest, Rp = POSE.mic, rTilt = 0;
+        if (hTalk && atStop) Lp = Math.floor(t / 2.1) % 2 ? POSE.explain : POSE.rest; // no wide gestures: the cabin is narrow
+        if (!atStop && !hTalk) Rp = POSE.low;
+        if (listening) {
+          const p = ease((t - line.t0) / 0.4);
+          Rp = mix2(POSE.mic, POSE.offer, p);
+          rTilt = -28 * p;
+        }
+        const aL = setArm($("armL"), Lp, Lp === POSE.rest ? Math.sin(t * 1.4) * 2 : beat * 0.6);
+        const aR = setArm($("armR"), Rp, beat * 0.25);
+        const armR = $("armR"), armL = $("armL");
+        armR.querySelector(".mic").setAttribute("opacity", 1);
+        armR.querySelector(".mic").setAttribute("transform", `rotate(${-aR + rTilt})`);
+        for (const [a, c2] of [[armL, ".mic"], [armL, ".cup"], [armL, ".fork"], [armR, ".cup"], [armR, ".fork"]]) a.querySelector(c2).setAttribute("opacity", 0);
+        const mh = mouthAt("H", t);
+        $("mouthOpen").setAttribute("ry", mh[0] * 15);
+        $("mouthOpen").setAttribute("rx", 27 * mh[1]);
+        $("teeth").setAttribute("height", mh[0] * 5);
+        $("lowLip").setAttribute("transform", `translate(0 ${mh[0] * 12})`);
+        const ls = line ? t - line.t0 : 9;
+        $("brows").setAttribute("transform", `translate(0 ${-((ls < 0.9 && hTalk ? Math.sin((ls / 0.9) * Math.PI) : 0) + (listening ? 0.8 : 0)) * 8})`);
+        const lid = (t + Math.sin(t * 0.37) * 0.8) % 3.3 < 0.13 ? 0.08 : 1, look = atStop ? 7 : Math.sin(t * 0.5) * 2;
+        for (const [id, x0] of [["eyeL", 248], ["eyeR", 352]]) {
+          $(id).setAttribute("transform", `translate(${x0} 360) scale(1 ${lid}) translate(${-x0} -360)`);
+          $(id).querySelector(".iris").setAttribute("transform", `translate(${look} 0)`);
+        }
+        $("head").setAttribute("transform", `rotate(${(hTalk ? Math.sin(t * 2.1) * 2.4 + Math.sin(t * 3.7) : Math.sin(t * 0.8) * 0.8) + (listening ? 5 : 0)} 300 480)`);
+        $("legL").setAttribute("transform", "");
+        $("legR").setAttribute("transform", "");
+
+        // residents: busy with their own thing, look up when the lift arrives, gesture when they talk
+        "ZTKGP".split("").forEach((w, i) => {
+          const r = RES[w], seg = lift.at && lift.at.floor === i + 1 ? lift.at : null, ph = i * 1.7;
+          const att = seg ? ease((t - seg.ride[1]) / 0.5) : 0, talk = who === w, m = mouthAt(w, t);
+          const since = talk ? t - line.t0 : -1;
+          r.body.setAttribute("transform", `rotate(${Math.sin(t * 0.8 + ph) * 1.2 - att * 2}) scale(1 ${1 + Math.sin(t * 2.2 + ph) * 0.007})`);
+          r.head.setAttribute("transform", `rotate(${(talk ? Math.sin(t * 4.3) * 3.5 + Math.sin(t * 2) * 2 : Math.sin(t * 1.1 + ph) * 2) - att * 5} 0 -420)`);
+          const blink = (t + ph) % 3.6 < 0.13 ? 0.1 : 1;
+          r.eyes.setAttribute("transform", `translate(0 -512) scale(1 ${blink}) translate(0 512)`);
+          const idleLook = w === "K" ? 5 : w === "Z" ? Math.sin(t * 0.6) * 3 : Math.sin(t * 0.5 + ph) * 3;
+          r.iris.setAttribute("transform", `translate(${lerp(idleLook, talk ? -3 : -6, att)} ${w === "Z" && !att ? 3 : 0})`);
+          const surprise = seg && t - seg.ride[1] < 0.9 ? Math.sin(((t - seg.ride[1]) / 0.9) * Math.PI) : 0;
+          r.brows.setAttribute("transform", `translate(0 ${-(surprise * 9 + (since > 0 && since < 0.7 ? Math.sin((since / 0.7) * Math.PI) * 7 : 0))})`);
+          r.mouth.setAttribute("ry", 3 + m[0] * 15);
+          r.mouth.setAttribute("rx", 18 * m[1]);
+          r.lip.setAttribute("transform", `translate(0 ${-m[0] * 4})`);
+          // arms
+          const [iL, iR] = IDLE[w];
+          const wob = w === "Z" ? Math.sin(t * 7) * 6 : w === "T" ? Math.sin(t * 3) * 10 : w === "P" ? Math.sin(t * 4) * 22 : Math.sin(t * 1.2 + ph) * 3;
+          let L = [RP[iL][0], RP[iL][1] + (w === "Z" ? -wob : 0)], Rr = [RP[iR][0] + (w === "P" ? wob : 0), RP[iR][1] + wob * (w === "P" ? 0.3 : 1)];
+          if (talk) {
+            const g = ease(since / 0.35), b = Math.sin(t * 5) * 9;
+            const tgt = Math.floor((t - line.t0) / 1.3) % 2 ? RP.talkB : RP.talkA;
+            Rr = mix2(Rr, [tgt[0] + b * 0.4, tgt[1] + b], g);
+            if (w !== "Z") L = mix2(L, [RP.talkB[0] * 0.6, RP.talkB[1] * 0.7 - b], g * 0.8);
+          }
+          resArm(r, "L", L);
+          resArm(r, "R", Rr);
+        });
+        // the cat on the roof
+        {
+          const r = RES.B, m = mouthAt("B", t), talk = who === "B";
+          $("catTail").setAttribute("transform", `rotate(${Math.sin(t * 2.2) * 10} 70 -20)`);
+          r.head.setAttribute("transform", `rotate(${Math.sin(t * 0.9) * 3 + (talk ? -8 : 0)} -8 -180)`);
+          r.eyes.setAttribute("transform", `translate(0 -244) scale(1 ${(t + 0.7) % 4.1 < 0.14 ? 0.1 : 1}) translate(0 244)`);
+          r.mouth.setAttribute("ry", 2 + m[0] * 16);
+          r.mouth.setAttribute("rx", 12 + m[0] * 4);
+          r.body.setAttribute("transform", `scale(1 ${1 + Math.sin(t * 1.8) * 0.01})`);
+        }
+
+        // ambient life
+        N.snow.forEach((s) => {
+          s.e.setAttribute("cx", ((s.x + Math.sin(t * 0.7 + s.p) * 60) % WW + WW) % WW);
+          s.e.setAttribute("cy", (s.y + t * s.v) % F1);
+        });
+        N.wsnow.forEach((s) => {
+          s.e.setAttribute("cx", s.x + Math.sin(t + s.p) * 8);
+          s.e.setAttribute("cy", s.y0 + ((s.p + t * s.v) % s.h));
+        });
+        N.tw.forEach((e, i) => e.setAttribute("opacity", 0.45 + 0.5 * Math.sin(t * (1.5 + (i % 5) * 0.4) + i)));
+        N.nw.forEach((e, i) => { if (i % 9 === 4) e.setAttribute("opacity", Math.sin(t * 0.45 + i) > 0.92 ? 0.25 : 1); });
+        $("pend").setAttribute("transform", `rotate(${Math.sin(t * 3.1) * 16} 0 80)`);
+        $("clkM").setAttribute("transform", `rotate(${126 + t * 6} 0 -8)`);
+        $("clkH").setAttribute("transform", `rotate(${195 + t * 0.5} 0 -8)`);
+        const tvf = 0.55 + 0.25 * Math.sin(t * 9) * Math.sin(t * 3.3);
+        $("tvglow").setAttribute("opacity", tvf);
+        $("tvpic").setAttribute("fill", Math.floor(t * 1.2) % 2 ? "#3a6fb8" : "#27508a");
+        N.steam.forEach((e) => {
+          const u = (t * 0.7 + +e.dataset.i * 0.37) % 1;
+          e.setAttribute("transform", `translate(${Math.sin(u * 6.3) * 6} ${-u * 60})`);
+          e.setAttribute("opacity", 0.6 * Math.sin(u * Math.PI));
+        });
+        $("lid").setAttribute("transform", `translate(0 ${Math.abs(Math.sin(t * 9)) * -4}) rotate(${Math.sin(t * 9) * 2} 85 -376)`);
+        $("radio").setAttribute("opacity", 0.4 + 0.6 * Math.abs(Math.sin(t * 4)));
+        $("drill").setAttribute("transform", `translate(${Math.sin(t * 60) * (Math.sin(t * 0.8) > 0.9 ? 2 : 0)} 0)`);
+        N.bulbs.forEach((e) => { const i = +e.dataset.i; e.setAttribute("fill", ["#ffd84a", "#ff7fb0", "#7fd4ff", "#a8ff8a"][(i + Math.floor(t * 2)) % 4]); e.setAttribute("opacity", 0.75 + 0.25 * Math.sin(t * 5 + i)); });
+        N.mb.forEach((e) => e.setAttribute("opacity", 0.8 + 0.2 * Math.sin(t * 6 + +e.dataset.i)));
+        $("neon").setAttribute("opacity", Math.sin(t * 23) > 0.96 || (t % 5.3 < 0.12) ? 0.45 : 1);
+        $("ringglow").setAttribute("opacity", 0.55 + 0.08 * Math.sin(t * 2));
+        $("dogTail").setAttribute("transform", `rotate(${Math.sin(t * 11) * 16} 30 -20)`);
+        $("dogTongue").setAttribute("transform", `translate(0 ${Math.abs(Math.sin(t * 6)) * 3})`);
+        N.leaves.forEach((e) => e.setAttribute("transform", `rotate(${Math.sin(t * 0.9 + +e.dataset.i * 2) * 2.5} 0 -100)`));
+        N.flames.forEach((e, i) => e.setAttribute("ry", 12 + Math.sin(t * 13 + i * 2) * 2.5));
+        const hue = (t * 50) % 360, col = `hsl(${hue} 100% 62%)`;
+        N.rgb.forEach((e) => e.setAttribute("stroke", col));
+        N.rgbf.forEach((e) => e.setAttribute("fill", col));
+        $("rgbglow").setAttribute("fill", col);
+        N.keys.forEach((e) => e.setAttribute("fill", `hsl(${(hue + +e.dataset.i * 30) % 360} 100% 62%)`));
+        N.leds.forEach((e) => { const i = +e.dataset.i; e.setAttribute("opacity", Math.sin(t * (5 + (i % 7)) + i * 1.3) > 0.2 ? 1 : 0.15); });
+        $("code").setAttribute("transform", `translate(0 ${-((t * 40) % 128)})`);
+        const rb = Math.sin(t * 0.45) * 330;
+        $("robo").setAttribute("transform", `translate(${2230 + rb} ${fy(4) - 30})`);
+        $("roboLed").setAttribute("fill", Math.cos(t * 0.45) > 0 ? "#4fe3a8" : "#4fa8ff");
+        N.gstars.forEach((e) => e.setAttribute("opacity", 0.55 + 0.45 * Math.sin(t * 2 + +e.dataset.i)));
+        N.planets.forEach((e) => { const i = +e.dataset.i, a = t * (0.9 - i * 0.15) + i * 1.6, rr = 60 + i * 34; e.setAttribute("transform", `translate(${Math.cos(a) * rr} ${110 + Math.sin(a) * rr * 0.22})`); });
+        N.fish.forEach((e) => { const i = +e.dataset.i, u = Math.sin(t * (0.8 + i * 0.3) + i * 2), dir = Math.cos(t * (0.8 + i * 0.3) + i * 2) > 0 ? -1 : 1; e.setAttribute("transform", `translate(${94 + u * 52} ${-360 + i * 34 + Math.sin(t * 2 + i) * 6}) scale(${dir} 1)`); });
+        N.bubs.forEach((e) => { const u = (t * 0.5 + +e.dataset.i * 0.33) % 1; e.setAttribute("cy", -300 - u * 90); e.setAttribute("opacity", 1 - u); });
+        $("wheel").setAttribute("transform", `translate(-20 -44) rotate(${t * 300})`);
+        $("ball").setAttribute("transform", `translate(${2440 + Math.sin(t * 0.7) * 40} ${fy(5) - 62}) rotate(${Math.sin(t * 0.7) * 70})`);
+        $("mouse").setAttribute("transform", `translate(${RX0 + 520 + Math.sin(t * 0.6) * 150} ${fy(3) + 46}) scale(${Math.cos(t * 0.6) > 0 ? -1 : 1} 1)`);
+        const sp = 150 + Math.sin(t * 0.8) * 70;
+        $("spThread").setAttribute("d", `M0 0 V${sp}`);
+        $("spBody").setAttribute("transform", `translate(0 ${sp})`);
+        N.smoke.forEach((e) => { const u = (t * 0.25 + +e.dataset.i * 0.25) % 1; e.setAttribute("cy", -250 - u * 260); e.setAttribute("cx", Math.sin(u * 3 + +e.dataset.i) * 40 + u * 60); e.setAttribute("r", 26 + u * 46); e.setAttribute("opacity", 0.5 * (1 - u)); });
+        N.pigeons.forEach((e, i) => e.querySelector(".pHead").setAttribute("transform", `translate(${Math.max(0, Math.sin(t * 5 + i * 2)) * -7} ${Math.max(0, Math.sin(t * 2.5 + i)) * 5})`));
+
+        // ----- overlays -----
+        const si = SEGS.findIndex((s) => t >= s.ride[0] && t < s.t1), seg = si >= 0 ? SEGS[si] : null;
+        const inIntro = t < SEGS[0].ride[0] + 0.25, inOutro = t >= EP.out0;
+        const hv = inIntro ? ease(t / 0.25) * clamp((SEGS[0].ride[0] + 0.25 - t) / 0.25) : 0;
+        $("hook").style.opacity = hv;
+        $("hook").style.transform = `scale(${0.8 + 0.2 * ease(t / 0.3) + 0.02 * Math.sin(t * 6)})`;
+        const cv = inOutro ? ease((t - EP.out0 - 0.9) / 0.4) : 0;
+        $("cta").style.opacity = cv;
+        $("cta").style.transform = `translateY(${(1 - cv) * 60}px) rotate(${Math.sin(t * 5) * 1.2}deg)`;
+        const cur = seg && t >= seg.ride[1] - 0.2 ? (seg.floor === "roof" ? "К" : seg.floor) : null;
+        const doneN = SEGS.filter((s) => t >= s.t1).map((s) => (s.floor === "roof" ? "К" : s.floor));
+        N.fl.forEach((e) => { const n = isNaN(+e.dataset.n) ? "К" : +e.dataset.n; e.className = n === cur ? "on" : doneN.includes(n) ? "done" : ""; });
+        $("floors").style.opacity = inIntro || inOutro ? 0 : 1;
+        const pv = seg && !inOutro ? ease((t - seg.ride[1]) / 0.4) * clamp((seg.t1 - t) / 0.25) : 0;
+        $("place").style.opacity = pv;
+        if (seg) $("place").textContent = "📍 " + (seg.floor === "roof" ? "крыша · кот Барсик" : NAMES[seg.who][0].toLowerCase().replace(/^./, (x) => x.toUpperCase()));
+        const card = $("card"), first = seg && seg.lines[0];
+        const kv = seg && seg.card && seg.card.big && first ? ease((t - first.t0 - 0.35) / 0.45) * clamp((seg.t1 - t - 0.1) / 0.25) : 0;
+        card.style.opacity = kv;
+        card.style.transform = `translateY(${(1 - kv) * -50}px) rotate(${(1 - kv) * -2}deg)`;
+        if (seg && seg.card && seg.card.big && card.dataset.si != si) {
+          card.dataset.si = si;
+          card.querySelector(".tag").textContent = seg.card.tag || "";
+          card.querySelector(".big").textContent = seg.card.big || "";
+          card.querySelector(".small").textContent = seg.card.small || "";
+        }
+        // captions: a chunk of words, the spoken one lifted and yellow
+        let html = "";
+        if (line) {
+          const ch = line.chunks.find((c2) => t >= c2.t0 && t < c2.t1) || line.chunks[line.chunks.length - 1];
+          const nm = NAMES[line.who];
+          html = (nm ? `<span class="who"><span style="background:${nm[1]}">${nm[0]}</span></span>` : "") + ch.words.map((w) => `<span class="${t >= w[0] && t < w[1] + 0.08 ? "on" : ""}">${w[2]}</span>`).join(" ");
+          if (line.who === "B" && ROOFSEG.card && ROOFSEG.card.meow) html += `<span class="tr">(${ROOFSEG.card.meow})</span>`;
+        }
+        if ($("caps").dataset.h !== html) {
+          $("caps").dataset.h = html;
+          $("caps").innerHTML = html;
+        }
+      }
+      window.render = render;
+      window.DURATION = EP.D;
+      if (!location.search.includes("capture")) {
+        const t0 = performance.now();
+        const loop = () => { render(((performance.now() - t0) / 1000) % EP.D); requestAnimationFrame(loop); };
+        loop();
+      }
+    </script>
+  </body>
+</html>
