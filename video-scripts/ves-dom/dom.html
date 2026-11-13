@@ -102,6 +102,7 @@
             if (t >= b) y += 9 * Math.exp(-7 * (t - b)) * Math.sin(24 * (t - b)); // the cabin settles
           }
         }
+        if (t >= EP.out0) { y = lerp(y, fy(STOPS[0].floor), io((t - EP.out0) / 1.7)); at = null; to = STOPS[0]; } // back down, so the loop restarts cleanly
         if (t < STOPS[0].ride[1] - 0.1) at = null;
         if (at && t > at.t1 - 0.12) at = null; // doors close just before it leaves
         return { y, at, to };
