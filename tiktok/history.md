@@ -6,3 +6,6 @@
 ## Stories
 - Мастерская у метро (мистика: фото кухни с телефона в ремонте)
 - Взлом Twitter 2020 (Грэм Айвен Кларк, звонок в техподдержку)
+## Ready, waiting for ElevenLabs quota (build these first, then move above)
+- Chat: кот добрался до ноутбука хозяина — specs/2026-11-13-1130-chat.json
+- Story: кража Моны Лизы 1911 — specs/2026-11-13-1130-story.json
