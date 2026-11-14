@@ -142,30 +142,58 @@ HOOD = {1: (92, 98, 115), 2: (40, 95, 205), 3: (22, 22, 28)}
 
 
 def draw_hero(im, cx, cy, tier, t):
-    """Same guy at every tier (shaggy brown hair, hood); outfit upgrades with the level."""
-    d = ImageDraw.Draw(im, "RGBA"); cy += int(6 * np.sin(t * 2.2)); hood = HOOD.get(tier, HOOD[1]); dark = tuple(int(c * 0.7) for c in hood)
-    d.rounded_rectangle((cx - 170, cy + 40, cx + 170, cy + 380), 70, fill=hood)          # torso
-    d.line((cx - 28, cy + 90, cx - 34, cy + 190), fill=(230, 230, 235), width=6)          # hoodie strings
-    d.line((cx + 28, cy + 90, cx + 34, cy + 190), fill=(230, 230, 235), width=6)
-    d.ellipse((cx - 125, cy - 185, cx + 125, cy + 75), fill=dark)                         # hood
-    d.ellipse((cx - 88, cy - 140, cx + 88, cy + 50), fill=(238, 200, 170))                # face
-    d.pieslice((cx - 98, cy - 160, cx + 98, cy + 10), 180, 360, fill=(96, 64, 42))        # hair
-    for k in range(-3, 4): d.ellipse((cx + k * 26 - 20, cy - 90, cx + k * 26 + 20, cy - 48), fill=(96, 64, 42))  # fringe
-    blink = (t % 3.4) < 0.12
+    """Same guy at every tier (shaggy brown hair, hood); outfit upgrades with the level. Mood comes from the line."""
+    mood = L[line_at(t)].get("mood", "neutral"); talk = speaking(t)
+    lay = Image.new("RGBA", (640, 820), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    x, y = 320, 260  # face centre inside the layer
+    hood = HOOD.get(tier, HOOD[1]); dark = tuple(int(c * 0.7) for c in hood); skin = (238, 200, 170); hair = (96, 64, 42)
+    # hands: idle / talking gesture / both up / at the head
+    if mood == "hype": hands = [(x - 235, y - 150 + 26 * np.sin(t * 9)), (x + 235, y - 150 + 26 * np.sin(t * 9 + 1.5))]
+    elif mood == "shock": hands = [(x - 150, y + 10), (x + 150, y + 10)]
+    else:
+        hands = [(x - 200 + 8 * np.sin(t * 1.9), y + 330), (x + 200, y + 330)]
+        if talk: hands[1] = (x + 215 + 30 * np.sin(t * 5.1), y + 150 + 55 * np.sin(t * 3.3))
+        if talk and mood == "happy": hands[0] = (x - 215 + 30 * np.sin(t * 4.3 + 2), y + 150 + 55 * np.sin(t * 3.7 + 1))
+    for sx, (hx, hy) in zip((-1, 1), hands):
+        d.line((x + sx * 150, y + 130, hx, hy), fill=hood, width=64); d.ellipse((x + sx * 150 - 32, y + 98, x + sx * 150 + 32, y + 162), fill=hood)
+        d.ellipse((hx - 36, hy - 36, hx + 36, hy + 36), fill=skin)
+    d.rounded_rectangle((x - 170, y + 40, x + 170, y + 380), 70, fill=hood)               # torso
+    d.line((x - 28, y + 90, x - 34, y + 190), fill=(230, 230, 235), width=6); d.line((x + 28, y + 90, x + 34, y + 190), fill=(230, 230, 235), width=6)
+    d.ellipse((x - 125, y - 185, x + 125, y + 75), fill=dark)                               # hood
+    d.ellipse((x - 88, y - 140, x + 88, y + 50), fill=skin)                                 # face
+    d.pieslice((x - 98, y - 160, x + 98, y + 10), 180, 360, fill=hair)
+    for k in range(-3, 4): d.ellipse((x + k * 26 - 20, y - 90, x + k * 26 + 20, y - 48), fill=hair)
+    look = 5 * np.sin(t * 0.9); blink = (t % 3.4) < 0.12
     if tier >= 3:
-        d.rounded_rectangle((cx - 78, cy - 52, cx + 78, cy - 14), 14, fill=(10, 10, 14)); d.line((cx - 60, cy - 44, cx - 30, cy - 44), fill=(120, 120, 140), width=4)
+        d.rounded_rectangle((x - 78, y - 52, x + 78, y - 14), 14, fill=(10, 10, 14)); d.line((x - 60, y - 44, x - 30, y - 44), fill=(120, 120, 140), width=4)
     else:
         for ex in (-36, 36):
-            if blink: d.line((cx + ex - 12, cy - 30, cx + ex + 12, cy - 30), fill=(40, 30, 25), width=5)
-            else: d.ellipse((cx + ex - 10, cy - 42, cx + ex + 10, cy - 20), fill=(40, 30, 25))
-    if speaking(t) and int(t * 9) % 2: d.ellipse((cx - 18, cy + 4, cx + 18, cy + 30), fill=(120, 50, 50))
-    else: d.arc((cx - 24, cy - 6, cx + 24, cy + 22), 20, 160, fill=(120, 50, 50), width=5)
+            r = 17 if mood == "shock" else 13
+            if blink and mood != "shock": d.line((x + ex - 12, y - 30, x + ex + 12, y - 30), fill=(40, 30, 25), width=5)
+            else:
+                d.ellipse((x + ex - r, y - 31 - r, x + ex + r, y - 31 + r), fill="white")
+                d.ellipse((x + ex - 8 + look, y - 39, x + ex + 8 + look, y - 23), fill=(40, 30, 25))
+            # brows: (inner dy, outer dy)
+            bi, bo = dict(sad=(-14, 0), shock=(-22, -22), hype=(-4, -14), happy=(-8, -12)).get(mood, (-6, -6))
+            d.line((x + ex - np.sign(ex) * 16, y - 58 + bi, x + ex + np.sign(ex) * 18, y - 58 + bo), fill=hair, width=8)
+    m = abs(np.sin(t * 11.3) * np.sin(t * 4.7))  # talking mouth openness
+    if mood == "shock": d.ellipse((x - 16, y + 2, x + 16, y + 38), fill=(120, 50, 50))
+    elif talk or mood == "hype":
+        w_, h_ = (30, 34) if mood == "hype" else (20, 8 + 26 * m)
+        d.ellipse((x - w_, y + 14 - h_ / 2, x + w_, y + 14 + h_ / 2), fill=(120, 50, 50))
+    elif mood == "sad": d.arc((x - 22, y + 8, x + 22, y + 36), 200, 340, fill=(120, 50, 50), width=5)
+    else: d.arc((x - 26, y - 10, x + 26, y + 24), 20, 160, fill=(120, 50, 50), width=6)
     if tier == 1:  # cheap headphones, one cup taped
-        d.arc((cx - 112, cy - 175, cx + 112, cy + 40), 180, 360, fill=(40, 40, 46), width=14)
-        d.rounded_rectangle((cx - 122, cy - 70, cx - 86, cy + 10), 12, fill=(40, 40, 46)); d.rounded_rectangle((cx + 86, cy - 70, cx + 122, cy + 10), 12, fill=(40, 40, 46))
-        d.line((cx + 90, cy - 50, cx + 120, cy - 10), fill=(200, 200, 205), width=7)
-    if tier >= 2: d.arc((cx - 60, cy + 40, cx + 60, cy + 170), 0, 180, fill=(255, 200, 40), width=8 if tier == 2 else 14)  # chain
-    if tier >= 3: d.ellipse((cx - 22, cy + 150, cx + 22, cy + 194), fill=(255, 200, 40))
+        d.arc((x - 112, y - 175, x + 112, y + 40), 180, 360, fill=(40, 40, 46), width=14)
+        d.rounded_rectangle((x - 122, y - 70, x - 86, y + 10), 12, fill=(40, 40, 46)); d.rounded_rectangle((x + 86, y - 70, x + 122, y + 10), 12, fill=(40, 40, 46))
+        d.line((x + 90, y - 50, x + 120, y - 10), fill=(200, 200, 205), width=7)
+    if tier >= 2: d.arc((x - 60, y + 40, x + 60, y + 170), 0, 180, fill=(255, 200, 40), width=8 if tier == 2 else 14)
+    if tier >= 3: d.ellipse((x - 22, y + 150, x + 22, y + 194), fill=(255, 200, 40))
+    # body language: sway, nod while talking, jump when hyped, slump when sad
+    ang = 2.5 * np.sin(t * 1.7) + (2.2 * np.sin(t * 6.3) if talk else 0) + (5 if mood == "sad" else 0)
+    dy = -abs(np.sin(t * 9)) * 34 if mood == "hype" else (14 if mood == "sad" else 5 * np.sin(t * 2.2))
+    lay = lay.rotate(ang, resample=Image.BICUBIC, center=(x, y + 380))
+    im.alpha_composite(lay, (int(cx - x), int(cy - y + dy)))
 
 
 def draw_room(im, t):
