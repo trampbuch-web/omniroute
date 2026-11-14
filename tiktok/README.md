@@ -32,8 +32,8 @@ A `scene` lasts until the next line that has one: `bg` (blue navy green red dark
 `episodes`: title, date, music (m1 tense pulse, m2 hacker beat, m3 dark ambient). ~28 lines / ~90 s narration.
 Real events: only well-known, verifiable facts.
 
-## Daily routine (MSK)
-- 10:30 — one episode of the series: read `series.md`, write `specs/nolik-s01eNN.json`, build, send, update `series.md`.
-- 11:30 and 18:00 — one documentary story each: read `history.md`, NEW topic, spec with `"tempo": 1.2, "gap": 0.2`,
-  build, send, add to `history.md`.
-No chat videos. Every send includes a ready-to-paste description with `#luxerpvn`. Commit specs + md files to this branch.
+## Daily routine (two videos a day, ready by 10:30 MSK)
+1. Series episode: read `series.md`, write `specs/nolik-s01eNN.json`, build, update `series.md`.
+2. Documentary story: read `history.md`, NEW topic, spec with `"tempo": 1.2, "gap": 0.2`, build, add to `history.md`.
+No chat videos. Ads are full-screen (banner scaled to frame width, video behind blacked out) — done by `story.py`.
+Send both with ready-to-paste descriptions (with `#luxerpvn`). Commit specs + md files to this branch.

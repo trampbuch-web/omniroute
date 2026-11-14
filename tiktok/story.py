@@ -362,8 +362,11 @@ for k in range(int(total * FPS)):
 p.stdin.close(); p.wait()
 fc, vin, ain = [], "[0:v]", []
 for k, a in enumerate(ads):
-    fc.append(f"[{2 + k}:v]setpts=PTS/1.1,chromakey=0x00D300:0.16:0.06,despill=type=green,setpts=PTS-STARTPTS+{a}/TB[b{k}]")
-    fc.append(f"{vin}[b{k}]overlay=(W-w)/2:(H-h)/2:eof_action=pass[v{k}]"); vin = f"[v{k}]"
+    # full-screen ad: banner card scaled to the full frame width, paused video behind it blacked out
+    fc.append(f"[{2 + k}:v]setpts=PTS/1.1,chromakey=0x00D300:0.16:0.06,despill=type=green,scale=iw*1.12:-2,crop=1080:1920,"
+              f"setpts=PTS-STARTPTS+{a}/TB[b{k}]")
+    fc.append(f"{vin}drawbox=c=black@0.88:t=fill:enable='between(t,{a},{a + BANNER_DUR})'[d{k}]")
+    fc.append(f"[d{k}][b{k}]overlay=(W-w)/2:(H-h)/2:eof_action=pass[v{k}]"); vin = f"[v{k}]"
     ms = int(a * 1000); fc.append(f"[{2 + k}:a]atempo=1.1,adelay={ms}|{ms}[ba{k}]"); ain.append(f"[ba{k}]")
 fc.append(f"[1:a]{''.join(ain)}amix=inputs={1 + len(ads)}:normalize=0:duration=first[a]")
 cmd = ["ffmpeg", "-v", "error", "-y", "-i", "story_raw.mp4", "-i", "story.wav"]
