@@ -33,7 +33,10 @@ A `scene` lasts until the next line that has one: `bg` (blue navy green red dark
 Real events: only well-known, verifiable facts.
 
 ## Daily routine (scheduled 11:30 and 18:00 MSK)
-1. Read `history.md`, invent one NEW chat and one NEW story (no repeats), add them to `history.md`.
-2. Write `specs/<YYYY-MM-DD>-<HHMM>-chat.json` and `-story.json`.
-3. Build both, check a few frames, send both files with ready-to-paste descriptions (with `#luxerpvn`).
-4. Commit specs + history to this branch.
+No more chat videos. Each slot = 1 series episode + 1 documentary story.
+1. Series: read `series.md`, write the next episode `specs/nolik-s01eNN.json` (story renderer + RPG fields), update `series.md`.
+2. Story: read `history.md`, pick a NEW topic, write `specs/<YYYY-MM-DD>-<HHMM>-story.json` with `"tempo": 1.2, "gap": 0.2`
+   (fast, tense pacing; sfx on every twist), add it to `history.md`.
+3. Build both with `make.py story` (run in background, ~35 min total), check a few frames,
+   send both files with ready-to-paste descriptions (with `#luxerpvn`).
+4. Commit specs + series.md + history.md to this branch.

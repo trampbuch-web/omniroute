@@ -15,21 +15,23 @@ PAL = dict(blue=(20, 40, 70), navy=(18, 32, 55), green=(10, 55, 35), red=(110, 1
            purple=(45, 25, 70), amber=(60, 42, 18), teal=(10, 50, 60), steel=(25, 30, 45))
 
 # ---- timeline: ad near every 50 s at a sentence boundary
-clips = [load_audio(f"g{i:02d}.mp3") for i in range(len(L))]
+TEMPO, GAP = SPEC.get("tempo", 1.0), SPEC.get("gap", 0.35)
+MANUAL_ADS = any(ln.get("ad_before") for ln in L)
+clips = [load_audio(f"g{i:02d}.mp3", TEMPO) for i in range(len(L))]
 starts, ads = [], []
 cur, target = 0.8, AD_EVERY
 for i, c in enumerate(clips):
     dur = len(c) / SR
-    if cur + dur / 2 > target:
+    if L[i].get("ad_before") if MANUAL_ADS else cur + dur / 2 > target:
         ads.append(cur); cur += BANNER_DUR + 0.4; target += AD_EVERY
     if i and L[i]["ep"] != L[i - 1]["ep"]:
         cur += 0.5
-    starts.append(cur); cur += dur + 0.35
+    starts.append(cur); cur += dur + GAP
 total = cur + 1.6
 ends = [s + len(c) / SR for s, c in zip(starts, clips)]
 words = []
 for i in range(len(L)):
-    words += [w for w in words_from_alignment(f"g{i:02d}.json", 1.0, starts[i]) if not w[0].startswith("[")]
+    words += [w for w in words_from_alignment(f"g{i:02d}.json", TEMPO, starts[i]) if not w[0].startswith("[")]
 groups, g = [], []
 for w in words:
     g.append(w)
@@ -46,9 +48,13 @@ for i, ln in enumerate(L):
 for sc in scenes:
     lt = [starts[i] for i in sc["lines"]]
     items = sc.get("items", [])
-    sc["item_t"] = [lt[k] if k < len(lt) else lt[-1] + 0.7 * (k - len(lt) + 1) for k in range(len(items))]
+    sc["item_t"] = [lt[0] + 0.35 * k if sc.get("letters") else lt[k] if k < len(lt) else lt[-1] + 0.7 * (k - len(lt) + 1) for k in range(len(items))]
     sc["end"] = ends[sc["lines"][-1]]
 stamps = [(starts[i], ln["stamp"]) for i, ln in enumerate(L) if ln.get("stamp")]
+toasts = [(starts[i], min(3.2, ends[i] - starts[i] + 0.6), ln["toast"]) for i, ln in enumerate(L) if ln.get("toast")]
+levels = [(starts[i], ln["level"]) for i, ln in enumerate(L) if ln.get("level")]
+stat_events = [(starts[i], ln["stats"]) for i, ln in enumerate(L) if ln.get("stats")]
+speaking = lambda t: any(a <= t < b for a, b in zip(starts, ends))
 whooshes = [sc["start"] for sc in scenes[1:]]
 line_at = lambda t: max([i for i in range(len(L)) if starts[i] <= t] or [0])
 
@@ -89,6 +95,9 @@ for i, ln in enumerate(L):
     for s in ln.get("sfx", []):
         place(buf, fx(s), starts[i] - (3.8 if s == "riser" else 0), GAIN.get(s, 0.5))
 for w in whooshes: place(buf, fx("whoosh"), w - 0.4, GAIN["whoosh"])
+for st, _, _ in toasts: place(buf, sfx_pop(900, 1500, 0.09), st, 0.7)
+for st, _ in levels:
+    for k, f0 in enumerate((523, 659, 784, 1047)): place(buf, sfx_pop(f0, f0, 0.18), st + k * 0.09, 0.6)
 write_wav("story.wav", buf)
 
 # ---- visuals
@@ -129,6 +138,99 @@ def stamp(im, text, k):
     paste_c(im, lay, W / 2, 800)
 
 
+HOOD = {1: (92, 98, 115), 2: (40, 95, 205), 3: (22, 22, 28)}
+
+
+def draw_hero(im, cx, cy, tier, t):
+    """Same guy at every tier (shaggy brown hair, hood); outfit upgrades with the level."""
+    d = ImageDraw.Draw(im, "RGBA"); cy += int(6 * np.sin(t * 2.2)); hood = HOOD.get(tier, HOOD[1]); dark = tuple(int(c * 0.7) for c in hood)
+    d.rounded_rectangle((cx - 170, cy + 40, cx + 170, cy + 380), 70, fill=hood)          # torso
+    d.line((cx - 28, cy + 90, cx - 34, cy + 190), fill=(230, 230, 235), width=6)          # hoodie strings
+    d.line((cx + 28, cy + 90, cx + 34, cy + 190), fill=(230, 230, 235), width=6)
+    d.ellipse((cx - 125, cy - 185, cx + 125, cy + 75), fill=dark)                         # hood
+    d.ellipse((cx - 88, cy - 140, cx + 88, cy + 50), fill=(238, 200, 170))                # face
+    d.pieslice((cx - 98, cy - 160, cx + 98, cy + 10), 180, 360, fill=(96, 64, 42))        # hair
+    for k in range(-3, 4): d.ellipse((cx + k * 26 - 20, cy - 90, cx + k * 26 + 20, cy - 48), fill=(96, 64, 42))  # fringe
+    blink = (t % 3.4) < 0.12
+    if tier >= 3:
+        d.rounded_rectangle((cx - 78, cy - 52, cx + 78, cy - 14), 14, fill=(10, 10, 14)); d.line((cx - 60, cy - 44, cx - 30, cy - 44), fill=(120, 120, 140), width=4)
+    else:
+        for ex in (-36, 36):
+            if blink: d.line((cx + ex - 12, cy - 30, cx + ex + 12, cy - 30), fill=(40, 30, 25), width=5)
+            else: d.ellipse((cx + ex - 10, cy - 42, cx + ex + 10, cy - 20), fill=(40, 30, 25))
+    if speaking(t) and int(t * 9) % 2: d.ellipse((cx - 18, cy + 4, cx + 18, cy + 30), fill=(120, 50, 50))
+    else: d.arc((cx - 24, cy - 6, cx + 24, cy + 22), 20, 160, fill=(120, 50, 50), width=5)
+    if tier == 1:  # cheap headphones, one cup taped
+        d.arc((cx - 112, cy - 175, cx + 112, cy + 40), 180, 360, fill=(40, 40, 46), width=14)
+        d.rounded_rectangle((cx - 122, cy - 70, cx - 86, cy + 10), 12, fill=(40, 40, 46)); d.rounded_rectangle((cx + 86, cy - 70, cx + 122, cy + 10), 12, fill=(40, 40, 46))
+        d.line((cx + 90, cy - 50, cx + 120, cy - 10), fill=(200, 200, 205), width=7)
+    if tier >= 2: d.arc((cx - 60, cy + 40, cx + 60, cy + 170), 0, 180, fill=(255, 200, 40), width=8 if tier == 2 else 14)  # chain
+    if tier >= 3: d.ellipse((cx - 22, cy + 150, cx + 22, cy + 194), fill=(255, 200, 40))
+
+
+def draw_room(im, t):
+    d = ImageDraw.Draw(im, "RGBA")
+    d.rectangle((690, 290, 990, 580), fill=(12, 20, 45), outline=(70, 75, 90), width=10)  # window, night
+    d.ellipse((900, 320, 950, 370), fill=(230, 230, 200)); d.line((840, 290, 840, 580), fill=(70, 75, 90), width=8)
+    for k in range(9): d.rectangle((705 + k * 31, 520 - (k * 37) % 90, 728 + k * 31, 575), fill=(25, 35, 70))
+    d.rectangle((70, 300, 300, 560), fill=(50, 40, 70), outline=(90, 80, 110), width=6)  # poster
+    d.text((185, 430), "ЦЕЛЬ:\nСТАДИОН", font=font(34), fill=(200, 190, 230), anchor="mm", align="center")
+    g = int(150 + 50 * np.sin(t * 13) * np.sin(t * 3.1))
+    d.rounded_rectangle((60, 660, 330, 880), 14, fill=(170, 165, 150)); d.rectangle((84, 684, 306, 846), fill=(40, 90, g))  # old CRT
+    d.line((100, 720, 250, 720), fill=(200, 230, 255), width=5); d.line((100, 750, 200, 750), fill=(200, 230, 255), width=5)
+    d.rectangle((0, 920, W, 965), fill=(92, 62, 40))  # desk
+    d.rectangle((820, 800, 840, 920), fill=(60, 60, 66)); d.ellipse((800, 760, 860, 820), fill=(90, 90, 98))  # cheap mic
+
+
+def draw_stage(im, t):
+    lay = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(lay)
+    for k, col in enumerate([(255, 60, 200), (60, 200, 255), (255, 210, 60), (160, 90, 255)]):
+        x0 = 140 + k * 270; x1 = x0 + int(360 * np.sin(t * 1.3 + k * 1.7))
+        d.polygon([(x0 - 14, 180), (x0 + 14, 180), (x1 + 170, 1250), (x1 - 170, 1250)], fill=col + (46,))
+    im.alpha_composite(lay); d = ImageDraw.Draw(im, "RGBA")
+    r = np.random.default_rng(int(t * 12))
+    for _ in range(5):
+        x, y = int(r.integers(30, W - 30)), int(r.integers(1010, 1250)); d.ellipse((x - 9, y - 9, x + 9, y + 9), fill=(255, 255, 255, 230))
+    for row in range(3):
+        for k in range(15):
+            x = k * 78 + (row % 2) * 39 - 10; y = 1040 + row * 70 + int(8 * np.sin(t * 6 + k + row))
+            d.ellipse((x - 34, y - 34, x + 34, y + 34), fill=(8, 8, 14)); d.rectangle((x - 40, y + 20, x + 40, y + 200), fill=(8, 8, 14))
+            if (k + row) % 3 == 0: d.line((x + 30, y, x + 48, y - 80), fill=(8, 8, 14), width=16)
+
+
+def draw_stats(im, t):
+    cur = [e for e in stat_events if e[0] <= t]
+    if not cur: return
+    st, now = cur[-1]; prev = stat_events[stat_events.index(cur[-1]) - 1][1] if len(cur) > 1 else {k: 0 for k in now}
+    k_ = ease((t - st) / 0.9); d = ImageDraw.Draw(im, "RGBA")
+    d.rounded_rectangle((60, 985, W - 60, 1285), 22, fill=(8, 10, 18, 215), outline=(70, 80, 110), width=2)
+    for r, (name, val) in enumerate(now.items()):
+        y = 1010 + r * 38; old = prev.get(name, 0); v = old + (val - old) * k_; up = val != old and t - st < 2.2
+        d.text((90, y + 12), name, font=font(25), fill=(120, 255, 150) if up else (215, 220, 230), anchor="lm")
+        d.rounded_rectangle((380, y, 880, y + 24), 12, fill=(40, 46, 66))
+        if v > 0.5: d.rounded_rectangle((380, y, 380 + max(24, int(500 * v / 100)), y + 24), 12, fill=(120, 255, 150) if up else ORANGE)
+        d.text((W - 90, y + 12), (f"+{val - old}" if up and val > old else str(int(round(v)))), font=font(25), fill=(120, 255, 150) if up else "white", anchor="rm")
+
+
+def draw_overlays(im, t):
+    d = ImageDraw.Draw(im, "RGBA")
+    for st, dur, txt in toasts:
+        if not st <= t < st + dur: continue
+        y = int(200 - 140 * (1 - ease((t - st) / 0.25)) - 140 * ease((t - st - dur + 0.25) / 0.25))
+        d.rounded_rectangle((90, y, W - 90, y + 96), 30, fill=(245, 246, 250, 245))
+        tok = txt.split(" ", 1); x = 125
+        if len(tok) == 2 and ord(tok[0][0]) > 0x2000:
+            im.alpha_composite(emoji(tok[0], 56), (x, y + 20)); x += 76; txt = tok[1]
+        d.text((x, y + 48), txt, font=fit(d, txt, 40, W - 300), fill=(15, 18, 28), anchor="lm")
+    for st, (n_, title) in levels:
+        if not st <= t < st + 2.2: continue
+        k_ = ease((t - st) / 0.3); w_ = int(460 * k_)
+        d.rounded_rectangle((W / 2 - w_, 318, W / 2 + w_, 452), 26, fill=(255, 200, 40, 245), outline=(255, 255, 255), width=5)
+        if k_ > 0.6:
+            d.text((W / 2, 360), f"УРОВЕНЬ {n_}", font=font(54), fill=(20, 16, 6), anchor="mm")
+            d.text((W / 2, 416), title, font=fit(d, title, 36, 860), fill=(60, 44, 10), anchor="mm")
+
+
 def draw_scene(im, sc, t):
     d = ImageDraw.Draw(im, "RGBA"); lt = t - sc["start"]; eff = sc.get("fx", "none")
     if eff == "rain":
@@ -149,7 +251,14 @@ def draw_scene(im, sc, t):
                 ImageDraw.Draw(g_).ellipse((W / 2 - 300 - r * 40, 500 - r * 40, W / 2 + 300 + r * 40, 800 + r * 40), fill=(60, 140, 255, 14))
                 lay.alpha_composite(g_)
         im.alpha_composite(lay); d = ImageDraw.Draw(im, "RGBA")
+    if eff == "room": draw_room(im, t)
+    if eff == "stage": draw_stage(im, t)
+    if sc.get("hero"):
+        draw_hero(im, W // 2, 560, sc["hero"], t)
+        if eff != "stage": draw_stats(im, t)
+        d = ImageDraw.Draw(im, "RGBA")
     items = sc.get("items", [])
+    if sc.get("big_top"): d.text((W / 2, 420), sc["big_top"], font=fit(d, sc["big_top"], 90, 900), fill=ORANGE, anchor="mm", stroke_width=4, stroke_fill="black")
     ey, es = (420, 150) if items else (650, 270)
     if eff == "rings":
         for r in range(3):
@@ -173,14 +282,14 @@ def draw_scene(im, sc, t):
         e = ease((t - st) / 0.35); y = 540 + k * 180; x = int(90 - (1 - e) * 900)
         d.rounded_rectangle((x, y, x + 900, y + 150), 24, fill=(35, 42, 60, 230), outline=ORANGE, width=3)
         d.ellipse((x + 30, y + 30, x + 120, y + 120), fill=ORANGE)
-        d.text((x + 75, y + 75), str(k + 1), font=font(54), fill="black", anchor="mm")
+        d.text((x + 75, y + 75), "АБВГ"[k] if sc.get("letters") else str(k + 1), font=font(54), fill="black", anchor="mm")
         d.text((x + 150, y + 75), it, font=fit(d, it, 40, 720), fill="white", anchor="lm")
 
 
 def hud(im, t, ep):
     d = ImageDraw.Draw(im); f = font(28, MONO)
     if int(t * 2) % 2: d.ellipse((40, 128, 58, 146), fill=(230, 40, 40))
-    d.text((70, 137), f"ЭПИЗОД {ep:02d} · {EPS[ep]['title']}", font=f, fill=(190, 190, 200), anchor="lm")
+    d.text((70, 137), f"{SPEC.get('hud_label') or f'ЭПИЗОД {ep:02d}'} · {EPS[ep]['title']}", font=f, fill=(190, 190, 200), anchor="lm")
     hh, mm = map(int, SPEC.get("clock_start", "21:00").split(":"))
     sec = int(t) + hh * 3600 + mm * 60
     d.text((W - 40, 137), f"{EPS[ep].get('date', '')}  {sec // 3600 % 24:02d}:{sec // 60 % 60:02d}:{sec % 60:02d}", font=f, fill=(190, 190, 200), anchor="rm")
@@ -195,6 +304,7 @@ def frame(t, captions=True):
         if st <= t and scene_of[line_at(st)] == scene_of[i]: stamp(im, txt, t - st)
     if any(0 <= t - w < 0.12 for w in whooshes):
         im.alpha_composite(Image.new("RGBA", (W, H), (255, 255, 255, 90)))
+    draw_overlays(im, t)
     hud(im, t, L[i]["ep"])
     if captions:
         gs = [g for g in groups if g[0][1] <= t]
