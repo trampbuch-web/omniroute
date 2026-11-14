@@ -36,4 +36,5 @@ Real events: only well-known, verifiable facts.
 1. Series episode: read `series.md`, write `specs/nolik-s01eNN.json`, build, update `series.md`.
 2. Documentary story: read `history.md`, NEW topic, spec with `"tempo": 1.2, "gap": 0.2`, build, add to `history.md`.
 No chat videos. Ads are full-screen (banner scaled to frame width, video behind blacked out) — done by `story.py`.
-Send both with ready-to-paste descriptions (with `#luxerpvn`). Commit specs + md files to this branch.
+Send both with ready-to-paste descriptions. Every description: hook line, then an ad mention line
+(`Реклама: LuxerVPN — ищи @LuxerVpnBot в Telegram`), then hashtags including `#luxerpvn`. Commit specs + md files to this branch.
