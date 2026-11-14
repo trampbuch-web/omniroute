@@ -64,6 +64,19 @@ def main():
     spec = json.load(open(spec_path))
     work = os.path.join(os.path.dirname(out), "work_" + os.path.splitext(os.path.basename(out))[0])
     os.makedirs(work, exist_ok=True); os.chdir(work)
+    if os.environ.get("TTS_ENGINE", "omni") == "omni":  # local OmniVoice, user's cloned voice
+        if kind == "story":
+            jobs = [dict(voice=spec.get("voice", "narrator"), text=(f"[{ln['tag']}] " if ln.get("tag") else "") + ln["text"],
+                         out=os.path.join(work, f"g{i:02d}")) for i, ln in enumerate(spec["lines"])]
+        else:
+            jobs = [dict(voice=spec["voices"][side], text=spoken, out=os.path.join(work, f"{spec['prefix']}{i:02d}"))
+                    for i, (side, shown, spoken) in enumerate(spec["msgs"]) if spoken]
+        json.dump(jobs, open("jobs.json", "w"), ensure_ascii=False)
+        py = subprocess.run(["bash", os.path.join(HERE, "setup_omni.sh")], check=True, capture_output=True, text=True).stdout.split()[-1]
+        subprocess.run([py, os.path.join(HERE, "omni.py"), "jobs.json"], check=True)
+        subprocess.run([sys.executable, os.path.join(HERE, f"{kind}.py"), spec_path, out], check=True)
+        print("OK", out)
+        return
     try:
         if kind == "story":
             for i, ln in enumerate(spec["lines"]):
