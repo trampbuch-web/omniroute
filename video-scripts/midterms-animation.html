@@ -1,0 +1,1472 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Хук слева — промежуточные выборы в США</title>
+    <style>
+      :root {
+        --bg: #0b0f1a;
+        --red: #e3262f;
+        --text: #f4f4f4;
+        --muted: #9aa3b5;
+        --gold: #ffd36b;
+      }
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #05070d;
+      }
+      body {
+        font-family: "DejaVu Sans", Arial, sans-serif;
+        color: var(--text);
+        position: relative;
+      }
+      #world {
+        position: absolute;
+        inset: 0;
+        transform-origin: 960px 540px;
+      }
+
+      /* ---------- студия ---------- */
+      .wall {
+        position: absolute;
+        inset: 0;
+        background:
+          radial-gradient(
+            ellipse 900px 600px at 480px 520px,
+            rgba(40, 70, 140, 0.45),
+            transparent 70%
+          ),
+          repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.025) 0 2px, transparent 2px 160px),
+          linear-gradient(180deg, #0a0e1a 0%, #121c36 60%, #0b1020 100%);
+      }
+      .truss {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 70px;
+        background: repeating-linear-gradient(60deg, #1b2030 0 6px, transparent 6px 40px), #0c0f18;
+        border-bottom: 4px solid #232838;
+      }
+      .lamp {
+        position: absolute;
+        top: 40px;
+        width: 46px;
+        height: 46px;
+        border-radius: 50%;
+        background: radial-gradient(circle, #fff7dd 0 30%, #ffcf7a 45%, rgba(255, 190, 90, 0) 72%);
+      }
+      .beam {
+        position: absolute;
+        top: 60px;
+        width: 0;
+        height: 0;
+        border-left: 120px solid transparent;
+        border-right: 120px solid transparent;
+        border-top: 640px solid rgba(255, 220, 150, 0.035);
+        transform-origin: top center;
+      }
+      .side {
+        position: absolute;
+        left: 24px;
+        top: 140px;
+        width: 150px;
+        height: 520px;
+        border: 6px solid #1c2130;
+        background: #0d1326;
+        overflow: hidden;
+        box-shadow: 0 0 40px rgba(60, 110, 255, 0.25);
+      }
+      .side .stripes {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 1200px;
+        background: repeating-linear-gradient(180deg, #b5222a 0 40px, #e9e9ee 40px 80px);
+        opacity: 0.28;
+      }
+      .side .stars {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 0;
+        height: 170px;
+        background:
+          radial-gradient(circle, #fff 2px, transparent 3px) 0 0 / 30px 30px,
+          #1b2f6b;
+        opacity: 0.85;
+      }
+      .side .lbl {
+        position: absolute;
+        bottom: 18px;
+        left: 0;
+        right: 0;
+        text-align: center;
+        font-weight: 900;
+        font-size: 26px;
+        letter-spacing: 3px;
+        text-shadow: 0 2px 6px #000;
+      }
+      .videowall {
+        position: absolute;
+        left: 860px;
+        top: 100px;
+        width: 1000px;
+        height: 610px;
+        background: #070b16;
+        border: 10px solid #1a1f2c;
+        box-shadow:
+          0 0 0 2px #2c3346,
+          0 0 70px rgba(227, 38, 47, 0.25);
+        overflow: hidden;
+      }
+      .videowall::before {
+        content: "";
+        position: absolute;
+        inset: 0;
+        opacity: 0.08;
+        background-image:
+          linear-gradient(#fff 1px, transparent 1px),
+          linear-gradient(90deg, #fff 1px, transparent 1px);
+        background-size: 50px 50px;
+      }
+      .videowall::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        background: repeating-linear-gradient(
+          180deg,
+          rgba(255, 255, 255, 0.025) 0 2px,
+          transparent 2px 4px
+        );
+      }
+      .neon {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 760px;
+        height: 6px;
+        background: var(--red);
+        box-shadow: 0 0 24px 6px rgba(227, 38, 47, 0.6);
+      }
+      .floor {
+        position: absolute;
+        left: 0;
+        right: 0;
+        top: 766px;
+        bottom: 0;
+        background: linear-gradient(180deg, #151b2c 0%, #090c15 100%);
+      }
+      .reflect {
+        position: absolute;
+        left: 860px;
+        top: 770px;
+        width: 1000px;
+        height: 200px;
+        opacity: 0.12;
+        background: linear-gradient(180deg, rgba(227, 38, 47, 0.8), transparent);
+        filter: blur(8px);
+      }
+      #host {
+        position: absolute;
+        left: 190px;
+        top: 25px;
+        width: 570px;
+        height: 855px;
+        transform-origin: 285px 760px;
+        overflow: visible;
+      }
+      #desk {
+        position: absolute;
+        left: 90px;
+        top: 760px;
+        width: 820px;
+        height: 260px;
+      }
+
+      /* ---------- графика на видеостене ---------- */
+      .panel {
+        position: absolute;
+        left: 60px;
+        right: 60px;
+        top: 50px;
+        bottom: 50px;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        opacity: 0;
+      }
+      .el {
+        opacity: 0;
+      }
+      h1 {
+        font-size: 110px;
+        font-weight: 900;
+        letter-spacing: 4px;
+        line-height: 1;
+      }
+      h2 {
+        font-size: 54px;
+        font-weight: 900;
+        margin-bottom: 26px;
+        line-height: 1.15;
+      }
+      b,
+      .hl {
+        color: var(--red);
+      }
+      .tag {
+        display: inline-block;
+        background: var(--red);
+        padding: 7px 18px;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        margin-bottom: 26px;
+        align-self: flex-start;
+        color: #fff;
+      }
+      .big {
+        font-size: 36px;
+        line-height: 1.3;
+      }
+      .muted {
+        color: var(--muted);
+      }
+      .item {
+        font-size: 34px;
+        margin: 12px 0;
+        display: flex;
+        align-items: flex-start;
+        line-height: 1.25;
+      }
+      .item .n {
+        color: var(--red);
+        font-weight: 900;
+        min-width: 64px;
+      }
+      .stats {
+        display: flex;
+        gap: 40px;
+        margin-bottom: 26px;
+      }
+      .stat {
+        flex: 1;
+        border-top: 6px solid var(--red);
+        padding-top: 14px;
+      }
+      .stat .v {
+        font-size: 84px;
+        font-weight: 900;
+        line-height: 1;
+      }
+      .stat .k {
+        font-size: 26px;
+        color: var(--muted);
+        margin-top: 8px;
+      }
+      .strike {
+        position: relative;
+        display: inline-block;
+        font-size: 38px;
+        font-weight: 700;
+      }
+      .strike .grow {
+        position: absolute;
+        left: -6px;
+        top: 50%;
+        height: 6px;
+        background: var(--red);
+        width: 0;
+      }
+      .bars .row {
+        display: flex;
+        align-items: center;
+        margin: 18px 0;
+        font-size: 30px;
+      }
+      .bars .lbl {
+        width: 330px;
+        color: var(--muted);
+      }
+      .bars .grow {
+        height: 54px;
+        background: var(--red);
+        width: 0;
+      }
+      .bars .row.dim .grow {
+        background: #5b6478;
+      }
+      .tl {
+        display: flex;
+        gap: 36px;
+      }
+      .tl .yr {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border-left: 8px solid var(--red);
+        padding: 18px 22px;
+      }
+      .tl .yr.up {
+        border-left-color: #3fbf6f;
+      }
+      .tl .y {
+        font-size: 64px;
+        font-weight: 900;
+      }
+      .tl .d {
+        font-size: 28px;
+        color: var(--muted);
+        margin-top: 6px;
+        line-height: 1.3;
+      }
+      .tl .a {
+        font-size: 54px;
+        font-weight: 900;
+        color: var(--red);
+      }
+      .tl .up .a {
+        color: #3fbf6f;
+      }
+      .quote {
+        border-left: 10px solid var(--red);
+        padding-left: 34px;
+        font-size: 60px;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+      .src {
+        font-size: 28px;
+        color: var(--muted);
+        margin-top: 20px;
+      }
+      .senate {
+        position: relative;
+        height: 60px;
+        background: #2a3042;
+        margin: 16px 0 10px;
+      }
+      .senate .grow {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: var(--red);
+        width: 0;
+      }
+      .senate .mark {
+        position: absolute;
+        left: 67%;
+        top: -16px;
+        bottom: -16px;
+        width: 5px;
+        background: var(--gold);
+      }
+      .senate .mk {
+        position: absolute;
+        left: 67%;
+        top: -52px;
+        transform: translateX(-50%);
+        font-size: 26px;
+        color: var(--gold);
+        font-weight: 700;
+        white-space: nowrap;
+      }
+      .ru .item .n {
+        color: var(--gold);
+      }
+      .funnel {
+        margin-top: 18px;
+      }
+
+      /* ---------- оверлеи (не двигаются с камерой) ---------- */
+      .corner {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 0;
+        height: 0;
+        border-top: 230px solid var(--red);
+        border-right: 230px solid transparent;
+      }
+      .bug {
+        position: absolute;
+        right: 50px;
+        top: 26px;
+        font-weight: 900;
+        font-size: 30px;
+        letter-spacing: 2px;
+        text-shadow: 0 2px 6px #000;
+      }
+      .live {
+        position: absolute;
+        right: 300px;
+        top: 28px;
+        background: var(--red);
+        padding: 4px 12px;
+        font-size: 22px;
+        font-weight: 700;
+        letter-spacing: 2px;
+      }
+      .live i {
+        display: inline-block;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: #fff;
+        margin-right: 8px;
+      }
+      .lower {
+        position: absolute;
+        left: 70px;
+        bottom: 150px;
+        background: var(--red);
+        padding: 12px 28px;
+        opacity: 0;
+      }
+      .lower b {
+        display: block;
+        font-size: 38px;
+        color: #fff;
+      }
+      .lower span {
+        font-size: 22px;
+        letter-spacing: 2px;
+      }
+      .sub {
+        position: absolute;
+        left: 900px;
+        right: 70px;
+        bottom: 82px;
+        font-size: 30px;
+        text-shadow: 0 2px 8px #000;
+      }
+      .sub span {
+        background: rgba(0, 0, 0, 0.65);
+        padding: 5px 14px;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        line-height: 1.6;
+      }
+      .ticker {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 58px;
+        background: #0d111c;
+        border-top: 3px solid var(--red);
+        overflow: hidden;
+      }
+      .ticker .lab {
+        position: absolute;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 190px;
+        background: var(--red);
+        z-index: 2;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 900;
+        font-size: 24px;
+        letter-spacing: 2px;
+      }
+      .ticker .run {
+        position: absolute;
+        left: 210px;
+        top: 0;
+        bottom: 0;
+        display: flex;
+        align-items: center;
+        white-space: nowrap;
+        font-size: 26px;
+      }
+      .ticker .run span {
+        padding-right: 60px;
+      }
+      .ticker .run span::after {
+        content: "◆";
+        color: var(--red);
+        padding-left: 60px;
+      }
+      svg text {
+        font-family: "DejaVu Sans", Arial, sans-serif;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="world">
+      <div class="wall"></div>
+      <div class="beam" style="left: 260px; transform: rotate(8deg)"></div>
+      <div class="beam" style="left: 1240px; transform: rotate(-6deg)"></div>
+      <div class="beam" style="left: 1600px; transform: rotate(-12deg)"></div>
+      <div class="truss"></div>
+      <div class="lamp" style="left: 300px"></div>
+      <div class="lamp" style="left: 560px"></div>
+      <div class="lamp" style="left: 830px"></div>
+      <div class="lamp" style="left: 1100px"></div>
+      <div class="lamp" style="left: 1360px"></div>
+
+      <div class="side">
+        <div class="stripes" id="stripes"></div>
+        <div class="stars"></div>
+        <div class="lbl">USA 2026</div>
+      </div>
+
+      <div class="videowall">
+        <div class="panel">
+          <div class="scene" data-s="0" data-e="6">
+            <h1 class="el" data-d="0.3">ХУК<br /><b>СЛЕВА</b></h1>
+            <div class="big muted el" data-d="1.4" style="margin-top: 30px">
+              Выборы в США: экзамен для Трампа
+            </div>
+          </div>
+
+          <div class="scene" data-s="6" data-e="12">
+            <div class="tag el" data-d="0">США · ВТОРНИК · 3 НОЯБРЯ</div>
+            <h2 class="el" data-d="0.4">Промежуточные выборы</h2>
+            <svg class="el" data-d="1.0" width="520" height="220" viewBox="0 0 520 220">
+              <rect x="40" y="190" width="440" height="18" fill="#cfd5e2" />
+              <rect x="70" y="150" width="380" height="40" fill="#e9edf5" />
+              <g fill="#b9c0d0">
+                <rect x="90" y="155" width="10" height="30" />
+                <rect x="120" y="155" width="10" height="30" />
+                <rect x="150" y="155" width="10" height="30" />
+                <rect x="360" y="155" width="10" height="30" />
+                <rect x="390" y="155" width="10" height="30" />
+                <rect x="420" y="155" width="10" height="30" />
+              </g>
+              <rect x="190" y="110" width="140" height="40" fill="#e9edf5" />
+              <path d="M200 110 Q260 20 320 110 Z" fill="#f4f6fb" />
+              <rect x="252" y="30" width="16" height="30" fill="#f4f6fb" />
+              <circle cx="260" cy="24" r="8" fill="#e3262f" />
+              <g fill="#b9c0d0">
+                <rect x="205" y="118" width="8" height="28" />
+                <rect x="225" y="118" width="8" height="28" />
+                <rect x="245" y="118" width="8" height="28" />
+                <rect x="267" y="118" width="8" height="28" />
+                <rect x="287" y="118" width="8" height="28" />
+                <rect x="307" y="118" width="8" height="28" />
+              </g>
+            </svg>
+          </div>
+
+          <div class="scene" data-s="12" data-e="19">
+            <div class="tag el" data-d="0">ЧТО НА КОНУ</div>
+            <div class="stats">
+              <div class="stat el" data-d="0.4">
+                <div class="v" data-count="435" data-d="0.5">0</div>
+                <div class="k">мест в Палате представителей — все</div>
+              </div>
+              <div class="stat el" data-d="1.4">
+                <div class="v">⅓</div>
+                <div class="k">Сената</div>
+              </div>
+              <div class="stat el" data-d="2.2">
+                <div class="v">+</div>
+                <div class="k">губернаторы, штаты, местные власти</div>
+              </div>
+            </div>
+            <div class="strike el" data-d="3.6">
+              Президент — в бюллетене<span class="grow" data-w="470" data-d="4.2"></span>
+            </div>
+          </div>
+
+          <div class="scene" data-s="19" data-e="25">
+            <div class="tag el" data-d="0">ЯВКА</div>
+            <div class="bars">
+              <div class="row el dim" data-d="0.3">
+                <span class="lbl">Президентские выборы</span
+                ><span class="grow" data-w="520" data-d="0.4"></span>
+              </div>
+              <div class="row el" data-d="1.0">
+                <span class="lbl">Промежуточные</span
+                ><span class="grow" data-w="300" data-d="1.1"></span>
+              </div>
+            </div>
+            <div class="big el" data-d="2.4" style="margin-top: 16px">
+              Идут самые мотивированные —<br /><b>противники президента</b>
+            </div>
+          </div>
+
+          <div class="scene" data-s="25" data-e="32">
+            <div class="tag el" data-d="0">ИСТОРИЯ ПОВТОРЯЕТСЯ</div>
+            <div class="big muted el" data-d="0.3" style="margin-bottom: 24px">
+              Партия президента почти всегда теряет места
+            </div>
+            <div class="tl">
+              <div class="yr el" data-d="1.2">
+                <div class="a">▼</div>
+                <div class="y">2018</div>
+                <div class="d">Республиканцы теряют Палату представителей</div>
+              </div>
+              <div class="yr el" data-d="2.6">
+                <div class="a">▼</div>
+                <div class="y">2022</div>
+                <div class="d">Демократы теряют Палату представителей</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="scene" data-s="32" data-e="39">
+            <div class="tag el" data-d="0">РЕДКИЕ ИСКЛЮЧЕНИЯ</div>
+            <div class="tl">
+              <div class="yr up el" data-d="0.6">
+                <div class="a">▲</div>
+                <div class="y">1998</div>
+                <div class="d">Демократы при Клинтоне прибавили мест</div>
+              </div>
+              <div class="yr up el" data-d="2.0">
+                <div class="a">▲</div>
+                <div class="y">2002</div>
+                <div class="d">Республиканцы при Буше-младшем упрочили большинство</div>
+              </div>
+            </div>
+            <div class="big el" data-d="3.6" style="margin-top: 26px">
+              Оба раза — <b>очень высокий рейтинг</b> президента
+            </div>
+          </div>
+
+          <div class="scene" data-s="39" data-e="45">
+            <div class="quote el" data-d="0.4">
+              «Притворитесь, что я <span class="hl">в бюллетене</span>»
+            </div>
+            <div class="src el" data-d="1.2">Дональд Трамп, съезд республиканцев, сентябрь</div>
+          </div>
+
+          <div class="scene" data-s="45" data-e="53">
+            <div class="tag el" data-d="0">ЕСЛИ ДЕМОКРАТЫ ВОЗЬМУТ ПАЛАТУ</div>
+            <div class="item el" data-d="1.2">
+              <span class="n">01</span>Расследования против администрации
+            </div>
+            <div class="item el" data-d="3.0">
+              <span class="n">02</span>Блокировка законов и бюджета
+            </div>
+            <div class="item el" data-d="4.8">
+              <span class="n">03</span>Разговоры о новом импичменте
+            </div>
+          </div>
+
+          <div class="scene" data-s="53" data-e="59">
+            <div class="tag el" data-d="0">ИМПИЧМЕНТ: АРИФМЕТИКА</div>
+            <div class="big el" data-d="0.4">Обвинить — <b>простое большинство</b> Палаты</div>
+            <div class="big el" data-d="1.8" style="margin-top: 50px">
+              Отстранить — <b>2/3 Сената</b>
+            </div>
+            <div class="senate el" data-d="2.2" style="margin-top: 60px">
+              <span class="grow" data-w="590" data-d="2.4"></span><span class="mark"></span
+              ><span class="mk">67 из 100</span>
+            </div>
+          </div>
+
+          <div class="scene ru" data-s="59" data-e="72.5">
+            <div class="tag el" data-d="0" style="background: var(--gold); color: #111">
+              ЧТО ЭТО ЗНАЧИТ ДЛЯ РОССИИ
+            </div>
+            <div class="item el" data-d="1.4">
+              <span class="n">01</span>Санкции: без Конгресса их не снять
+            </div>
+            <div class="item el" data-d="3.0">
+              <span class="n">02</span>Помощь Украине: деньги утверждает Конгресс
+            </div>
+            <div class="item el" data-d="4.6">
+              <span class="n">03</span>Сделки с Москвой — от дизеля до ослабления ограничений — под
+              ударом
+            </div>
+            <svg class="funnel el" data-d="9.0" width="880" height="110" viewBox="0 0 880 110">
+              <path
+                id="fa"
+                d="M10 10 L700 48"
+                stroke="#ffd36b"
+                stroke-width="6"
+                fill="none"
+                stroke-dasharray="700"
+                stroke-dashoffset="700"
+              />
+              <path
+                id="fb"
+                d="M10 100 L700 62"
+                stroke="#ffd36b"
+                stroke-width="6"
+                fill="none"
+                stroke-dasharray="700"
+                stroke-dashoffset="700"
+              />
+              <text x="715" y="66" fill="#ffd36b" font-size="28" font-weight="900">
+                окно сужается
+              </text>
+            </svg>
+          </div>
+
+          <div class="scene" data-s="72.5" data-e="80">
+            <div class="big el" data-d="0.3" style="font-size: 50px; font-weight: 900">
+              Трамп: хозяин положения<br />или <b>«хромая утка»</b>?
+            </div>
+            <h1 class="el" data-d="4.4" style="margin-top: 44px; font-size: 90px">
+              ХУК <b>СЛЕВА</b>
+            </h1>
+          </div>
+        </div>
+      </div>
+
+      <div class="neon"></div>
+      <div class="floor"></div>
+      <div class="reflect"></div>
+      <svg
+        style="position: absolute; left: 0; top: 766px"
+        width="1920"
+        height="314"
+        viewBox="0 0 1920 314"
+      >
+        <g stroke="#ffffff" stroke-opacity="0.05" stroke-width="2">
+          <path d="M960 0 L-600 314" />
+          <path d="M960 0 L0 314" />
+          <path d="M960 0 L480 314" />
+          <path d="M960 0 L960 314" />
+          <path d="M960 0 L1440 314" />
+          <path d="M960 0 L1920 314" />
+          <path d="M960 0 L2520 314" />
+          <path d="M0 60 H1920" />
+          <path d="M0 140 H1920" />
+          <path d="M0 250 H1920" />
+        </g>
+      </svg>
+
+      <!-- ведущий: персонаж с аватарки + руки и мимика -->
+      <svg id="host" viewBox="0 0 600 900">
+        <defs>
+          <radialGradient id="skin" cx="45%" cy="38%" r="70%">
+            <stop offset="0" stop-color="#f8d9c0" />
+            <stop offset="0.7" stop-color="#eec5a6" />
+            <stop offset="1" stop-color="#d9a98a" />
+          </radialGradient>
+          <linearGradient id="hair" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#f0cf8c" />
+            <stop offset="0.6" stop-color="#d8ae68" />
+            <stop offset="1" stop-color="#b98d4c" />
+          </linearGradient>
+          <linearGradient id="blazer" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#2a2c34" />
+            <stop offset="1" stop-color="#0d0e12" />
+          </linearGradient>
+          <linearGradient id="sleeve" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#121318" />
+            <stop offset="0.5" stop-color="#262830" />
+            <stop offset="1" stop-color="#121318" />
+          </linearGradient>
+          <linearGradient id="shirt" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#ffffff" />
+            <stop offset="1" stop-color="#dfe3ea" />
+          </linearGradient>
+          <linearGradient id="lens" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#ffffff" stop-opacity="0.22" />
+            <stop offset="0.5" stop-color="#bcd4ff" stop-opacity="0.06" />
+            <stop offset="1" stop-color="#ffffff" stop-opacity="0.12" />
+          </linearGradient>
+          <g id="arm">
+            <rect x="-36" y="-10" width="72" height="200" rx="34" fill="url(#sleeve)" />
+            <g class="fore" transform="translate(0 185)">
+              <rect x="-30" y="-12" width="60" height="165" rx="28" fill="url(#sleeve)" />
+              <rect x="-29" y="138" width="58" height="18" rx="6" fill="#f2f4f8" />
+              <g class="hand" transform="translate(0 178)">
+                <ellipse cx="0" cy="0" rx="24" ry="29" fill="#efc7aa" />
+                <ellipse
+                  cx="-20"
+                  cy="-6"
+                  rx="9"
+                  ry="16"
+                  fill="#e6bb9d"
+                  transform="rotate(25 -20 -6)"
+                />
+                <rect class="finger" x="-6" y="16" width="12" height="40" rx="6" fill="#efc7aa" />
+                <path d="M-14 12 Q0 18 14 12" stroke="#c99a7e" stroke-width="2" fill="none" />
+              </g>
+            </g>
+          </g>
+        </defs>
+
+        <g id="torso">
+          <g transform="translate(0 -45)">
+            <ellipse cx="300" cy="680" rx="290" ry="90" fill="#000" opacity="0.25" />
+            <path
+              d="M40 900 L70 650 Q90 585 215 560 L385 560 Q510 585 530 650 L560 900 Z"
+              fill="url(#blazer)"
+            />
+            <path d="M232 560 L300 790 L368 560 Z" fill="url(#shirt)" />
+            <path d="M300 600 L300 790" stroke="#c9ced8" stroke-width="2" />
+            <circle cx="300" cy="655" r="5" fill="#f4f4f4" stroke="#b9bec8" stroke-width="2" />
+            <circle cx="300" cy="715" r="5" fill="#f4f4f4" stroke="#b9bec8" stroke-width="2" />
+            <path
+              d="M232 560 L262 648 L300 598 Z"
+              fill="#eef1f5"
+              stroke="#c9ced8"
+              stroke-width="2"
+            />
+            <path
+              d="M368 560 L338 648 L300 598 Z"
+              fill="#eef1f5"
+              stroke="#c9ced8"
+              stroke-width="2"
+            />
+            <path d="M215 560 L300 820 L250 900 L150 900 L180 640 Z" fill="#1c1d23" />
+            <path d="M385 560 L300 820 L350 900 L450 900 L420 640 Z" fill="#1c1d23" />
+            <path
+              d="M222 580 L292 805"
+              stroke="#4a4d58"
+              stroke-width="2"
+              stroke-dasharray="5 7"
+              fill="none"
+            />
+            <path
+              d="M378 580 L308 805"
+              stroke="#4a4d58"
+              stroke-width="2"
+              stroke-dasharray="5 7"
+              fill="none"
+            />
+            <path d="M392 680 L470 674" stroke="#3a3c45" stroke-width="4" />
+            <path d="M402 680 L418 648 L432 676 L446 652 L460 676 Z" fill="#e3262f" />
+            <circle cx="232" cy="662" r="13" fill="#e3262f" stroke="#ffd36b" stroke-width="3" />
+            <path d="M352 612 Q356 640 340 680" stroke="#111" stroke-width="3" fill="none" />
+            <rect x="344" y="598" width="16" height="26" rx="7" fill="#0b0b0b" />
+            <rect x="341" y="618" width="22" height="7" rx="2" fill="#555a66" />
+          </g>
+          <rect x="262" y="465" width="76" height="70" fill="#e6bea2" />
+          <path d="M262 495 Q300 525 338 495 L338 465 L262 465 Z" fill="#c99a7e" opacity="0.55" />
+
+          <g id="head">
+            <ellipse cx="180" cy="375" rx="21" ry="33" fill="#e8bfa2" />
+            <ellipse cx="420" cy="375" rx="21" ry="33" fill="#e8bfa2" />
+            <path d="M184 356 Q170 375 186 396" stroke="#c4927a" stroke-width="4" fill="none" />
+            <path d="M416 356 Q430 375 414 396" stroke="#c4927a" stroke-width="4" fill="none" />
+            <ellipse cx="300" cy="360" rx="122" ry="150" fill="url(#skin)" />
+            <path
+              d="M195 430 Q230 505 300 512 Q370 505 405 430 Q380 490 300 496 Q220 490 195 430 Z"
+              fill="#c9957a"
+              opacity="0.35"
+            />
+            <ellipse cx="228" cy="430" rx="26" ry="14" fill="#f29b8f" opacity="0.22" />
+            <ellipse cx="372" cy="430" rx="26" ry="14" fill="#f29b8f" opacity="0.22" />
+            <g id="brows">
+              <path
+                d="M218 318 Q248 304 280 314"
+                stroke="#a87e45"
+                stroke-width="7"
+                stroke-linecap="round"
+                fill="none"
+              />
+              <path
+                d="M320 314 Q352 304 382 318"
+                stroke="#a87e45"
+                stroke-width="7"
+                stroke-linecap="round"
+                fill="none"
+              />
+            </g>
+            <g id="eyeL">
+              <ellipse cx="248" cy="360" rx="20" ry="13" fill="#fbfbfb" />
+              <g class="iris">
+                <circle cx="250" cy="361" r="10" fill="#5b7894" />
+                <circle cx="250" cy="361" r="5" fill="#121212" />
+                <circle cx="254" cy="357" r="2.6" fill="#fff" />
+              </g>
+              <path
+                d="M227 356 Q248 342 270 354"
+                stroke="#3b2a22"
+                stroke-width="3.5"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </g>
+            <g id="eyeR">
+              <ellipse cx="352" cy="360" rx="20" ry="13" fill="#fbfbfb" />
+              <g class="iris">
+                <circle cx="354" cy="361" r="10" fill="#5b7894" />
+                <circle cx="354" cy="361" r="5" fill="#121212" />
+                <circle cx="358" cy="357" r="2.6" fill="#fff" />
+              </g>
+              <path
+                d="M330 354 Q352 342 373 356"
+                stroke="#3b2a22"
+                stroke-width="3.5"
+                fill="none"
+                stroke-linecap="round"
+              />
+            </g>
+            <path d="M200 350 L184 360" stroke="#0d0d0d" stroke-width="8" />
+            <path d="M400 350 L416 360" stroke="#0d0d0d" stroke-width="8" />
+            <rect
+              x="198"
+              y="326"
+              width="96"
+              height="68"
+              rx="12"
+              fill="url(#lens)"
+              stroke="#0d0d0d"
+              stroke-width="12"
+            />
+            <rect
+              x="306"
+              y="326"
+              width="96"
+              height="68"
+              rx="12"
+              fill="url(#lens)"
+              stroke="#0d0d0d"
+              stroke-width="12"
+            />
+            <path d="M294 350 Q300 343 306 350" stroke="#0d0d0d" stroke-width="9" fill="none" />
+            <path
+              d="M212 382 L240 336 M226 386 L248 350"
+              stroke="#ffffff"
+              stroke-opacity="0.35"
+              stroke-width="5"
+              stroke-linecap="round"
+            />
+            <path
+              d="M320 382 L348 336 M334 386 L356 350"
+              stroke="#ffffff"
+              stroke-opacity="0.35"
+              stroke-width="5"
+              stroke-linecap="round"
+            />
+            <circle cx="206" cy="333" r="3" fill="#c9ced8" />
+            <circle cx="394" cy="333" r="3" fill="#c9ced8" />
+            <path
+              d="M300 378 Q290 410 296 422 Q304 428 314 420"
+              fill="none"
+              stroke="#c4927a"
+              stroke-width="4"
+              stroke-linecap="round"
+            />
+            <ellipse cx="292" cy="420" rx="4" ry="2.5" fill="#b07a62" opacity="0.7" />
+            <ellipse cx="310" cy="420" rx="4" ry="2.5" fill="#b07a62" opacity="0.7" />
+            <path
+              d="M303 382 L305 405"
+              stroke="#fff"
+              stroke-opacity="0.4"
+              stroke-width="3"
+              stroke-linecap="round"
+            />
+            <!-- рот: тёмный проём раскрывается, нижняя губа опускается -->
+            <ellipse id="mouthOpen" cx="301" cy="455" rx="27" ry="0" fill="#5a1f22" />
+            <rect id="teeth" x="284" y="451" width="34" height="0" rx="3" fill="#f6f2ec" />
+            <path d="M268 452 Q300 446 334 450 Q302 458 268 452 Z" fill="#b5514e" />
+            <g id="lowLip">
+              <path d="M270 453 Q302 476 332 451 Q302 466 270 453 Z" fill="#c9706a" />
+              <path
+                d="M290 466 Q302 469 314 465"
+                stroke="#fff"
+                stroke-opacity="0.35"
+                stroke-width="2"
+                fill="none"
+              />
+            </g>
+            <path d="M264 450 Q262 455 266 458" stroke="#c4927a" stroke-width="2" fill="none" />
+            <path d="M338 448 Q341 453 337 457" stroke="#c4927a" stroke-width="2" fill="none" />
+            <path
+              d="M165 400 Q140 230 235 185 Q300 155 370 185 Q470 225 438 400 Q432 330 410 300 Q395 330 360 318 Q340 335 300 322 Q270 340 240 320 Q210 335 192 305 Q172 330 165 400 Z"
+              fill="url(#hair)"
+            />
+            <path
+              d="M165 400 Q158 360 170 320 Q178 360 192 372 Q180 385 165 400 Z"
+              fill="#cfa35e"
+            />
+            <path
+              d="M438 400 Q446 360 432 318 Q424 360 410 372 Q422 385 438 400 Z"
+              fill="#cfa35e"
+            />
+            <g id="fringe">
+              <path
+                d="M200 300 Q222 260 252 270 Q238 300 232 334 Q220 312 200 300 Z"
+                fill="#e6c07a"
+              />
+              <path
+                d="M246 268 Q282 248 310 268 Q292 290 288 330 Q270 300 246 268 Z"
+                fill="#e9c47e"
+              />
+              <path
+                d="M304 264 Q338 246 368 270 Q352 292 350 330 Q334 296 304 264 Z"
+                fill="#e6c07a"
+              />
+              <path
+                d="M362 268 Q392 262 410 300 Q390 300 380 332 Q378 298 362 268 Z"
+                fill="#dcb46c"
+              />
+            </g>
+            <g fill="none" stroke-linecap="round">
+              <path d="M235 200 Q215 250 210 300" stroke="#b8904f" stroke-width="4" />
+              <path d="M268 178 Q250 230 252 278" stroke="#b8904f" stroke-width="4" />
+              <path d="M305 168 Q300 220 300 268" stroke="#b8904f" stroke-width="4" />
+              <path d="M342 176 Q352 225 340 270" stroke="#b8904f" stroke-width="4" />
+              <path d="M380 192 Q400 240 395 290" stroke="#b8904f" stroke-width="4" />
+              <path d="M415 225 Q430 270 425 330" stroke="#b8904f" stroke-width="3" />
+              <path d="M190 232 Q172 280 176 330" stroke="#b8904f" stroke-width="3" />
+              <path d="M250 196 Q240 220 238 250" stroke="#fbe3ad" stroke-width="5" opacity="0.8" />
+              <path d="M318 182 Q326 210 322 240" stroke="#fbe3ad" stroke-width="5" opacity="0.8" />
+              <path d="M370 200 Q384 225 382 250" stroke="#fbe3ad" stroke-width="4" opacity="0.7" />
+              <path d="M440 300 Q458 310 456 330" stroke="#d8ae68" stroke-width="2.5" />
+            </g>
+          </g>
+
+          <!-- руки: плечо → локоть → кисть, углы задаёт render() -->
+          <g id="armL" transform="translate(110 600)"><use href="#arm" /></g>
+          <g id="armR" transform="translate(490 600) scale(-1 1)"><use href="#arm" /></g>
+        </g>
+      </svg>
+
+      <!-- стол ведущего -->
+      <svg id="desk" viewBox="0 0 820 260">
+        <defs>
+          <linearGradient id="deskTop" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#3a4256" />
+            <stop offset="1" stop-color="#1c2232" />
+          </linearGradient>
+          <linearGradient id="deskFront" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#161b29" />
+            <stop offset="1" stop-color="#0a0d16" />
+          </linearGradient>
+        </defs>
+        <path d="M10 40 Q410 10 810 40 L790 70 Q410 44 30 70 Z" fill="url(#deskTop)" />
+        <path d="M30 70 Q410 44 790 70 L760 250 L60 250 Z" fill="url(#deskFront)" />
+        <path d="M42 120 Q410 96 778 120" stroke="#e3262f" stroke-width="8" fill="none" />
+        <path
+          d="M42 120 Q410 96 778 120"
+          stroke="#e3262f"
+          stroke-width="22"
+          fill="none"
+          opacity="0.15"
+        />
+        <text
+          x="410"
+          y="190"
+          text-anchor="middle"
+          font-size="46"
+          font-weight="900"
+          fill="#f4f4f4"
+          letter-spacing="6"
+        >
+          ХУК
+          <tspan fill="#e3262f">СЛЕВА</tspan>
+        </text>
+        <!-- бумаги -->
+        <path d="M150 36 L260 30 L270 46 L158 52 Z" fill="#f1f1f1" />
+        <path d="M162 32 L270 28 L278 42 L170 47 Z" fill="#ffffff" />
+        <path d="M180 36 L250 33 M182 40 L246 37" stroke="#9aa3b5" stroke-width="1.5" />
+        <!-- планшет -->
+        <path
+          d="M470 40 L590 34 L600 52 L478 58 Z"
+          fill="#0d0f14"
+          stroke="#2c3346"
+          stroke-width="2"
+        />
+        <path d="M480 42 L586 37 L593 50 L486 55 Z" fill="#2b5fd9" opacity="0.6" />
+        <!-- кружка с паром -->
+        <rect x="680" y="-6" width="44" height="48" rx="6" fill="#f4f4f4" />
+        <rect x="680" y="8" width="44" height="10" fill="#e3262f" />
+        <path
+          d="M724 6 Q744 10 742 22 Q740 32 724 32"
+          stroke="#f4f4f4"
+          stroke-width="6"
+          fill="none"
+        />
+        <g
+          id="steam"
+          stroke="#ffffff"
+          stroke-width="4"
+          fill="none"
+          stroke-linecap="round"
+          opacity="0.35"
+        >
+          <path d="M694 -14 Q686 -30 696 -44 Q704 -58 696 -72" />
+          <path d="M710 -14 Q718 -32 708 -46 Q700 -60 710 -76" />
+        </g>
+      </svg>
+    </div>
+
+    <!-- оверлеи -->
+    <div class="corner"></div>
+    <div class="live"><i id="dot"></i>ЭФИР</div>
+    <div class="bug">ХУК <b>СЛЕВА</b></div>
+    <div class="lower" id="lower">
+      <b>Тимофей Беспартийный</b><span>ВЕДУЩИЙ · «ХУК СЛЕВА»</span>
+    </div>
+    <div class="sub" id="sub"></div>
+    <div class="ticker">
+      <div class="lab">МОЛНИЯ</div>
+      <div class="run" id="run">
+        <span>США: промежуточные выборы — переизбираются все 435 членов Палаты представителей</span>
+        <span>Треть Сената, губернаторы и местные власти</span>
+        <span>Трамп: «Притворитесь, что я в бюллетене»</span>
+        <span>Партия президента на промежуточных выборах обычно теряет места</span>
+      </div>
+    </div>
+
+    <script>
+      // [начало, конец, текст, говорит_ведущий] — текст ведущего; 0 = цитата другим голосом
+      const SUBS = [
+        [
+          0.3,
+          6,
+          "Здравствуйте, друзья. В эфире «Хук слева», в красном углу ринга — Тимофей Беспартийный.",
+          1,
+        ],
+        [
+          6,
+          12,
+          "Сегодня в Америке промежуточные выборы. Для Трампа это может стать самым неприятным днём за два года.",
+          1,
+        ],
+        [
+          12,
+          19,
+          "Переизбирают всю Палату представителей — 435 мест, треть Сената, губернаторов и местные власти. Президента в бюллетене нет.",
+          1,
+        ],
+        [
+          19,
+          25,
+          "А значит, явка ниже, и на участки идут самые мотивированные — прежде всего противники президента, которые жаждут реванша.",
+          1,
+        ],
+        [
+          25,
+          32,
+          "История на их стороне. Почти всегда партия президента через два года теряет места. Так было и в 2018-м, и в 2022-м.",
+          1,
+        ],
+        [
+          32,
+          39,
+          "Исключения редки: 1998 год при Клинтоне и 2002-й при Буше-младшем. Оба раза у президента был очень высокий рейтинг.",
+          1,
+        ],
+        [39, 42.5, "У Трампа такой поддержки уже нет. На съезде он уговаривал сторонников:", 1],
+        [42.5, 45, "Трамп: «Притворитесь, что я в бюллетене».", 0],
+        [45, 49, "Что дальше? Если демократы возьмут хотя бы Палату представителей,", 1],
+        [
+          49,
+          53,
+          "Трампа ждут расследования, блокировка законов и разговоры о новом импичменте.",
+          1,
+        ],
+        [
+          53,
+          59,
+          "Правда, чтобы отстранить президента, нужны две трети Сената. Так что импичмент — скорее давление, чем приговор.",
+          1,
+        ],
+        [
+          59,
+          63.5,
+          "А теперь главное для нас. Санкции и помощь Украине — во многом решения Конгресса.",
+          1,
+        ],
+        [
+          63.5,
+          68,
+          "Демократическое большинство будет тормозить любые сделки Трампа с Москвой — от того же дизеля до ослабления ограничений.",
+          1,
+        ],
+        [
+          68,
+          72.5,
+          "Проще говоря, окно для договорённостей Кремля с Белым домом может резко сузиться.",
+          1,
+        ],
+        [
+          72.5,
+          77,
+          "Итог: вторник покажет, остаётся ли Трамп хозяином положения или становится «хромой уткой».",
+          1,
+        ],
+        [77, 80, "Такой хук слева мы провели сегодня. До новых встреч, друзья.", 1],
+      ];
+      const DURATION = 80,
+        FADE = 0.4,
+        IN = 0.6;
+      const GONG_T = 79;
+
+      // камера: [t, масштаб, x, y] — точка, к которой «наезжаем»
+      const CAM = [
+        [0, 1.28, 470, 420],
+        [4, 1, 960, 540],
+        [12, 1.04, 1360, 400],
+        [25, 1.02, 960, 540],
+        [39, 1.08, 960, 460],
+        [45, 1, 960, 540],
+        [59, 1.06, 700, 480],
+        [72.5, 1, 960, 540],
+        [80, 0.98, 960, 540],
+      ];
+
+      // позы рук: [плечо°, локоть°] для левой и правой (правая зеркальная)
+      const POSE = {
+        rest: [
+          [15, -112],
+          [15, -112],
+        ],
+        wave: [
+          [15, -112],
+          [62, 70],
+        ],
+        open: [
+          [34, 96],
+          [34, 96],
+        ],
+        explain: [
+          [20, -150],
+          [15, -112],
+        ],
+        point: [
+          [15, -112],
+          [78, 12],
+        ],
+        count: [
+          [15, -112],
+          [18, -158],
+        ],
+        both: [
+          [22, -128],
+          [22, -128],
+        ],
+      };
+      const FINGER = { point: [0, 1], count: [0, 1] };
+      const GEST = [
+        [0, "wave"],
+        [2.6, "rest"],
+        [6, "explain"],
+        [12, "point"],
+        [19, "both"],
+        [25, "point"],
+        [32, "count"],
+        [39, "rest"],
+        [45, "open"],
+        [53, "count"],
+        [59, "both"],
+        [64, "explain"],
+        [68, "open"],
+        [72.5, "rest"],
+        [77, "wave"],
+        [79.2, "rest"],
+      ];
+
+      const clamp = (x) => Math.max(0, Math.min(1, x));
+      const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+      const smooth = (x) => {
+        x = clamp(x);
+        return x * x * (3 - 2 * x);
+      };
+      const lerp = (a, b, p) => a + (b - a) * p;
+      const $ = (id) => document.getElementById(id);
+      const scenes = [...document.querySelectorAll(".scene")];
+      const world = $("world");
+      const run = $("run");
+
+      function camAt(t) {
+        let i = CAM.findIndex(([k]) => k > t);
+        if (i === -1) return CAM[CAM.length - 1];
+        if (i === 0) return CAM[0];
+        const a = CAM[i - 1],
+          b = CAM[i],
+          p = smooth((t - a[0]) / (b[0] - a[0]));
+        return [t, lerp(a[1], b[1], p), lerp(a[2], b[2], p), lerp(a[3], b[3], p)];
+      }
+
+      function poseAt(t) {
+        let i = GEST.findIndex(([k]) => k > t);
+        i = i === -1 ? GEST.length : i;
+        const cur = GEST[Math.max(0, i - 1)],
+          prev = GEST[Math.max(0, i - 2)];
+        const p = ease((t - cur[0]) / 0.55);
+        const A = POSE[prev[1]],
+          B = POSE[cur[1]];
+        const arms = [0, 1].map((s) => [lerp(A[s][0], B[s][0], p), lerp(A[s][1], B[s][1], p)]);
+        const fA = FINGER[prev[1]] || [0, 0],
+          fB = FINGER[cur[1]] || [0, 0];
+        return {
+          arms,
+          finger: [0, 1].map((s) => lerp(fA[s], fB[s], p)),
+          name: cur[1],
+          since: t - cur[0],
+        };
+      }
+
+      function setArm(el, [a1, a2], wiggle, finger) {
+        const base = el.id === "armL" ? "translate(110 600)" : "translate(490 600) scale(-1 1)";
+        el.setAttribute("transform", `${base} rotate(${a1})`);
+        el.querySelector(".fore").setAttribute(
+          "transform",
+          `translate(0 185) rotate(${a2 + wiggle})`
+        );
+        el.querySelector(".finger").setAttribute("opacity", finger);
+      }
+
+      function render(t) {
+        // сцены на видеостене
+        for (const sc of scenes) {
+          const s = +sc.dataset.s,
+            e = +sc.dataset.e;
+          const vis = clamp((t - s) / FADE) * clamp((e - t) / FADE);
+          sc.style.opacity = vis;
+          if (!vis) continue;
+          const lt = t - s;
+          sc.querySelectorAll(".el").forEach((el) => {
+            const p = ease((lt - +el.dataset.d) / IN);
+            el.style.opacity = p;
+            el.style.transform = `translateY(${(1 - p) * 34}px)`;
+          });
+          sc.querySelectorAll(".grow").forEach((b) => {
+            b.style.width = ease((lt - +b.dataset.d) / 1.1) * +b.dataset.w + "px";
+          });
+          sc.querySelectorAll("[data-count]").forEach((c) => {
+            c.textContent = Math.round(ease((lt - +c.dataset.d) / 1.6) * +c.dataset.count);
+          });
+          sc.querySelectorAll("#fa, #fb").forEach((p) => {
+            p.style.strokeDashoffset = 700 * (1 - ease((lt - 9.2) / 1.6));
+          });
+        }
+
+        // камера
+        const [, cs, cx, cy] = camAt(t);
+        world.style.transformOrigin = `${cx}px ${cy}px`;
+        world.style.transform = `scale(${cs})`;
+
+        // студия живёт
+        $("stripes").style.transform = `translateY(${-((t * 30) % 80)}px)`;
+        $("steam").setAttribute("transform", `translate(0 ${-((t * 14) % 14)})`);
+        $("steam").setAttribute("opacity", 0.25 + 0.15 * Math.sin(t * 2));
+        $("dot").style.opacity = Math.sin(t * 5) > 0 ? 1 : 0.25;
+        run.style.transform = `translateX(${-((t * 110) % (run.scrollWidth / 2))}px)`;
+
+        // ведущий
+        const cur = SUBS.find(([a, b]) => t >= a && t < b);
+        const speaking = cur && cur[3];
+        const listening = cur && !cur[3];
+        const pose = poseAt(t);
+        const beat = speaking ? Math.sin(t * 5.2) * 6 + Math.sin(t * 2.3) * 4 : 0;
+        const waving = pose.name === "wave" && pose.since < 2.4 ? Math.sin(pose.since * 9) * 22 : 0;
+        setArm(
+          $("armL"),
+          pose.arms[0],
+          pose.name === "explain" || pose.name === "both" || pose.name === "open"
+            ? beat
+            : beat * 0.25,
+          pose.finger[0]
+        );
+        setArm(
+          $("armR"),
+          pose.arms[1],
+          waving || (pose.name === "rest" ? beat * 0.25 : beat * 0.7),
+          pose.finger[1]
+        );
+
+        const open = speaking ? Math.abs(Math.sin(t * 13) * Math.sin(t * 4.7)) : 0;
+        $("mouthOpen").setAttribute("ry", open * 14);
+        $("teeth").setAttribute("height", open * 5);
+        $("lowLip").setAttribute("transform", `translate(0 ${open * 11})`);
+
+        // брови вверх в начале каждой фразы и при цитате
+        const lineStart = cur ? t - cur[0] : 9;
+        const raise =
+          (lineStart < 0.9 ? Math.sin((lineStart / 0.9) * Math.PI) : 0) + (listening ? 0.8 : 0);
+        $("brows").setAttribute("transform", `translate(0 ${-raise * 8})`);
+        $("fringe").setAttribute("transform", `translate(0 ${Math.sin(t * 1.7) * 1.5})`);
+
+        // моргание: неровный ритм, чтобы не выглядело механически
+        const bt = (t + Math.sin(t * 0.37) * 0.8) % 3.3;
+        const lid = bt < 0.13 ? 0.08 : 1;
+        const look = pose.name === "point" ? 5 : listening ? 4 : Math.sin(t * 0.5) * 1.5;
+        for (const [id, cx0] of [
+          ["eyeL", 248],
+          ["eyeR", 352],
+        ]) {
+          $(id).setAttribute(
+            "transform",
+            `translate(${cx0} 360) scale(1 ${lid}) translate(${-cx0} -360)`
+          );
+          $(id).querySelector(".iris").setAttribute("transform", `translate(${look} 0)`);
+        }
+
+        const tilt = listening ? 5 : pose.name === "point" ? 3 : 0;
+        const nod = speaking
+          ? Math.sin(t * 2.1) * 2.4 + Math.sin(t * 3.7) * 1
+          : Math.sin(t * 0.8) * 0.8;
+        $("head").setAttribute(
+          "transform",
+          `rotate(${nod + tilt} 300 480) translate(0 ${speaking ? Math.abs(Math.sin(t * 4.2)) * -2 : 0})`
+        );
+        const sway = Math.sin(t * 0.6) * 7 + Math.sin(t * 1.3) * 2;
+        const lean = pose.name === "point" ? 2.5 : pose.name === "both" ? -1 : 0;
+        $("host").style.transform =
+          `translateX(${sway}px) rotate(${lean + Math.sin(t * 0.6) * 0.6}deg) translateY(${Math.sin(t * 1.6) * 2}px)`;
+
+        // плашка с именем
+        $("lower").style.opacity = clamp((t - 1) / FADE) * clamp((6.5 - t) / FADE);
+
+        // удар гонга
+        const g = t - GONG_T,
+          hit = g > 0 && g < 0.6;
+        document.body.style.transform = `translateX(${hit ? Math.sin(g * 60) * 14 * (1 - g / 0.6) : 0}px)`;
+
+        const txt = cur ? cur[2] : "";
+        const sub = $("sub");
+        if (sub.dataset.txt !== txt) {
+          sub.dataset.txt = txt;
+          sub.innerHTML = txt ? `<span>${txt}</span>` : "";
+        }
+      }
+
+      // руки: копии шаблона #arm вместо <use>, чтобы можно было крутить локоть
+      for (const id of ["armL", "armR"]) {
+        const g = $(id);
+        g.replaceChildren(document.querySelector("#arm").cloneNode(true));
+        g.firstChild.removeAttribute("id");
+      }
+      document.querySelector("#host defs #arm").remove();
+
+      // timeMap: [[newT, oldT], ...] от add-audio.mjs — растягивает раскладку под реальную озвучку
+      let timeMap = null;
+      const toOld = (t) => {
+        if (!timeMap) return t;
+        const i = timeMap.findIndex(([n]) => n > t);
+        if (i <= 0) return i === 0 ? timeMap[0][1] : timeMap[timeMap.length - 1][1];
+        const [n0, o0] = timeMap[i - 1],
+          [n1, o1] = timeMap[i];
+        return o0 + ((t - n0) / (n1 - n0)) * (o1 - o0);
+      };
+      window.setTimeMap = (m) => {
+        timeMap = m;
+        window.DURATION = m[m.length - 1][0];
+      };
+      // top-level `function render` is window.render itself, so keep a reference before wrapping
+      const draw = render;
+      window.render = (t) => draw(toOld(t));
+      window.DURATION = DURATION;
+
+      if (!location.search.includes("capture")) {
+        const t0 = performance.now();
+        const loop = () => {
+          window.render(((performance.now() - t0) / 1000) % window.DURATION);
+          requestAnimationFrame(loop);
+        };
+        loop();
+      }
+    </script>
+  </body>
+</html>

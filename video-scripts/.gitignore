@@ -1,0 +1,13 @@
+__pycache__/
+seg/
+voice-*.wav
+episode.html
+check-*.jpg
+log.txt
+starts.json
+udar-animation.html
+video.mp4
+mix.wav
+voice.wav
+bed_offset
+udar-tmp-animation.html
