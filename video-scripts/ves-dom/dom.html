@@ -64,6 +64,8 @@
       $("calDay").textContent = d0;
       $("calMon").textContent = (m0 || "").toUpperCase().replace(/Я$/, "Ь").replace(/А$/, "");
       $("hook").innerHTML = EP.hook.map((h) => `<div>${h}</div>`).join("") + `<small>новости дня · по этажам</small>`;
+      // long hooks shrink to stay on two lines
+      for (const d of $("hook").querySelectorAll("div")) { d.style.whiteSpace = "nowrap"; d.style.fontSize = Math.min(118, 1010 / (Math.max(...EP.hook.map((h) => h.length)) * 0.74)) + "px"; }
       $("cta").firstChild.textContent = EP.cta;
       $("floors").innerHTML = ["К", 5, 4, 3, 2, 1].map((n) => `<div data-n="${n}">${n}</div>`).join("");
 
