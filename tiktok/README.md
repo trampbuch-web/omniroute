@@ -32,11 +32,8 @@ A `scene` lasts until the next line that has one: `bg` (blue navy green red dark
 `episodes`: title, date, music (m1 tense pulse, m2 hacker beat, m3 dark ambient). ~28 lines / ~90 s narration.
 Real events: only well-known, verifiable facts.
 
-## Daily routine (scheduled 11:30 and 18:00 MSK)
-No more chat videos. Each slot = 1 series episode + 1 documentary story.
-1. Series: read `series.md`, write the next episode `specs/nolik-s01eNN.json` (story renderer + RPG fields), update `series.md`.
-2. Story: read `history.md`, pick a NEW topic, write `specs/<YYYY-MM-DD>-<HHMM>-story.json` with `"tempo": 1.2, "gap": 0.2`
-   (fast, tense pacing; sfx on every twist), add it to `history.md`.
-3. Build both with `make.py story` (run in background, ~35 min total), check a few frames,
-   send both files with ready-to-paste descriptions (with `#luxerpvn`).
-4. Commit specs + series.md + history.md to this branch.
+## Daily routine (MSK)
+- 10:30 — one episode of the series: read `series.md`, write `specs/nolik-s01eNN.json`, build, send, update `series.md`.
+- 11:30 and 18:00 — one documentary story each: read `history.md`, NEW topic, spec with `"tempo": 1.2, "gap": 0.2`,
+  build, send, add to `history.md`.
+No chat videos. Every send includes a ready-to-paste description with `#luxerpvn`. Commit specs + md files to this branch.
