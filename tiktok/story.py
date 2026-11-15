@@ -229,7 +229,7 @@ def draw_stage(im, t):
 def draw_stats(im, t):
     cur = [e for e in stat_events if e[0] <= t]
     if not cur: return
-    st, now = cur[-1]; prev = stat_events[stat_events.index(cur[-1]) - 1][1] if len(cur) > 1 else {k: 0 for k in now}
+    st, now = cur[-1]; prev = stat_events[stat_events.index(cur[-1]) - 1][1] if len(cur) > 1 else SPEC.get("stats_start", {k: 0 for k in now})
     k_ = ease((t - st) / 0.9); d = ImageDraw.Draw(im, "RGBA")
     d.rounded_rectangle((60, 985, W - 60, 1285), 22, fill=(8, 10, 18, 215), outline=(70, 80, 110), width=2)
     for r, (name, val) in enumerate(now.items()):
