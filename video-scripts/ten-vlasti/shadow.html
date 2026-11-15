@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Тень власти</title>
+    <style>
+      html, body { margin: 0; width: 1080px; height: 1920px; overflow: hidden; background: #000; font-family: "DejaVu Sans", Arial, sans-serif; }
+      #stage { position: absolute; inset: 0; overflow: hidden; transform-origin: 540px 1000px; }
+      .sc { position: absolute; left: 0; top: 0; display: none; }
+      #tim { overflow: visible; filter: drop-shadow(-9px -3px 0 rgba(255, 205, 120, 0.6)) brightness(0.8) contrast(1.1) saturate(0.82); }
+      #black { position: absolute; inset: 0; background: #000; opacity: 0; }
+      #vig { position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 46%, rgba(0, 0, 0, 0) 42%, rgba(0, 0, 0, 0.72) 100%); }
+      #grain { position: absolute; left: -200px; top: -200px; width: 1480px; height: 2320px; opacity: 0.09; mix-blend-mode: overlay; }
+      #brand { position: absolute; left: 36px; top: 64px; color: #e2b25a; font-size: 30px; font-weight: 900; letter-spacing: 6px; border: 3px solid #e2b25a; padding: 10px 16px; background: rgba(0, 0, 0, 0.55); }
+      #epi { position: absolute; left: 40px; top: 136px; color: #cfd5e2; font-size: 24px; letter-spacing: 2px; }
+      #place { position: absolute; left: 40px; top: 190px; color: #fff; font-size: 34px; font-weight: 900; letter-spacing: 3px; border-left: 8px solid #e3262f; padding-left: 14px; opacity: 0; }
+      #stamp { position: absolute; right: 36px; top: 70px; font-size: 24px; font-weight: 900; letter-spacing: 3px; padding: 8px 14px; border: 3px solid; transform: rotate(3deg); opacity: 0; }
+      #src { position: absolute; left: 40px; bottom: 150px; color: rgba(255, 255, 255, 0.6); font-size: 22px; letter-spacing: 1px; }
+      #caps { position: absolute; left: 50px; right: 50px; top: 1590px; text-align: center; font-size: 62px; font-weight: 900; line-height: 1.14; color: #fff; text-shadow: 0 4px 0 #000, 0 0 24px rgba(0, 0, 0, 0.9); }
+      #caps .on { color: #ffd98a; }
+      #caps.q { font-style: italic; }
+      #caps .who { display: block; font-style: normal; font-size: 26px; letter-spacing: 3px; margin-bottom: 10px; text-shadow: none; }
+      #caps .who span { background: #e3262f; padding: 5px 14px; }
+      #end { position: absolute; inset: 0; background: #000; opacity: 0; text-align: center; color: #e2b25a; }
+      #end h1 { margin: 700px 0 0; font-size: 104px; letter-spacing: 10px; }
+      #end h2 { margin: 24px 0 0; font-size: 34px; letter-spacing: 6px; color: #fff; font-weight: 400; }
+      #end p { margin: 90px 80px 0; font-size: 21px; color: rgba(255, 255, 255, 0.5); line-height: 1.5; }
+      #prog { position: absolute; left: 0; top: 0; height: 8px; background: #e2b25a; }
+      template { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="stage"></div>
+    <canvas id="grain" width="370" height="580"></canvas>
+    <div id="vig"></div>
+    <div id="black"></div>
+    <div id="brand">ТЕНЬ ВЛАСТИ</div>
+    <div id="epi"></div>
+    <div id="place"></div>
+    <div id="stamp"></div>
+    <div id="src"></div>
+    <div id="caps"></div>
+    <div id="end"><h1>ТЕНЬ<br />ВЛАСТИ</h1><h2></h2><p></p></div>
+    <div id="prog"></div>
+    <template id="hostT"><svg xmlns="http://www.w3.org/2000/svg">__HOST__</svg></template>
+    <script>
+      __SCENES__
+      const EP = __EP__;
+      const FPS = EP.fps, $ = (id) => document.getElementById(id);
+      $("epi").textContent = `сезон ${EP.season} · серия ${EP.episode} · «${EP.title}»`;
+      $("end").querySelector("h2").textContent = EP.next;
+      $("end").querySelector("p").innerHTML = "Источники: " + EP.sources.join(" · ");
+      // film grain: one noise tile, shifted every frame
+      {
+        const c = $("grain"), g = c.getContext("2d"), im = g.createImageData(370, 580);
+        for (let i = 0; i < im.data.length; i += 4) { const v = Math.floor(rnd() * 255); im.data[i] = im.data[i + 1] = im.data[i + 2] = v; im.data[i + 3] = 255; }
+        g.putImageData(im, 0, 0);
+      }
+      // shared gradients live in their own always-rendered svg: a hidden scene would take them down with it
+      document.body.insertAdjacentHTML("afterbegin", `<svg width="0" height="0" style="position:absolute">${DEFS}</svg>`);
+      // build every scene once
+      const SC = EP.scenes.map((seg, i) => {
+        const s = SCENES[seg.type](seg), d = document.createElement("div");
+        d.className = "sc";
+        d.innerHTML = `<svg width="1080" height="1920" viewBox="0 0 1080 1920">${s.svg}</svg>`;
+        $("stage").appendChild(d);
+        return { ...s, el: d, layers: [...d.querySelectorAll(".ly")].map((e) => [e, +e.dataset.d]) };
+      });
+      // the host rig lives in the scene that asks for it
+      const hostScene = SC.find((s) => s.host);
+      if (hostScene) {
+        const h = hostScene.host, hgt = (h.w * 1500) / 680;
+        hostScene.el.querySelector("#f-hostslot").innerHTML = `<svg id="tim" x="${h.x}" y="${h.y}" width="${h.w}" height="${hgt}" viewBox="-40 -20 680 1500">${$("hostT").content.querySelector("svg").innerHTML}</svg>`;
+        for (const id of ["armL", "armR"]) { const g = $(id); g.replaceChildren(document.querySelector("#tim #arm").cloneNode(true)); g.firstChild.removeAttribute("id"); }
+        document.querySelector("#tim defs #arm").remove();
+        for (const q of [".mic", ".cup", ".fork"]) document.querySelectorAll("#tim " + q).forEach((e) => e.setAttribute("opacity", 0));
+      }
+      const POSE = { rest: [15, -112], explain: [20, -150], point: [8, -70] };
+      function setArm(el, [a1, a2], wiggle) {
+        el.setAttribute("transform", `${el.id === "armL" ? "translate(158 600)" : "translate(442 600) scale(-1 1)"} rotate(${a1})`);
+        el.querySelector(".fore").setAttribute("transform", `translate(0 185) rotate(${a2 + wiggle})`);
+        el.querySelector(".finger").setAttribute("opacity", 0);
+      }
+      const lines = EP.scenes.flatMap((s) => s.lines);
+      const STAMP = { "ПОДТВЕРЖДЕНО": "#4fd38a", "ВЕРСИЯ": "#ffb03a", "РЕКОНСТРУКЦИЯ": "#9fc4ff" };
+
+      function render(t) {
+        let si = EP.scenes.findIndex((s) => t < s.t1);
+        if (si === -1) si = EP.scenes.length - 1;
+        const seg = EP.scenes[si], sc = SC[si], lt = t - seg.t0, p = clamp(lt / (seg.t1 - seg.t0));
+        SC.forEach((s, i) => (s.el.style.display = i === si ? "block" : "none"));
+        // scene camera: slow push with parallax, a small punch on the cut
+        const punch = Math.exp(-lt * 9) * 0.05, drift = lerp(-26, 26, p);
+        $("stage").style.transform = `scale(${1.03 + 0.07 * io(p) + punch})`;
+        sc.layers.forEach(([e, d]) => e.setAttribute("transform", `translate(${(d - 0.5) * drift} ${(d - 0.5) * -10 * p})`));
+        sc.update(sc.el, p, lt, seg);
+        $("black").style.opacity = Math.max(clamp(1 - lt / 0.2), si === 0 ? clamp(1 - t / 0.5) : 0, clamp((t - EP.out0 + 0.15) / 0.3));
+        $("grain").style.transform = `translate(${Math.floor(rnd() * 180)}px, ${Math.floor(rnd() * 180)}px) scale(4)`;
+        $("grain").style.transformOrigin = "0 0";
+        $("prog").style.width = (t / EP.D) * 100 + "%";
+
+        const line = lines.find((l) => t >= l.t0 && t < l.t1 + 0.2);
+        if (sc.host) {
+          const talk = line && line.who === "N", m = talk ? EP.mouth[Math.floor(t * FPS)] || [0, 1] : [0, 1];
+          const beat = talk ? Math.sin(t * 4.6) * 7 + Math.sin(t * 2.1) * 4 : 0;
+          setArm($("armL"), Math.floor(t / 2.4) % 2 ? POSE.explain : POSE.rest, beat * 0.6);
+          setArm($("armR"), POSE.point, beat * 0.3);
+          $("mouthOpen").setAttribute("ry", m[0] * 15);
+          $("mouthOpen").setAttribute("rx", 27 * m[1]);
+          $("teeth").setAttribute("height", m[0] * 5);
+          $("lowLip").setAttribute("transform", `translate(0 ${m[0] * 12})`);
+          const lid = (t + Math.sin(t * 0.37) * 0.8) % 3.3 < 0.13 ? 0.08 : 1;
+          for (const [id, x0] of [["eyeL", 248], ["eyeR", 352]]) $(id).setAttribute("transform", `translate(${x0} 360) scale(1 ${lid}) translate(${-x0} -360)`);
+          $("brows").setAttribute("transform", `translate(0 ${talk ? -2 : 3})`);
+          $("head").setAttribute("transform", `rotate(${talk ? Math.sin(t * 1.9) * 2 + Math.sin(t * 3.3) : Math.sin(t * 0.8)} 300 480)`);
+          $("tim").setAttribute("y", sc.host.y + Math.sin(t * 1.4) * 3);
+        }
+
+        // overlays
+        const end = t >= EP.out0, v = end ? 0 : ease((lt - 0.15) / 0.4);
+        $("place").style.opacity = seg.place ? v : 0;
+        $("place").textContent = seg.place || "";
+        const st = $("stamp");
+        st.style.opacity = seg.stamp ? v : 0;
+        st.textContent = seg.stamp || "";
+        st.style.color = st.style.borderColor = STAMP[seg.stamp] || "#e2b25a";
+        st.style.transform = `rotate(3deg) scale(${1.7 - 0.7 * v})`;
+        $("src").textContent = seg.src && !end ? "источник: " + seg.src : "";
+        let html = "", cls = "";
+        if (line && !end) {
+          const ch = line.chunks.find((c) => t >= c.t0 && t < c.t1) || line.chunks[line.chunks.length - 1];
+          cls = line.who === "N" ? "" : "q";
+          html = (line.label ? `<span class="who"><span>ЦИТАТА · ${line.label}</span></span>` : "") + ch.words.map((w) => `<span class="${t >= w[0] && t < w[1] + 0.06 ? "on" : ""}">${w[2]}</span>`).join(" ");
+        }
+        if ($("caps").dataset.h !== html) { $("caps").dataset.h = html; $("caps").innerHTML = html; $("caps").className = cls; }
+        const ev = clamp((t - EP.out0 - 0.1) / 0.5);
+        $("end").style.opacity = ev;
+        for (const id of ["brand", "epi"]) $(id).style.opacity = 1 - ev;
+      }
+      window.render = render;
+      window.DURATION = EP.D;
+      if (!location.search.includes("capture")) {
+        const t0 = performance.now();
+        const loop = () => { render(((performance.now() - t0) / 1000) % EP.D); requestAnimationFrame(loop); };
+        loop();
+      }
+    </script>
+  </body>
+</html>
