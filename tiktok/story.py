@@ -62,7 +62,9 @@ line_at = lambda t: max([i for i in range(len(L)) if starts[i] <= t] or [0])
 n = int(total * SR) + SR
 voice = np.zeros(n, np.float32)
 for c, st in zip(clips, starts): place(voice, c, st)
-voice *= 0.85 / np.abs(voice).max()
+# louder, even voice: RMS to ~-16 dBFS over speech, soft-limited so peaks never clip
+_v = voice[np.abs(voice) > 1e-4]
+voice = (np.tanh(voice * (0.16 / (np.sqrt(np.mean(_v ** 2)) + 1e-9)) * 1.6) / np.tanh(1.6)).astype(np.float32) * 0.95
 tt = np.arange(n) / SR
 rms = lambda x, r: x * (r / (np.sqrt(np.mean(x ** 2)) + 1e-9))
 ep_start = {}
@@ -77,7 +79,7 @@ for j, ep in enumerate(eps):
     seg *= np.minimum(1, x / (XF if j else 0.4)) * np.minimum(1, (ln_ / SR - x) / XF)
     place(bed, seg, a0)
 duck = np.full(n, 0.55, np.float32)
-for st, e in zip(starts, ends): duck[int(st * SR):int(e * SR)] = 0.2
+for st, e in zip(starts, ends): duck[int(st * SR):int(e * SR)] = 0.14
 for a_ in ads: duck[int(a_ * SR):int((a_ + BANNER_DUR) * SR)] = 0.08
 duck = np.convolve(duck, np.ones(6000) / 6000, "same").astype(np.float32)
 buf = voice + bed * duck * np.clip((total - tt) / 1.8, 0, 1).astype(np.float32)
