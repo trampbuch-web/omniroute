@@ -3,7 +3,7 @@
 Builds 1080x1920 videos with a local OmniVoice voice-over (the user's own cloned voice) and the LuxerVPN
 banner inserted at pauses. CPU only: a story takes ~15 min of TTS, a chat ~7 min.
 `setup_omni.sh` installs the venv on first use (~2 GB); models download from HuggingFace automatically.
-Voices: `me` (user's voice, cloned from their uploaded video; never commit that sample, the repo is public),
+Voices: `narrator2` (user's channel narrator, for stories), `me` (user's voice, for the series, cloned from their uploaded video; never commit that sample, the repo is public),
 `ai`, `grandma` (synthetic refs in `assets/voices/`). Old ElevenLabs names map to these.
 Set `TTS_ENGINE=elevenlabs` to use ElevenLabs instead (free quota is exhausted).
 
@@ -34,7 +34,7 @@ Real events: only well-known, verifiable facts.
 
 ## Daily routine (two videos a day, ready by 10:30 MSK)
 1. Series episode: read `series.md`, write `specs/nolik-s01eNN.json`, build, update `series.md`.
-2. Documentary story: read `history.md`, NEW topic, spec with `"tempo": 1.35, "gap": 0.1` (fast, tense: short punchy
+2. Documentary story: read `history.md`, NEW topic, spec with `"voice": "narrator2", "tempo": 1.35, "gap": 0.1` (fast, tense: short punchy
    sentences of 3-8 words, a twist or sfx every 5-8 s, `tag` "dramatic" on key beats), build, add to `history.md`.
 No chat videos. Ads are full-screen (banner scaled to frame width, video behind blacked out) — done by `story.py`.
 Send both with ready-to-paste descriptions. Every description: hook line, then an ad mention line

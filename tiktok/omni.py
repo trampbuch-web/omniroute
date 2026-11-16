@@ -14,8 +14,10 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SR = 24000
 CACHE = os.environ.get("OMNI_CACHE", os.path.expanduser("~/.cache/tiktok-omni"))
 # The user's own voice sample (their TikTok video). Kept out of the public repo on purpose.
-ME_SRC = os.environ.get("ME_VOICE_SRC", "/root/.claude/uploads/35878073-d42e-5e14-aec9-6f46ff767017/8aa4a430-v09044g40000cbaiph3c77u4f4eicmgg.mp4")
-ME_CUT = ("6.4", "16.3")  # cleanest ~10 s of speech in that video
+UP = "/root/.claude/uploads/35878073-d42e-5e14-aec9-6f46ff767017/"
+# The user's own voices (their videos), cut to the cleanest ~8-10 s of speech. Kept out of the public repo on purpose.
+USER_VOICES = {"me": (UP + "8aa4a430-v09044g40000cbaiph3c77u4f4eicmgg.mp4", "6.4", "16.3"),          # vlog voice: series
+               "narrator2": (UP + "deae4f84-v1c044g50000dbs6p57og65uv08c9vf0.mp4", "7.4", "15.4")}   # channel narrator: stories
 ALIASES = dict(narrator="me", young_m="me", dad="me", man="me", young_f="ai", woman="ai")
 TAGS = {"laughs": "laughter", "laughter": "laughter", "sighs": "sigh", "sigh": "sigh"}
 
@@ -39,9 +41,9 @@ def main():
         if voice not in prompts:
             pt = os.path.join(CACHE, f"{voice}.pt")
             if not os.path.exists(pt):
-                if voice == "me":
-                    ref = os.path.join(CACHE, "me_ref.wav")
-                    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", ME_CUT[0], "-to", ME_CUT[1], "-i", ME_SRC, "-vn", "-ac", "1",
+                if voice in USER_VOICES:
+                    src, a, b = USER_VOICES[voice]; ref = os.path.join(CACHE, f"{voice}_ref.wav")
+                    subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", a, "-to", b, "-i", src, "-vn", "-ac", "1",
                                     "-ar", str(SR), ref], check=True)
                     model.create_voice_clone_prompt(ref_audio=ref).save(pt)  # ref_text via Whisper
                 else:
