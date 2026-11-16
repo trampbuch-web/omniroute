@@ -34,7 +34,8 @@ Real events: only well-known, verifiable facts.
 
 ## Daily routine (two videos a day, ready by 10:30 MSK)
 1. Series episode: read `series.md`, write `specs/nolik-s01eNN.json`, build, update `series.md`.
-2. Documentary story: read `history.md`, NEW topic, spec with `"tempo": 1.2, "gap": 0.2`, build, add to `history.md`.
+2. Documentary story: read `history.md`, NEW topic, spec with `"tempo": 1.35, "gap": 0.1` (fast, tense: short punchy
+   sentences of 3-8 words, a twist or sfx every 5-8 s, `tag` "dramatic" on key beats), build, add to `history.md`.
 No chat videos. Ads are full-screen (banner scaled to frame width, video behind blacked out) — done by `story.py`.
 Send both with ready-to-paste descriptions. Every description: hook line, then an ad mention line
 (`Реклама: LuxerVPN — ищи @LuxerVpnBot в Telegram`), then hashtags including `#luxerpvn`. Commit specs + md files to this branch.
