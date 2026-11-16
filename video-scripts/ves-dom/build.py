@@ -152,7 +152,25 @@ fc += "".join(f"[{i}]" for i in range(nv)) + f"amix=inputs={nv}:normalize=0,loud
 mix = os.path.join(EP_DIR, "mix.wav")
 sh("ffmpeg", "-nostdin", "-v", "error", "-y", *ins, "-i", bed, "-filter_complex", fc, "-map", "[a]", "-t", str(D), "-ar", "44100", "-ac", "2", mix)
 final = os.path.join(EP_DIR, f"ves-dom-{os.path.basename(EP_DIR)}.mp4")
-sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", video, "-i", mix, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-t", str(D), final)
+plain = os.path.join(EP_DIR, "plain.mp4")
+sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", video, "-i", mix, "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-t", str(D), plain)
+# sponsor banner (same rules as the other channel videos): full screen at 1.1x, chroma key removed, the episode frozen
+# and darkened behind it. It goes in as the doors close after the middle stop — an ad break between floors.
+BANNER, BD = os.path.join(HERE, "assets", "banner.mp4"), 3.9 / 1.1
+if ep.get("ad", True):
+    AD = segs[len(segs) // 2]["ride"][0]
+    fc = (f"[0:v]trim=0:{AD},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop_duration={BD}[p1];[0:v]trim=start={AD},setpts=PTS-STARTPTS[p2];"
+          f"[p1][p2]concat=n=2:v=1:a=0,drawbox=c=black@0.88:t=fill:enable='between(t,{AD},{AD + BD})'[bg];"
+          f"[1:v]setpts=PTS/1.1,fps={FPS},chromakey=0x00D300:0.16:0.06,despill=type=green,scale=iw*1.12:-2,crop=1080:1920,setpts=PTS-STARTPTS+{AD}/TB[b];"
+          f"[bg][b]overlay=(W-w)/2:(H-h)/2:eof_action=pass[v];"
+          f"[0:a]atrim=0:{AD},asetpts=PTS-STARTPTS,afade=t=out:st={AD - 0.15}:d=0.15[x1];[1:a]atempo=1.1,aresample=44100,apad,atrim=0:{BD}[x2];"
+          f"[0:a]atrim=start={AD},asetpts=PTS-STARTPTS,afade=t=in:d=0.2[x3];[x1][x2][x3]concat=n=3:v=0:a=1[a]")
+    sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", plain, "-i", BANNER, "-filter_complex", fc, "-map", "[v]", "-map", "[a]",
+       "-c:v", "libx264", "-preset", "medium", "-crf", "20", "-pix_fmt", "yuv420p", "-r", str(FPS), "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", final)
+    os.remove(plain)
+    print(f"ad at {AD:.2f} s for {BD:.2f} s")
+else:
+    os.replace(plain, final)
 for f in [video, mix] + tracks:
     os.remove(f)
 print("done:", final)
