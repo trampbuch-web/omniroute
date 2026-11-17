@@ -10,6 +10,7 @@ AD_EVERY = 50.0
 SPEC = json.load(open(sys.argv[1]))
 OUT = sys.argv[2]
 L = SPEC["lines"]
+HORROR = SPEC.get("horror", False)
 EPS = {int(k): v for k, v in SPEC["episodes"].items()}
 PAL = dict(blue=(20, 40, 70), navy=(18, 32, 55), green=(10, 55, 35), red=(110, 15, 20), dark=(28, 28, 38),
            purple=(45, 25, 70), amber=(60, 42, 18), teal=(10, 50, 60), steel=(25, 30, 45))
@@ -99,7 +100,6 @@ def fx(name):
 
 GAIN = dict(impact=0.8, glitch=0.4, coins=0.5, phone=0.35, typing=0.3, siren=0.35, knock=0.7, gavel=0.7, riser=0.45, whoosh=0.5,
             hit=0.85, reverse=0.55, heartbeat=0.75, static=0.4, ring=0.22, boom=0.9, whisper=0.45)
-HORROR = SPEC.get("horror", False)
 for i, ln in enumerate(L):
     for s in ln.get("sfx", []):
         place(buf, fx(s), starts[i] - {"riser": 3.8, "reverse": 1.4}.get(s, 0), GAIN.get(s, 0.5))
