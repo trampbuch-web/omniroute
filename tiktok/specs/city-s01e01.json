@@ -99,8 +99,7 @@
      {
       "who": "mark",
       "x": 420,
-      "pose": "sit",
-      "y": 900,
+      "pose": "idle",
       "mood": "closed"
      }
     ],
