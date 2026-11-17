@@ -173,6 +173,9 @@ def draw_actor(panel, a, cast, lt, talking=False):
     if a.get("face", "r") == "l": L = L.transpose(Image.FLIP_LEFT_RIGHT)
     if s != 1.0: L = L.resize((int(L.width * s), int(760 * s)), Image.LANCZOS)
     gy = a.get("y", GROUND)
+    if not P["rot"]:  # soft contact shadow
+        sh_ = Image.new("RGBA", (int(260 * s), int(50 * s)), (0, 0, 0, 0)); ImageDraw.Draw(sh_).ellipse((0, 0, sh_.width - 1, sh_.height - 1), fill=(0, 0, 0, 90))
+        panel.alpha_composite(sh_, (int(x - sh_.width / 2), int(gy - sh_.height / 2)))
     panel.alpha_composite(L, (int(x - (300 + pad) * s), int(gy - 700 * s)))
     if pose == "sleep":
         d2 = ImageDraw.Draw(panel)
@@ -203,6 +206,11 @@ def balloon(panel, anchor, text, k):
 
 # ---------- sets (drawn over the halftone panel)
 def draw_set(panel, name, t):
+    base = panel.convert("RGB"); _draw_set(base, name, t); panel.paste(base.convert("RGBA"))
+
+
+def _draw_set(panel, name, t):
+    # drawn on an RGB copy: PIL blends translucent fills there (it does not on RGBA targets)
     d = ImageDraw.Draw(panel, "RGBA"); W_, H_ = C.PW, C.PH
     if name in ("cell", "corridor", "room", "office", "court", "plane"):
         wall = {"cell": (150, 146, 140), "corridor": (130, 130, 140), "room": (196, 170, 140), "office": (170, 180, 196),
@@ -253,13 +261,60 @@ def draw_set(panel, name, t):
             d.rectangle((120, 560, 260, 700), fill=(120, 120, 130), outline=INK, width=OW)
             for x in range(140, 260, 25): d.line((x, 570, x, 690), fill=INK, width=5)
         if name == "street":
+            top_, bot_ = sky, tuple(min(255, int(c * 1.9 + 30)) for c in sky)  # sky gradient toward a glowing horizon
+            for y in range(0, GROUND, 6):
+                k = y / GROUND; d.rectangle((0, y, W_, y + 6), fill=tuple(int(top_[i] + (bot_[i] - top_[i]) * k) for i in range(3)) + (235,))
+            for x in range(-40, W_, 90):  # distant skyline in haze
+                hh = 260 + int(160 * abs(math.sin(x * 0.37)))
+                d.rectangle((x, GROUND - hh - 140, x + 80, GROUND), fill=(110, 120, 150, 170))
+                for wy in range(GROUND - hh - 120, GROUND - 160, 40): d.rectangle((x + 14, wy, x + 26, wy + 14), fill=(255, 230, 150, 120))
+            d.rectangle((0, GROUND - 260, W_, GROUND), fill=(200, 210, 230, 40))
             for x, hgt in [(0, 520), (200, 640), (420, 480), (600, 700), (800, 560)]:
                 d.rectangle((x, GROUND - hgt, x + 200, GROUND), fill=(80, 76, 96), outline=INK, width=OW)
                 for wy in range(GROUND - hgt + 40, GROUND - 60, 80):
                     for wx in (x + 30, x + 120): d.rectangle((wx, wy, wx + 50, wy + 50), fill=C.YEL if (wx + wy) % 3 else (40, 40, 60), outline=INK, width=4)
             d.rectangle((0, GROUND, W_, H_), fill=(60, 60, 66), outline=INK, width=OW)
+            for k in range(0, W_, 160): d.rectangle((k + 30, GROUND + 50, k + 110, GROUND + 60), fill=(230, 230, 220))  # road marks
+            for lx in (150, 850):  # street lamps with glow
+                d.rectangle((lx - 8, GROUND - 520, lx + 8, GROUND), fill=(40, 40, 46), outline=INK, width=4)
+                d.line((lx, GROUND - 520, lx + 70, GROUND - 540), fill=INK, width=14); d.ellipse((lx + 50, GROUND - 556, lx + 100, GROUND - 524), fill=(255, 236, 160), outline=INK, width=5)
+                for r in (160, 110, 70): d.ellipse((lx + 75 - r, GROUND - 540 - r, lx + 75 + r, GROUND - 540 + r), fill=(255, 220, 140, 26))
+                d.polygon([(lx + 55, GROUND - 530), (lx + 95, GROUND - 530), (lx + 200, GROUND), (lx - 50, GROUND)], fill=(255, 230, 160, 30))
         if name == "forest":
             for x, s in [(80, .8), (300, 1.0), (560, .9), (820, 1.1)]:
                 for k in range(3):
                     y = GROUND - 80 * s - k * 120 * s; d.polygon([(x - 150 * s + k * 30, y), (x + 150 * s - k * 30, y), (x, y - 200 * s)], fill=(30, 100, 60), outline=INK, width=8)
             d.rectangle((0, GROUND, W_, H_), fill=(60, 50, 40), outline=INK, width=OW)
+
+
+def weather(panel, kind, t):
+    """Atmosphere over the set: rain streaks, drifting fog bands or dust motes in the light."""
+    lay = Image.new("RGBA", panel.size, (0, 0, 0, 0)); d = ImageDraw.Draw(lay); W_, H_ = panel.size
+    rng = np.random.default_rng(7)
+    if kind == "rain":
+        for k in range(140):
+            x0, y0, sp = rng.uniform(0, W_ + 200), rng.uniform(0, H_), rng.uniform(900, 1400)
+            y = (y0 + t * sp) % (H_ + 100) - 50; x = (x0 - (y0 + t * sp) * 0.25) % (W_ + 200) - 100
+            d.line((x, y, x - 10, y + 40), fill=(210, 225, 255, 120), width=3)
+        for k in range(10):  # splashes on the ground
+            x = rng.uniform(0, W_); ph = (t * 2 + k * 0.37) % 1
+            d.ellipse((x - 26 * ph, GROUND + 20 - 6 * ph, x + 26 * ph, GROUND + 20 + 6 * ph), outline=(220, 235, 255, int(160 * (1 - ph))), width=2)
+    elif kind == "fog":
+        for k in range(5):
+            y = 300 + k * 140; x = (t * (20 + 8 * k) + k * 300) % (W_ + 800) - 800
+            d.ellipse((x, y, x + 900, y + 160), fill=(220, 225, 235, 28))
+            d.ellipse((x - 500, y + 40, x + 300, y + 200), fill=(220, 225, 235, 22))
+    elif kind == "dust":
+        for k in range(45):
+            x = (rng.uniform(0, W_) + 12 * math.sin(t * 0.7 + k)) % W_; y = (rng.uniform(0, H_) - t * rng.uniform(8, 20)) % H_
+            r = rng.uniform(1.5, 4); d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 240, 200, int(rng.uniform(60, 160))))
+    panel.alpha_composite(lay)
+
+
+def reflect(panel, alpha=0.3):
+    """Wet-ground mirror: flipped strip of what stands on the ground line, faded downward."""
+    h = panel.height - GROUND
+    if h <= 0: return
+    strip = panel.crop((0, GROUND - h, panel.width, GROUND)).transpose(Image.FLIP_TOP_BOTTOM)
+    m = Image.linear_gradient("L").resize((panel.width, h)).point(lambda v: int((255 - v) * alpha))
+    strip.putalpha(m); panel.alpha_composite(strip, (0, GROUND))

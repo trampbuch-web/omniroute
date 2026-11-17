@@ -51,6 +51,11 @@
    "title": "ЗАПИСЬ",
    "date": "ЗАВТРА",
    "music": "m1"
+  },
+  "5": {
+   "title": "ТВОЙ ВЫБОР",
+   "date": "18:47",
+   "music": "m2"
   }
  },
  "hud_label": "СЕРИЯ 1",
@@ -67,7 +72,7 @@
    "s": 1.1
   }
  },
- "description": "Он проснулся — а город пуст. И ему пришло сообщение: «Не выходи в 19:00. Ты уже однажды умер» 🌆 Серия 1/6\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #сериал #мистика #триллер #городкоторыйумервчера",
+ "description": "Он проснулся — а город пуст. «Не выходи в 19:00. Ты уже однажды умер». Что делать Марку: А или Б? 🌆 Серия 1\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #сериал #мистика #триллер #городкоторыйумервчера",
  "lines": [
   {
    "ep": 1,
@@ -76,7 +81,9 @@
    "scene": {
     "bg": "navy",
     "set": "street",
-    "big": "НИ ДУШИ"
+    "big": "НИ ДУШИ",
+    "weather": "rain",
+    "reflect": true
    },
    "sfx": [
     "glitch"
@@ -96,7 +103,8 @@
       "y": 900,
       "mood": "closed"
      }
-    ]
+    ],
+    "weather": "dust"
    }
   },
   {
@@ -114,7 +122,8 @@
       "hold": "phone",
       "mood": "sad"
      }
-    ]
+    ],
+    "weather": "dust"
    }
   },
   {
@@ -132,7 +141,9 @@
       "t0": 0,
       "t1": 2.4
      }
-    ]
+    ],
+    "weather": "rain",
+    "reflect": true
    }
   },
   {
@@ -157,7 +168,9 @@
       "mood": "wide",
       "face": "r"
      }
-    ]
+    ],
+    "weather": "rain",
+    "reflect": true
    },
    "sfx": [
     "glitch"
@@ -188,7 +201,8 @@
       "pose": "point",
       "mood": "wide"
      }
-    ]
+    ],
+    "weather": "dust"
    }
   },
   {
@@ -208,7 +222,9 @@
       "pose": "shock",
       "mood": "wide"
      }
-    ]
+    ],
+    "weather": "rain",
+    "reflect": true
    },
    "sfx": [
     "impact"
@@ -235,7 +251,9 @@
       "pose": "idle",
       "mood": "wide"
      }
-    ]
+    ],
+    "weather": "rain",
+    "reflect": true
    }
   },
   {
@@ -288,7 +306,9 @@
       "t0": 0,
       "t1": 1.8
      }
-    ]
+    ],
+    "weather": "rain",
+    "reflect": true
    }
   },
   {
@@ -312,7 +332,8 @@
       "pose": "point",
       "mood": "normal"
      }
-    ]
+    ],
+    "weather": "dust"
    },
    "sfx": [
     "typing"
@@ -364,7 +385,8 @@
       "face": "r",
       "s": 1.2
      }
-    ]
+    ],
+    "weather": "dust"
    }
   },
   {
@@ -377,6 +399,47 @@
    "sfx": [
     "glitch"
    ]
+  },
+  {
+   "ep": 5,
+   "text": "До девятнадцати ноль-ноль — двенадцать минут. Что делать Марку?",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big_top": "ЧТО ДЕЛАТЬ МАРКУ?",
+    "letters": true,
+    "items": [
+     "Запереться дома до утра",
+     "Выйти на площадь в 19:00"
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 5,
+   "text": "А — запереться дома и пережить девятнадцать ноль-ноль. Бэ — выйти на площадь и встретить себя с записи."
+  },
+  {
+   "ep": 5,
+   "text": "Пиши букву в комментариях. От тебя зависит, доживёт ли он до утра.",
+   "scene": {
+    "bg": "purple",
+    "set": "street",
+    "weather": "rain",
+    "reflect": true,
+    "big": "А ИЛИ Б?",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 500,
+      "pose": "idle",
+      "mood": "wide",
+      "s": 1.05
+     }
+    ]
+   }
   }
  ]
 }

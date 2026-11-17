@@ -332,6 +332,25 @@ import comic as C
 import char as CH
 
 
+_vg, _gr = [], {}
+
+
+def _vignette():
+    if not _vg:
+        yy_, xx_ = np.mgrid[0:C.PH, 0:C.PW].astype(np.float32)
+        r = np.sqrt(((xx_ - C.PW / 2) / C.PW) ** 2 + ((yy_ - C.PH / 2) / C.PH) ** 2)
+        a = (np.clip((r - 0.32) / 0.4, 0, 1) ** 1.6 * 150).astype(np.uint8)
+        v = np.zeros((C.PH, C.PW, 4), np.uint8); v[..., 3] = a; _vg.append(Image.fromarray(v, "RGBA"))
+    return _vg[0]
+
+
+def _grain(k):
+    if k not in _gr:
+        r = np.random.default_rng(k); g = np.zeros((C.PH, C.PW, 4), np.uint8)
+        n = r.integers(0, 255, (C.PH, C.PW)); g[..., :3] = n[..., None]; g[..., 3] = 14; _gr[k] = Image.fromarray(g, "RGBA")
+    return _gr[k]
+
+
 def comic_frame(t, captions=True):
     i = line_at(t); si = scene_of[i]; sc = scenes[si]; lt = t - sc["start"]
     im = Image.new("RGBA", (W, H), C.PAPER + (255,)); d = ImageDraw.Draw(im)
@@ -365,6 +384,8 @@ def comic_frame(t, captions=True):
         sy = L[j].get("say")
         if sy and starts[j] <= t < ends[j] + 0.3 and sy.get("who") in anchors:
             CH.balloon(panel, anchors[sy["who"]], sy["text"], (t - starts[j]) / 0.3)
+    if sc.get("reflect"): CH.reflect(panel)
+    if sc.get("weather"): CH.weather(panel, sc["weather"], t)
     if sc.get("actors") or sc.get("set"):
         dp = ImageDraw.Draw(panel, "RGBA")
         if sc.get("big"): C.title_text(dp, sc["big"], C.PW / 2, 955, 70, col=C.YEL)
@@ -404,6 +425,7 @@ def comic_frame(t, captions=True):
         zw, zh = int(C.PW / z), int(C.PH / z); fx_, fy_ = scenes[si].get("focus", (C.PW / 2, C.PH / 2))
         x0 = int(min(max(fx_ - zw / 2, 0), C.PW - zw)); y0 = int(min(max(fy_ - zh / 2, 0), C.PH - zh))
         panel = panel.crop((x0, y0, x0 + zw, y0 + zh)).resize((C.PW, C.PH), Image.BICUBIC); dp = ImageDraw.Draw(panel, "RGBA")
+    panel.alpha_composite(_vignette()); panel.alpha_composite(_grain(int(t * 24) % 6))
     shake = any("impact" in L[j].get("sfx", []) and 0 <= t - starts[j] < 0.3 for j in range(len(L)))
     dp.rectangle((0, 0, C.PW - 1, C.PH - 1), outline=C.INK, width=14)
     k = ease(lt / 0.3) if si else 1.0
