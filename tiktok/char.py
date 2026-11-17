@@ -385,6 +385,28 @@ def _set_new(d, name, t, W_, H_):
         _glow(d, W_ / 2, 400, 520, (60, 220, 120))
         d.rectangle((0, 720, W_, 780), fill=(60, 60, 66), outline=INK, width=OW); d.rectangle((0, GROUND, W_, H_), fill=(30, 30, 34), outline=INK, width=OW)
         return True
+    if name == "tunnel":
+        d.rectangle((0, 0, W_, H_), fill=(54, 40, 30))
+        for k in range(30):
+            r = np.random.default_rng(k); x, y = r.integers(0, W_), r.integers(0, GROUND); d.ellipse((x - 30, y - 18, x + 30, y + 18), fill=(70, 52, 38))
+        for x in (120, 500, 880):  # timber frames
+            d.rectangle((x - 22, 120, x + 22, GROUND), fill=(140, 96, 56), outline=INK, width=OW)
+        d.rectangle((60, 100, 940, 150), fill=(140, 96, 56), outline=INK, width=OW)
+        for x in (300, 700):
+            d.line((x, 150, x, 220), fill=INK, width=4); d.ellipse((x - 18, 216, x + 18, 252), fill=(255, 230, 150), outline=INK, width=4)
+            _glow(d, x, 240, 220, (255, 200, 120))
+        d.rectangle((0, GROUND, W_, H_), fill=(80, 60, 44), outline=INK, width=OW)
+        return True
+    if name == "vault":
+        d.rectangle((0, 0, W_, H_), fill=(110, 116, 124))
+        for x in range(0, W_, 100): d.line((x, 0, x, GROUND), fill=(90, 96, 104), width=4)
+        d.ellipse((620, 140, 940, 460), fill=(150, 156, 164), outline=INK, width=OW + 4); d.ellipse((700, 220, 860, 380), fill=(170, 176, 184), outline=INK, width=OW)
+        for a in range(0, 360, 60):
+            r_ = math.radians(a); d.line((780, 300, 780 + 70 * math.cos(r_), 300 + 70 * math.sin(r_)), fill=INK, width=10)
+        for k in range(4): d.rectangle((40 + k * 120, 560, 150 + k * 120, 700), fill=(110, 170, 110), outline=INK, width=6)  # stacks of notes
+        d.rectangle((0, GROUND, W_, H_), fill=(130, 130, 136), outline=INK, width=OW)
+        d.ellipse((380, GROUND - 20, 620, GROUND + 50), fill=(20, 16, 14), outline=INK, width=OW)  # the hole in the floor
+        return True
     if name == "bridge":
         _sky(d, (40, 30, 70), (240, 120, 80), 620, W_)
         d.ellipse((380, 420, 620, 660), fill=(255, 190, 120))

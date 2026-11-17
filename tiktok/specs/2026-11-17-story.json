@@ -1,0 +1,539 @@
+{
+ "id": "fortaleza-2005",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "boss": {
+   "top": "suit",
+   "hair": "fedora",
+   "color": [
+    50,
+    48,
+    60
+   ]
+  },
+  "dig1": {
+   "top": "hoodie",
+   "hair": "beanie",
+   "color": [
+    60,
+    110,
+    150
+   ]
+  },
+  "dig2": {
+   "top": "shirt",
+   "hair": "bald",
+   "color": [
+    190,
+    170,
+    130
+   ],
+   "mustache": true,
+   "skin": [
+    200,
+    150,
+    110
+   ]
+  },
+  "nb": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    170,
+    60,
+    80
+   ],
+   "hair_color": [
+    60,
+    40,
+    30
+   ],
+   "skin": [
+    214,
+    170,
+    130
+   ]
+  },
+  "guard": {
+   "top": "uniform",
+   "hair": "cap",
+   "color": [
+    50,
+    70,
+    120
+   ]
+  },
+  "cop": {
+   "top": "uniform",
+   "hair": "cap",
+   "color": [
+    40,
+    40,
+    46
+   ],
+   "mustache": true
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ГАЗОН",
+   "date": "2005",
+   "music": "m1"
+  },
+  "2": {
+   "title": "ТУННЕЛЬ",
+   "date": "05—08.2005",
+   "music": "m2"
+  },
+  "3": {
+   "title": "ХРАНИЛИЩЕ",
+   "date": "06.08.2005",
+   "music": "m2"
+  },
+  "4": {
+   "title": "ПОНЕДЕЛЬНИК",
+   "date": "08.08.2005",
+   "music": "m1"
+  }
+ },
+ "description": "Они украли 70 миллионов долларов — и ни разу не вошли в банк 🕳️\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #ограбление #туннель #бразилия",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Они украли семьдесят миллионов долларов. И ни разу не вошли в банк.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "vault",
+    "big": "НЕ ВОШЛИ В БАНК",
+    "actors": [
+     {
+      "who": "boss",
+      "x": 400,
+      "pose": "idle",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Бразилия. Форталеза. Две тысячи пятый год.",
+   "scene": {
+    "bg": "amber",
+    "set": "street",
+    "weather": "dust",
+    "sub": "ФОРТАЛЕЗА · 2005",
+    "actors": [
+     {
+      "who": "boss",
+      "pose": "walk",
+      "from": -120,
+      "to": 420,
+      "t0": 0,
+      "t1": 2.2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Рядом с Центральным банком открывается фирма по продаже искусственного газона.",
+   "scene": {
+    "bg": "green",
+    "set": "street",
+    "big": "ГАЗОН",
+    "actors": [
+     {
+      "who": "boss",
+      "x": 380,
+      "pose": "talk",
+      "mood": "happy"
+     },
+     {
+      "who": "dig1",
+      "x": 640,
+      "pose": "idle",
+      "face": "l"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Соседи каждый день видят грузовики с землёй.",
+   "scene": {
+    "bg": "amber",
+    "set": "street",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "nb",
+      "x": 300,
+      "pose": "point",
+      "mood": "normal"
+     },
+     {
+      "who": "dig2",
+      "pose": "walk",
+      "face": "l",
+      "from": 1100,
+      "to": 700,
+      "t0": 0,
+      "t1": 2,
+      "hold": "suitcase"
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Никто не задаёт вопросов. Газон же.",
+   "say": {
+    "who": "nb",
+    "text": "Опять землю везут…"
+   }
+  },
+  {
+   "ep": 2,
+   "text": "А под домом — туннель.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "dig1",
+      "x": 420,
+      "pose": "dig",
+      "hold": "spoon"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Три месяца они копают. Метр за метром.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "dig1",
+      "x": 300,
+      "pose": "dig"
+     },
+     {
+      "who": "dig2",
+      "x": 640,
+      "pose": "dig",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Семьдесят восемь метров. Под улицей. Прямо к хранилищу.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "big": "78 МЕТРОВ",
+    "actors": [
+     {
+      "who": "boss",
+      "pose": "sneak",
+      "from": -100,
+      "to": 500,
+      "t0": 0,
+      "t1": 2.5
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "В туннеле — свет, деревянные опоры. И даже кондиционер.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "boss",
+      "x": 500,
+      "pose": "point",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Шестое августа. Выходные. Банк закрыт.",
+   "scene": {
+    "bg": "red",
+    "set": "tunnel",
+    "sub": "06.08.2005",
+    "actors": [
+     {
+      "who": "boss",
+      "x": 480,
+      "pose": "talk",
+      "mood": "angry"
+     },
+     {
+      "who": "dig1",
+      "x": 760,
+      "face": "l",
+      "pose": "idle"
+     }
+    ]
+   },
+   "say": {
+    "who": "boss",
+    "text": "Сегодня. Или никогда."
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Снизу они пробивают бетонный пол хранилища. Больше метра толщиной.",
+   "scene": {
+    "bg": "steel",
+    "set": "vault",
+    "actors": [
+     {
+      "who": "dig2",
+      "x": 500,
+      "pose": "dig"
+     }
+    ]
+   },
+   "sfx": [
+    "impact",
+    "static"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Внутри — горы купюр.",
+   "ad_before": true,
+   "tag": "dramatic",
+   "scene": {
+    "bg": "steel",
+    "set": "vault",
+    "actors": [
+     {
+      "who": "dig1",
+      "x": 420,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "dig2",
+      "x": 640,
+      "pose": "shock",
+      "face": "l",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "coins"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Три с половиной тонны денег уходят под землю.",
+   "scene": {
+    "bg": "steel",
+    "set": "vault",
+    "actors": [
+     {
+      "who": "dig1",
+      "pose": "walk",
+      "face": "l",
+      "hold": "money",
+      "from": 900,
+      "to": 420,
+      "t0": 0,
+      "t1": 2
+     },
+     {
+      "who": "dig2",
+      "pose": "walk",
+      "face": "l",
+      "hold": "money",
+      "from": 1150,
+      "to": 650,
+      "t0": 0.4,
+      "t1": 2.4
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Тревогу никто не поднял. Был выходной.",
+   "scene": {
+    "bg": "dark",
+    "set": "vault",
+    "big": "ТИШИНА"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "В понедельник охранник открывает хранилище.",
+   "scene": {
+    "bg": "steel",
+    "set": "vault",
+    "actors": [
+     {
+      "who": "guard",
+      "pose": "walk",
+      "from": -120,
+      "to": 300,
+      "t0": 0,
+      "t1": 2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Пусто. В полу — чёрная дыра.",
+   "tag": "dramatic",
+   "stamp": "ПУСТО",
+   "scene": {
+    "bg": "red",
+    "set": "vault",
+    "actors": [
+     {
+      "who": "guard",
+      "x": 300,
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Полиция спускается в туннель. И выходит в доме с газоном.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "cop",
+      "pose": "sneak",
+      "hold": "flashlight",
+      "from": -120,
+      "to": 520,
+      "t0": 0,
+      "t1": 2.6
+     }
+    ]
+   },
+   "sfx": [
+    "siren"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Внутри — никого. Только лопаты и пустые мешки.",
+   "scene": {
+    "bg": "dark",
+    "set": "street",
+    "weather": "rain",
+    "reflect": true,
+    "actors": [
+     {
+      "who": "cop",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Сто шестьдесят четыре миллиона реалов. Одно из крупнейших ограблений банка в истории.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "green",
+    "prop": "money",
+    "big": "164 000 000"
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Часть банды потом поймали. Но большую часть денег так и не нашли.",
+   "scene": {
+    "bg": "steel",
+    "set": "street",
+    "actors": [
+     {
+      "who": "cop",
+      "x": 300,
+      "pose": "talk"
+     },
+     {
+      "who": "dig2",
+      "x": 640,
+      "pose": "idle",
+      "face": "l",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "gavel"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "А ты бы заметил соседей с газоном? Пиши в комментариях.",
+   "scene": {
+    "bg": "purple",
+    "set": "street",
+    "weather": "rain",
+    "reflect": true,
+    "big": "ЗАМЕТИЛ БЫ?",
+    "actors": [
+     {
+      "who": "nb",
+      "x": 500,
+      "pose": "lookup",
+      "mood": "wide"
+     }
+    ]
+   }
+  }
+ ]
+}
