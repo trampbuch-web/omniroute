@@ -230,12 +230,12 @@
     "actors": [
      {
       "who": "dig1",
-      "x": 300,
+      "x": 220,
       "pose": "dig"
      },
      {
       "who": "dig2",
-      "x": 640,
+      "x": 800,
       "pose": "dig",
       "face": "l"
      }
