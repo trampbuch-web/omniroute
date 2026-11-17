@@ -44,3 +44,8 @@ Real events: only well-known, verifiable facts.
 No chat videos. Ads are full-screen (banner scaled to frame width, video behind blacked out) — done by `story.py`.
 Send both with ready-to-paste descriptions. Every description: hook line, then an ad mention line
 (`Реклама: LuxerVPN — ищи @LuxerVpnBot в Telegram`), then hashtags including `#luxerpvn`. Commit specs + md files to this branch.
+
+## Horror mode (`"horror": true` in a spec)
+Scene cuts = rising swell slamming into static + a black flash; lines tagged `dramatic` = stinger hit + red flash, with the
+music cut to silence for 0.6 s right before. Extra synthesized SFX (from `sfx_synth.py`): hit, reverse, heartbeat,
+static, ring, boom, whisper — use them in `sfx`. The first line must be a scroll-stopping hook (shocking fact in ≤2 s).

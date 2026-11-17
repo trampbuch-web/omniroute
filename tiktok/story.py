@@ -83,6 +83,9 @@ for j, ep in enumerate(eps):
 duck = np.full(n, 0.55, np.float32)
 for st, e in zip(starts, ends): duck[int(st * SR):int(e * SR)] = 0.14
 for a_ in ads: duck[int(a_ * SR):int((a_ + BANNER_DUR) * SR)] = 0.08
+if HORROR:
+    for i, ln in enumerate(L):
+        if ln.get("tag") == "dramatic" and i: duck[max(0, int((starts[i] - 0.6) * SR)):int(starts[i] * SR)] = 0.0
 duck = np.convolve(duck, np.ones(6000) / 6000, "same").astype(np.float32)
 buf = voice + bed * duck * np.clip((total - tt) / 1.8, 0, 1).astype(np.float32)
 _fx = {}
@@ -94,11 +97,19 @@ def fx(name):
     return _fx[name]
 
 
-GAIN = dict(impact=0.8, glitch=0.4, coins=0.5, phone=0.35, typing=0.3, siren=0.35, knock=0.7, gavel=0.7, riser=0.45, whoosh=0.5)
+GAIN = dict(impact=0.8, glitch=0.4, coins=0.5, phone=0.35, typing=0.3, siren=0.35, knock=0.7, gavel=0.7, riser=0.45, whoosh=0.5,
+            hit=0.85, reverse=0.55, heartbeat=0.75, static=0.4, ring=0.22, boom=0.9, whisper=0.45)
+HORROR = SPEC.get("horror", False)
 for i, ln in enumerate(L):
     for s in ln.get("sfx", []):
-        place(buf, fx(s), starts[i] - (3.8 if s == "riser" else 0), GAIN.get(s, 0.5))
-for w in whooshes: place(buf, fx("whoosh"), w - 0.4, GAIN["whoosh"])
+        place(buf, fx(s), starts[i] - {"riser": 3.8, "reverse": 1.4}.get(s, 0), GAIN.get(s, 0.5))
+if HORROR:  # sharp, scary cuts: swell that slams into static, stinger + silence-before-reveal on dramatic beats
+    for w in whooshes: place(buf, fx("reverse"), w - 1.4, 0.4); place(buf, fx("static"), w - 0.05, 0.3)
+    place(buf, fx("boom"), max(0.0, starts[0] - 0.1), 0.9)
+    for i, ln in enumerate(L):
+        if ln.get("tag") == "dramatic" and i: place(buf, fx("hit"), starts[i], 0.7)
+else:
+    for w in whooshes: place(buf, fx("whoosh"), w - 0.4, GAIN["whoosh"])
 for st, _, _ in toasts: place(buf, sfx_pop(900, 1500, 0.09), st, 0.7)
 for st, _ in levels:
     for k, f0 in enumerate((523, 659, 784, 1047)): place(buf, sfx_pop(f0, f0, 0.18), st + k * 0.09, 0.6)
@@ -434,6 +445,10 @@ def comic_frame(t, captions=True):
     im.alpha_composite(pr, (int(W / 2 - pr.width / 2 + (1 - k) * 1100) + sx, int(200 + C.PH / 2 - pr.height / 2) + sx // 2))
     for st, txt in stamps:
         if st <= t and scene_of[line_at(st)] == si: stamp(im, txt, t - st)
+    if HORROR:
+        if any(0 <= t - w < 0.09 for w in whooshes): im.alpha_composite(Image.new("RGBA", (W, H), (0, 0, 0, 225)))
+        dr = [starts[j] for j in range(1, len(L)) if L[j].get("tag") == "dramatic"]
+        if any(0 <= t - x_ < 0.18 for x_ in dr): im.alpha_composite(Image.new("RGBA", (W, H), (200, 0, 0, 70)))
     if captions:
         gs = [g for g in groups if g[0][1] <= t]
         if gs and t < min(ends[-1] + 0.6, END_T):

@@ -137,15 +137,36 @@
  "lines": [
   {
    "ep": 1,
+   "text": "Вчера в семь вечера исчез целый город. Два миллиона человек. Остался только я.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "square",
+    "weather": "fog",
+    "big": "ОСТАЛСЯ ТОЛЬКО Я",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 500,
+      "s": 0.75,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": []
+  },
+  {
+   "ep": 1,
    "text": "Мои часы остановились ровно в девятнадцать ноль-ноль.",
    "tag": "dramatic",
    "scene": {
     "bg": "dark",
     "prop": "watch",
-    "sub": "07:12 · УТРО"
+    "sub": "СЕЙЧАС 07:12 · УТРО"
    },
    "sfx": [
-    "glitch"
+    "ring"
    ]
   },
   {
@@ -192,7 +213,8 @@
     "prop": "calls"
    },
    "sfx": [
-    "phone"
+    "phone",
+    "heartbeat"
    ]
   },
   {
@@ -249,7 +271,8 @@
     ]
    },
    "sfx": [
-    "glitch"
+    "glitch",
+    "whisper"
    ]
   },
   {
@@ -306,7 +329,8 @@
     "prop": "note"
    },
    "sfx": [
-    "riser"
+    "riser",
+    "heartbeat"
    ]
   },
   {
@@ -315,7 +339,8 @@
    "ad_before": true,
    "tag": "dramatic",
    "sfx": [
-    "impact"
+    "impact",
+    "whisper"
    ]
   },
   {
@@ -367,7 +392,8 @@
     "prop": "sms"
    },
    "sfx": [
-    "phone"
+    "phone",
+    "static"
    ]
   },
   {
@@ -485,7 +511,8 @@
     ]
    },
    "sfx": [
-    "impact"
+    "impact",
+    "heartbeat"
    ]
   },
   {
@@ -519,7 +546,8 @@
     ]
    },
    "sfx": [
-    "riser"
+    "riser",
+    "whisper"
    ]
   },
   {
@@ -541,7 +569,8 @@
    },
    "sfx": [
     "knock",
-    "impact"
+    "impact",
+    "heartbeat"
    ]
   },
   {
@@ -561,5 +590,6 @@
     "impact"
    ]
   }
- ]
+ ],
+ "horror": true
 }
