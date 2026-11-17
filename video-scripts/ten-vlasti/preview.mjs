@@ -15,7 +15,7 @@ await p.evaluate((t) => {
   c.className = "";
   c.innerHTML = `«${EP.title.toUpperCase()}»`;
   c.style.cssText += "font-size:120px;color:#ffd98a;top:1500px;letter-spacing:4px";
-  document.getElementById("prog").style.display = "none";
+  for (const id of ["prog", "src"]) document.getElementById(id).style.display = "none";
 }, +(process.argv[3] || 4.6));
 await p.screenshot({ path: path.join(dir, "preview.png") });
 await b.close();
