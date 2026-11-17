@@ -51,6 +51,10 @@ const moveDust = (root, lt) => root.querySelectorAll(".dust").forEach((e) => {
 });
 const hall = (wall = "url(#t-wall)") => R(0, 0, 1080, 1920, INK) + LY(0.2, R(-100, 0, 1280, 1400, wall) + times(8, (i) => R(-60 + i * 170, 0, 4, 1400, "#000", 'opacity="0.5"')) + R(-100, 1180, 1280, 14, "#1b2233")) + LY(0.5, R(-100, 1390, 1280, 600, "url(#t-floor)"));
 
+const BODY = `M0 -880 q-62 0 -66 70 q-2 44 14 72 q8 30 30 42 v30 l-58 22 q-70 26 -84 110 l-26 330 q-4 60 16 110 l44 -4 v-140 l16 150 l-10 560 h110 l14 -420 l14 420 h110 l-10 -560 l16 -150 v140 l44 4 q20 -50 16 -110 l-26 -330 q-14 -84 -84 -110 l-58 -22 v-30 q22 -12 30 -42 q16 -28 14 -72 q-4 -70 -66 -70 Z`;
+// a generic suited figure, backlit
+const suit = (x, y, k, tint, tie = "#3a1418") => G(`translate(${x} ${y}) scale(${k})`, P(BODY, "none", `stroke="${tint}" stroke-width="14" filter="url(#t-blur2)" opacity="0.85"`) + P(BODY, "#04050a") + P("M-10 -640 h20 l8 150 l-18 26 l-18 -26 Z", tie) + P("M-34 -664 L0 -620 L34 -664 L20 -690 L0 -660 L-20 -690 Z", "#cfd5e2", 'opacity="0.55"'));
+
 const SCENES = {
   // three empty chairs in a shaft of light; the host's shadow falls across the floor
   chairs: () => ({
@@ -139,7 +143,7 @@ const SCENES = {
       trump: { tint: "#ffd98a", flag: null, body: 1.14, hair: "M-66 -806 q-6 -70 60 -76 q70 -4 76 50 q-30 -34 -76 -22 q-30 8 -60 48 Z" },
       xi: { tint: "#ff8a7a", flag: null, body: 1.12, hair: "M-58 -806 q4 -62 58 -64 q54 2 58 64 q-20 -34 -58 -34 q-38 0 -58 34 Z" },
     }[seg.who];
-    const body = `M0 -880 q-62 0 -66 70 q-2 44 14 72 q8 30 30 42 v30 l-58 22 q-70 26 -84 110 l-26 330 q-4 60 16 110 l44 -4 v-140 l16 150 l-10 560 h110 l14 -420 l14 420 h110 l-10 -560 l16 -150 v140 l44 4 q20 -50 16 -110 l-26 -330 q-14 -84 -84 -110 l-58 -22 v-30 q22 -12 30 -42 q16 -28 14 -72 q-4 -70 -66 -70 Z`;
+    const body = BODY;
     const fig = G(`translate(540 1560) scale(${V.body} 1)`, P(body, "none", `stroke="${V.tint}" stroke-width="14" filter="url(#t-blur2)" opacity="0.85"`) + P(body, "#04050a") + P(V.hair, seg.who === "trump" ? "#caa24a" : "#0a0c12", `stroke="${V.tint}" stroke-opacity="0.6" stroke-width="3"`) +
       (seg.who === "trump" ? P("M-12 -640 h24 l14 250 l-26 40 l-26 -40 Z", RED) : P("M-10 -640 h20 l8 150 l-18 26 l-18 -26 Z", "#3a1418")) + P("M-34 -664 L0 -620 L34 -664 L20 -690 L0 -660 L-20 -690 Z", "#cfd5e2", 'opacity="0.55"'));
     let bg = "";
@@ -205,6 +209,81 @@ const SCENES = {
       root.querySelector("#d-glow").setAttribute("opacity", 0.12 + (gap / 150) * 0.45);
       root.querySelector("#d-big").setAttribute("opacity", 0.35 + 0.65 * ease(p / 0.2));
       root.querySelector("#d-tim").setAttribute("transform", `translate(0 ${Math.sin(lt * 1.1) * 3})`);
+    },
+  }),
+
+  // press approach: a lectern with a bundle of microphones, flashes from the press pack in the foreground
+  press: (seg) => {
+    const C2 = { washington: ["#1a2442", "#ffd98a", "#2b4ac8"], moscow: ["#2a0e12", "#9fc4ff", "#8a1016"], kyiv: ["#0e2236", "#ffe27a", "#1f5fae"] }[seg.city || "washington"];
+    const mics = times(7, (i) => { const a = -0.6 + i * 0.2; return L(`M540 1160 L${540 + Math.sin(a) * 120} ${1010 - Math.cos(a) * 30}`, "#1d1f27", 7) + E(540 + Math.sin(a) * 124, 1004 - Math.cos(a) * 30, 18, 24, ["#e3262f", "#1d1f27", "#2b4ac8", "#e2b25a", "#1d1f27", "#f4f4f4", "#3a6fb8"][i]) + R(526 + Math.sin(a) * 124, 1024 - Math.cos(a) * 30, 28, 18, ["#e3262f", "#2b4ac8", "#1d1f27", "#f4f4f4", "#e3262f", "#1d1f27", "#e2b25a"][i], 'rx="3"'); }).join("");
+    const pack = times(9, (i) => { const x = 40 + i * 125 + (i % 2) * 20, y = 1830 - (i % 3) * 40; return G(`translate(${x} ${y})`, E(0, -150, 70, 84, "#020306") + P("M-120 0 q0 -120 120 -120 q120 0 120 120 Z", "#020306") + (i % 3 !== 1 ? G(`translate(${(i % 2 ? 40 : -50)} -250)`, R(-46, -34, 92, 62, "#0b0d14", 'rx="8"') + C(0, -2, 22, "#1b2233") + `<circle class="flash" data-i="${i}" cx="${i % 2 ? 30 : -30}" cy="-30" r="22" fill="#fff" opacity="0"/>`) : "")); }).join("");
+    return {
+      svg: R(0, 0, 1080, 1920, INK) + LY(0.2, R(-100, 0, 1280, 1400, C2[0]) + times(5, (i) => times(8, (k) => C(-40 + i * 300 + (k % 2) * 150, 120 + k * 150, 46, "none", `stroke="${C2[1]}" stroke-opacity="0.08" stroke-width="4"`))) + C(540, 560, 230, "none", `stroke="${C2[1]}" stroke-opacity="0.35" stroke-width="10"`) + C(540, 560, 190, C2[2], 'opacity="0.35"') + T(540, 590, "★", 120, C2[1], 'text-anchor="middle" opacity="0.5"')) +
+        LY(0.4, P("M540 0 L240 1500 H840 Z", "url(#t-cone)", 'opacity="0.55" style="mix-blend-mode:screen"')) + LY(0.55, R(-100, 1400, 1280, 520, "url(#t-floor)")) +
+        LY(0.7, suit(540, 1500, 0.95, C2[1]) + P("M380 1160 h320 l-30 340 h-260 Z", "#141927") + L("M380 1160 h320", C2[1], 4, 'opacity="0.7"') + C(540, 1300, 46, "none", `stroke="${C2[1]}" stroke-width="5" opacity="0.6"`) + mics) +
+        LY(1.15, pack) + `<rect id="p-flash" width="1080" height="1920" fill="#fff" opacity="0"/>`,
+      update(root, p, lt) {
+        let f = 0;
+        root.querySelectorAll(".flash").forEach((e) => {
+          const i = +e.dataset.i, ph = (lt * (1.3 + (i % 4) * 0.37) + i * 0.71) % 1, on = ph < 0.06 ? 1 - ph / 0.06 : 0;
+          e.setAttribute("opacity", on);
+          e.setAttribute("r", 22 + on * 30);
+          f = Math.max(f, on);
+        });
+        root.querySelector("#p-flash").setAttribute("opacity", f * 0.13);
+      },
+    };
+  },
+
+  // night tarmac: the envoys' jet taxis past runway lights and lifts off
+  plane: (seg) => ({
+    svg: R(0, 0, 1080, 1920, INK) + LY(0.1, R(-100, 0, 1280, 1300, "#060a18") + times(70, () => C(rnd() * 1280 - 100, rnd() * 900, 1 + rnd() * 2.5, "#fff", `opacity="${0.2 + rnd() * 0.6}"`)) + C(860, 260, 70, "#e8e2cf", 'opacity="0.85"') + C(860, 260, 260, "url(#t-pool)", 'opacity="0.4"')) +
+      LY(0.25, times(26, (i) => R(-100 + i * 52, 1120 - (i * 37) % 140, 40, 200 + (i * 37) % 140, "#0b1022") + times(4, (k) => (((i + k) * 7) % 5 < 2 ? R(-92 + i * 52, 1140 - ((i * 37) % 140) + k * 40, 8, 10, "#ffd98a", 'opacity="0.7"') : "")))) +
+      LY(0.5, P("M-100 1300 H1180 V1920 H-100 Z", "#0a0d16") + times(9, (i) => { const y = 1330 + i * i * 9, w = 6 + i * 3; return R(540 - w / 2, y, w, 4 + i * 2, "#e9e4c8", 'opacity="0.5"') + `<circle class="rwl" data-i="${i}" cx="${540 - 80 - i * i * 7}" cy="${y}" r="${3 + i}" fill="#4fa8ff"/><circle class="rwl" data-i="${i}" cx="${540 + 80 + i * i * 7}" cy="${y}" r="${3 + i}" fill="#4fa8ff"/>`; })) +
+      `<g id="pl-jet">` + G("translate(0 0)", P("M-420 0 q20 -70 120 -76 h520 q120 6 190 50 l60 16 q-40 30 -120 34 h-650 q-100 -4 -120 -24 Z", "#d5dae3") + P("M-420 0 q20 -70 120 -76 h520 q120 6 190 50 l60 16 q-40 30 -120 34 h-650 q-100 -4 -120 -24 Z", "url(#t-ray)", 'opacity="0.4"') + P("M-360 -64 l-90 -150 h70 l130 150 Z", "#b0b8c6") + P("M-60 10 l-170 120 h80 l210 -120 Z", "#9aa3b5") + times(12, (i) => R(-240 + i * 46, -52, 22, 20, "#ffe9b8", 'rx="6"')) + P("M380 -50 q40 4 70 28 h-70 Z", "#1b2233") + R(-300, -14, 600, 8, "#2b4ac8", 'opacity="0.8"') + `<circle id="pl-beacon" cx="-400" cy="-120" r="10" fill="#e3262f"/>` + C(480, 10, 6, "#fff") + E(560, 20, 220, 30, "url(#t-gold)", 'opacity="0.35"')) + `</g>` +
+      T(540, 640, seg.big || "", 64, GOLD, 'text-anchor="middle" font-weight="900" letter-spacing="6" id="pl-big"'),
+    update(root, p, lt) {
+      const x = lerp(-700, 1500, io(p)), lift = Math.max(0, p - 0.55) * 900, ang = -Math.min(12, Math.max(0, p - 0.55) * 40);
+      root.querySelector("#pl-jet").setAttribute("transform", `translate(${x} ${1290 - lift}) rotate(${ang}) scale(0.9)`);
+      root.querySelector("#pl-beacon").setAttribute("opacity", Math.sin(lt * 9) > 0.6 ? 1 : 0.1);
+      root.querySelectorAll(".rwl").forEach((e) => e.setAttribute("opacity", 0.35 + 0.65 * (((lt * 3 - +e.dataset.i * 0.25) % 1 + 1) % 1 < 0.2 ? 1 : 0)));
+      root.querySelector("#pl-big").setAttribute("opacity", ease(p / 0.2));
+    },
+  }),
+
+  // the conference table: name plates of the European delegation light up one after another
+  plates: (seg) => {
+    const F = { de: ["#000", "#dd0000", "#ffce00"], fr: ["#0055a4", "#fff", "#ef4135"], it: ["#009246", "#fff", "#ce2b37"], pl: ["#fff", "#dc143c"], gb: ["#012169", "#fff", "#c8102e"], eu: ["#003399", "#ffcc00"] };
+    const flag = (k) => { const c = F[k]; if (k === "eu") return R(-48, -32, 96, 64, c[0]) + times(12, (i) => C(Math.cos(i * 0.5236) * 20, Math.sin(i * 0.5236) * 20, 3.5, c[1])); if (k === "pl") return R(-48, -32, 96, 32, c[0]) + R(-48, 0, 96, 32, c[1]); if (k === "gb") return R(-48, -32, 96, 64, c[0]) + L("M-48 -32 L48 32 M48 -32 L-48 32", c[1], 12) + L("M-48 -32 L48 32 M48 -32 L-48 32", c[2], 4) + L("M0 -32 V32 M-48 0 H48", c[1], 18) + L("M0 -32 V32 M-48 0 H48", c[2], 10); return k === "de" ? times(3, (i) => R(-48, -32 + i * 21.3, 96, 21.4, c[i])) : times(3, (i) => R(-48 + i * 32, -32, 32, 64, c[i])); };
+    const items = seg.items || [];
+    const plates = items.map(([k, name], i) => { const row = i % 2, col = Math.floor(i / 2), x = row ? 760 - col * 130 : 320 + col * 130, y = 1080 + col * 190, sc = 0.8 + col * 0.25; return `<g class="plate" data-i="${i}" transform="translate(${x} ${y}) scale(${sc})" opacity="0.15">${E(0, 60, 120, 18, "#000", 'opacity="0.5"')}${P("M-110 40 L-90 -40 H90 L110 40 Z", "#efe6d2")}${G("translate(-52 0) scale(0.55)", flag(k))}${T(30, 12, name, 24, "#1a1410", 'text-anchor="middle" font-weight="900"')}${C(0, -40, 120, "url(#t-pool)", 'class="pglow" opacity="0"')}</g>`; }).join("");
+    return {
+      svg: R(0, 0, 1080, 1920, INK) + LY(0.2, R(-100, 0, 1280, 1300, "url(#t-wall)") + times(5, (i) => R(40 + i * 220, 180, 120, 820, "#0d1322") + R(52 + i * 220, 200, 96, 780, "#132036", 'opacity="0.7"'))) +
+        LY(0.45, P("M540 820 L-60 1920 H1140 Z", "#1a120c") + P("M540 820 L-60 1920 H1140 Z", "url(#t-ray)", 'opacity="0.12"') + L("M540 820 L-60 1920 M540 820 L1140 1920", GOLD, 4, 'opacity="0.45"')) +
+        LY(0.6, plates) + LY(0.3, P("M540 0 L300 1100 H780 Z", "url(#t-cone)", 'opacity="0.4" style="mix-blend-mode:screen"')),
+      update(root, p) {
+        root.querySelectorAll(".plate").forEach((e) => {
+          const k = ease((p - 0.15 - +e.dataset.i * 0.11) / 0.12);
+          e.setAttribute("opacity", 0.15 + 0.85 * k);
+          e.querySelector(".pglow").setAttribute("opacity", k * 0.6);
+        });
+      },
+    };
+  },
+
+  // an unsigned document under a desk lamp; one line is circled in red
+  papers: (seg) => ({
+    svg: R(0, 0, 1080, 1920, INK) + LY(0.3, R(-100, 0, 1280, 1920, "url(#t-wood)") + C(560, 900, 760, "url(#t-pool)", 'opacity="0.55"')) +
+      LY(0.8, G("translate(540 960) rotate(-4)", R(-330, -470, 660, 900, "#000", 'opacity="0.35" transform="translate(16 20)"') + R(-330, -470, 660, 900, "#f1ebdc") +
+        T(-280, -390, seg.head || "", 30, "#1a1410", 'font-weight="900" letter-spacing="3"') + T(-280, -350, seg.sub || "", 22, "#5a5040", 'letter-spacing="2"') + L("M-280 -326 H280", "#1a1410", 3) +
+        times(16, (i) => (i === 7 ? "" : R(-280, -290 + i * 42, 300 + ((i * 97) % 260), 16, i % 5 === 3 ? "#111" : "#8a8070", 'opacity="0.8"'))) +
+        T(-280, -290 + 7 * 42 + 14, seg.mark || "", 36, "#1a1410", 'font-weight="900"') +
+        `<ellipse id="pp-circle" cx="-150" cy="${-290 + 7 * 42 + 2}" rx="190" ry="44" fill="none" stroke="${RED}" stroke-width="8" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-3 -150 ${-290 + 7 * 42})"/>` +
+        G("translate(170 360) rotate(-10)", R(-130, -36, 260, 72, "none", `rx="8" stroke="${RED}" stroke-width="6" opacity="0.8"`) + T(0, 14, "БЕЗ ПОДПИСИ", 34, RED, 'text-anchor="middle" font-weight="900" letter-spacing="4" opacity="0.8"')))) +
+      LY(1.1, G("translate(860 260)", L("M0 0 L-120 -260 L-40 -420", "#1d1f27", 22) + P("M-90 -440 l140 -40 l40 120 Z", "#1d1f27") + E(-10, -390, 40, 18, "#fff3c4") + C(-10, -380, 300, "url(#t-pool)", 'opacity="0.6"'))) + LY(0.6, dust(22, 200, 900, 400, 1500, "#ffe2a0")),
+    update(root, p, lt) {
+      moveDust(root, lt);
+      root.querySelector("#pp-circle").setAttribute("stroke-dashoffset", 1 - io((p - 0.35) / 0.3));
     },
   }),
 };
