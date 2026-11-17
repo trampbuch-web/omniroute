@@ -34,7 +34,10 @@ Real events: only well-known, verifiable facts.
 
 ## Daily routine (two videos a day, ready by 10:30 MSK)
 1. Series episode: read `series.md`, write `specs/nolik-s01eNN.json`, build, update `series.md`.
-2. Documentary story: read `history.md`, NEW topic, spec with `"voice": "narrator2", "tempo": 1.28, "gap": 0.1` (fast, tense: short punchy
+2. Documentary story (comic style — NO emoji): spec `"style": "comic"`; every scene uses `"prop"` (one of:
+   balloon, boat, bomb, building, city, clock, crowd, door, eye, flashlight, folder, gavel, head, island, key, letter, lock, magnifier, money, painting, person, phone, plane, police, prison, question, rain, seat, spoon, suitcase, trees, waves) instead of `emoji`, plus `big` (comic title), `sub` (yellow narration box), `fx`
+   (alarm/police/rings/shake), `sfx` (impact/glitch/siren/knock/coins/gavel/phone/typing draw a «БАХ!»-style burst),
+   `tag: "dramatic"` adds speed lines. Then: read `history.md`, NEW topic, spec with `"voice": "narrator2", "tempo": 1.28, "gap": 0.1` (fast, tense: short punchy
    sentences of 3-8 words, a twist or sfx every 5-8 s, `tag` "dramatic" on key beats), build, add to `history.md`.
 No chat videos. Ads are full-screen (banner scaled to frame width, video behind blacked out) — done by `story.py`.
 Send both with ready-to-paste descriptions. Every description: hook line, then an ad mention line

@@ -326,7 +326,80 @@ def hud(im, t, ep):
     d.line((40, 170, W - 40, 170), fill=(70, 70, 85), width=2)
 
 
+import comic as C
+
+
+def comic_frame(t, captions=True):
+    i = line_at(t); si = scene_of[i]; sc = scenes[si]; lt = t - sc["start"]
+    im = Image.new("RGBA", (W, H), C.PAPER + (255,)); d = ImageDraw.Draw(im)
+    ep = L[i]["ep"]; lab = f"{SPEC.get('hud_label') or f'ЭПИЗОД {ep}'} · {EPS[ep]['title']}"
+    f = C.F("title", 34); wl = d.textlength(lab, font=f)
+    d.rectangle((40, 100, 40 + wl + 40, 160), fill=C.INK); d.text((60, 130), lab, font=f, fill="white", anchor="lm")
+    dt = EPS[ep].get("date", "")
+    if dt:
+        wd = d.textlength(dt, font=f); d.rectangle((W - 40 - wd - 40, 100, W - 40, 160), fill=C.YEL, outline=C.INK, width=5)
+        d.text((W - 60, 130), dt, font=f, fill=C.INK, anchor="rm")
+    panel = C.halftone(C.PAL.get(sc.get("bg", "dark"), C.PAL["dark"])); dp = ImageDraw.Draw(panel, "RGBA")
+    eff = sc.get("fx", "none")
+    dramatic = eff in ("alarm", "police") or any(L[j].get("tag") == "dramatic" and starts[j] <= t for j in sc["lines"])
+    if dramatic: C.speed_lines(dp, t)
+    if eff == "alarm": dp.rectangle((0, 0, C.PW, C.PH), fill=(255, 0, 0, int(25 + 25 * np.sin(t * 8))))
+    if eff == "police":
+        side = int(t * 3) % 2
+        dp.rectangle((0, 0, 120, C.PH), fill=(255, 30, 30, 90) if side else (30, 60, 255, 90))
+        dp.rectangle((C.PW - 120, 0, C.PW, C.PH), fill=(30, 60, 255, 90) if side else (255, 30, 30, 90))
+    items = sc.get("items", [])
+    name = sc.get("prop") or C.EMOJI2PROP.get(sc.get("emoji", ""), "question" if sc.get("emoji") else None)
+    if name:
+        dur = max(1.0, sc["end"] - sc["start"]); k = ease(lt / 0.3)
+        size = int((260 if items else (480 if sc.get("big") else 600)) * (0.55 + 0.45 * k) * (1 + 0.08 * min(1, lt / dur)))
+        pr = C.prop(name).resize((size, size), Image.LANCZOS)
+        if eff == "shake" or (eff == "rings" and (t * 2) % 2 < 1.2): pr = pr.rotate(4 * np.sin(t * 40), resample=Image.BICUBIC)
+        cy = 250 if items else (430 if sc.get("big") else 480)
+        panel.alpha_composite(pr, (int(C.PW / 2 - size / 2), int(cy - size / 2 + 8 * np.sin(t * 1.8))))
+    if sc.get("big") and not items:
+        big = sc["big"]
+        if sc.get("count"):
+            a_, b_ = sc["count"]; v = int(a_ + (b_ - a_) * ease(lt / max(0.5, sc["end"] - sc["start"])))
+            big = big.replace("{n}", f"{v:,}".replace(",", " "))
+        C.title_text(dp, big, C.PW / 2, 830, int(90 + 40 * ease(lt / 0.35)), col=C.YEL)
+    if sc.get("big_top"): C.title_text(dp, sc["big_top"], C.PW / 2, 110, 90, col=C.YEL)
+    for k_, (it, st) in enumerate(zip(items, sc["item_t"])):
+        if t < st: continue
+        e = ease((t - st) / 0.35); y = (230 if sc.get("big_top") else 430) + k_ * 170; x = int(60 - (1 - e) * 1000)
+        dp.rectangle((x + 10, y + 10, x + 890, y + 150), fill=C.INK); dp.rectangle((x, y, x + 880, y + 140), fill="white", outline=C.INK, width=8)
+        dp.ellipse((x + 25, y + 25, x + 115, y + 115), fill=C.INK)
+        dp.text((x + 70, y + 72), "АБВГ"[k_] if sc.get("letters") else str(k_ + 1), font=C.F("title", 54), fill=C.YEL, anchor="mm")
+        ff = C.F("hand", 48)
+        while dp.textlength(it, font=ff) > 700 and ff.size > 28: ff = C.F("hand", ff.size - 2)
+        dp.text((x + 140, y + 70), it, font=ff, fill=C.INK, anchor="lm")
+    if sc.get("sub") and not items: panel.alpha_composite(C.narration_box(sc["sub"]), (30, 30))
+    for j in range(len(L)):
+        hit = [s_ for s_ in L[j].get("sfx", []) if s_ in C.SFX]
+        if hit and 0 <= t - starts[j] < 0.9 and scene_of[j] == si:
+            bu = C.burst(C.SFX[hit[0]], (t - starts[j]) / 0.9); panel.alpha_composite(bu, (int(C.PW - bu.width + 20), 120))
+    dp.rectangle((0, 0, C.PW - 1, C.PH - 1), outline=C.INK, width=14)
+    k = ease(lt / 0.3) if si else 1.0
+    pr = panel.rotate((1.2 if si % 2 else -1.2) * (1 + 2 * (1 - k)), expand=True, resample=Image.BICUBIC)
+    im.alpha_composite(pr, (int(W / 2 - pr.width / 2 + (1 - k) * 1100), int(200 + C.PH / 2 - pr.height / 2)))
+    for st, txt in stamps:
+        if st <= t and scene_of[line_at(st)] == si: stamp(im, txt, t - st)
+    if captions:
+        gs = [g for g in groups if g[0][1] <= t]
+        if gs and t < ends[-1] + 0.6:
+            g = gs[-1]; d = ImageDraw.Draw(im)
+            parts = [w.upper() for w, _ in g]; f = C.F("title", 70)
+            while sum(d.textlength(p + " ", font=f) for p in parts) > 900: f = C.F("title", f.size - 4)
+            tw = sum(d.textlength(p + " ", font=f) for p in parts) - d.textlength(" ", font=f); x = W / 2 - tw / 2
+            d.rectangle((x - 30 + 10, 1290 + 10, x + tw + 30 + 10, 1400 + 10), fill=C.INK)
+            d.rectangle((x - 30, 1290, x + tw + 30, 1400), fill="white", outline=C.INK, width=8)
+            for p, (_, ws) in zip(parts, g):
+                d.text((x, 1345), p, font=f, fill=C.RED if ws <= t else C.INK, anchor="lm"); x += d.textlength(p + " ", font=f)
+    return im.convert("RGB")
+
+
 def frame(t, captions=True):
+    if SPEC.get("style") == "comic": return comic_frame(t, captions)
     i = line_at(t); sc = scenes[scene_of[i]]
     im = bgimg(sc.get("bg", "dark"))
     draw_scene(im, sc, t)
