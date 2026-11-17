@@ -54,7 +54,8 @@ def pose_params(pose, lt, mood):
         P.update(arF=2.7 + 0.15 * w, elF=0.3, arB=-2.7 - 0.15 * w, elB=-0.3, lift=abs(math.sin(lt * 7)) * (30 if pose == "cheer" else 0))
         if pose == "shock": P.update(lean=-0.12, lift=max(0, 40 * math.sin(min(lt, 0.4) / 0.4 * math.pi)))
     elif pose == "dig":
-        P.update(lean=0.45, lift=-60, thF=0.9, shF=-1.3, thB=0.6, shB=-1.2, arF=1.3 + 0.5 * math.sin(lt * 9), elF=-0.4, arB=1.0 + 0.4 * math.sin(lt * 9 + 1), elB=-0.6)
+        sw = math.sin(lt * 7)
+        P.update(lean=0.5, lift=-60, thF=0.9, shF=-1.3, thB=0.6, shB=-1.2, arF=0.5 + 0.55 * sw, elF=-0.2, arB=0.3 + 0.5 * sw, elB=-0.3)
     elif pose == "knock":
         P.update(arF=1.35 + 0.25 * math.sin(lt * 15), elF=-1.1)
     elif pose == "sit":
@@ -93,8 +94,7 @@ def draw_actor(panel, a, cast, lt, talking=False):
     # draw at canonical scale on a layer facing right, origin = feet at (300, 700)
     L = Image.new("RGBA", (600, 760), (0, 0, 0, 0)); d = ImageDraw.Draw(L)
     ox, oy = 300, 700
-    hip = (ox, oy - 250 + P["bob"] - P["lift"] * 0 + (P["lift"] if P["lift"] < 0 else 0) * -1 * 0)
-    hip = (ox, oy - 250 + P["bob"] - (P["lift"] if P["lift"] > 0 else 0) - (P["lift"] if P["lift"] < 0 else 0) * -1)
+    hip = (ox, oy - 250 + P["bob"] - P["lift"])  # lift > 0 jumps, lift < 0 crouches with feet kept on the ground
     sh = _rot((hip[0], hip[1] - 185), hip, P["lean"])
     def leg(th, shn):
         k = (hip[0] + 125 * math.sin(th), hip[1] + 125 * math.cos(th))
