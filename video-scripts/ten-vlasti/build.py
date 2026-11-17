@@ -27,6 +27,7 @@ def dur(f):
 
 ep = json.load(open(os.path.join(EP_DIR, "episode.json")))
 seg_dir = os.path.join(EP_DIR, "seg")
+NARR_ID = hashlib.md5(open(os.path.join(HERE, "voice", "narrator-ref.wav"), "rb").read()).hexdigest()[:8]
 os.makedirs(seg_dir, exist_ok=True)
 
 # 1. voices (cached by voice + text)
@@ -34,7 +35,8 @@ jobs, lines = [], []
 for s in ep["scenes"]:
     for l in s["lines"]:
         voice = "N" if l[0] == "N" else ep["voices"][l[0]]
-        raw = os.path.join(seg_dir, hashlib.md5((voice + l[1]).encode()).hexdigest()[:10] + ".wav")
+        key = voice + (NARR_ID if voice == "N" else "") + l[1]  # a new narrator sample re-voices his lines
+        raw = os.path.join(seg_dir, hashlib.md5(key.encode()).hexdigest()[:10] + ".wav")
         if not os.path.exists(raw):
             jobs.append({"voice": voice, "text": l[1], "out": raw})
         lines.append((s, l, raw))
