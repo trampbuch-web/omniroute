@@ -3,8 +3,8 @@
  "kind": "story",
  "style": "comic",
  "voice": "narrator2",
- "tempo": 1.22,
- "gap": 0.15,
+ "tempo": 1.25,
+ "gap": 0.12,
  "cast": {
   "mark": {
    "top": "coat",
@@ -29,12 +29,73 @@
     196,
     166
    ]
+  },
+  "c1": {
+   "top": "suit",
+   "hair": "short",
+   "color": [
+    40,
+    40,
+    52
+   ],
+   "hair_color": [
+    30,
+    24,
+    20
+   ]
+  },
+  "c2": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    150,
+    40,
+    50
+   ],
+   "hair_color": [
+    200,
+    160,
+    90
+   ]
+  },
+  "c3": {
+   "top": "hoodie",
+   "hair": "beanie",
+   "color": [
+    60,
+    120,
+    160
+   ]
+  },
+  "c4": {
+   "top": "shirt",
+   "hair": "bald",
+   "color": [
+    200,
+    190,
+    160
+   ],
+   "mustache": true,
+   "skin": [
+    200,
+    150,
+    110
+   ]
+  },
+  "c5": {
+   "top": "coat",
+   "hair": "fedora",
+   "color": [
+    90,
+    80,
+    70
+   ]
   }
  },
  "episodes": {
   "1": {
-   "title": "ТИШИНА",
-   "date": "07:00",
+   "title": "07:12",
+   "date": "СЕГОДНЯ",
    "music": "m3"
   },
   "2": {
@@ -43,8 +104,8 @@
    "music": "m3"
   },
   "3": {
-   "title": "СООБЩЕНИЕ",
-   "date": "08:15",
+   "title": "ПОСЛАНИЕ",
+   "date": "08:05",
    "music": "m1"
   },
   "4": {
@@ -54,7 +115,7 @@
   },
   "5": {
    "title": "ТВОЙ ВЫБОР",
-   "date": "18:47",
+   "date": "?",
    "music": "m2"
   }
  },
@@ -63,27 +124,25 @@
   "title": "ГОРОД, КОТОРЫЙ УМЕР ВЧЕРА",
   "ep": "СЕРИЯ 1",
   "name": "Город без людей",
-  "set": "street",
+  "set": "square",
   "actor": {
    "who": "mark",
    "x": 500,
-   "pose": "idle",
+   "pose": "lookup",
    "mood": "wide",
-   "s": 1.1
+   "s": 0.9
   }
  },
- "description": "Он проснулся — а город пуст. «Не выходи в 19:00. Ты уже однажды умер». Что делать Марку: А или Б? 🌆 Серия 1\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #сериал #мистика #триллер #городкоторыйумервчера",
+ "description": "Часы встали на 19:00. 47 звонков — с его же номера. А на записи из завтра весь город смотрит в небо 🌆 Обернуться или бежать? Серия 1\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #сериал #мистика #триллер #городкоторыйумервчера",
  "lines": [
   {
    "ep": 1,
-   "text": "Семь утра. Город на два миллиона человек. И ни одного звука.",
+   "text": "Мои часы остановились ровно в девятнадцать ноль-ноль.",
    "tag": "dramatic",
    "scene": {
-    "bg": "navy",
-    "set": "street",
-    "big": "НИ ДУШИ",
-    "weather": "rain",
-    "reflect": true
+    "bg": "dark",
+    "prop": "watch",
+    "sub": "07:12 · УТРО"
    },
    "sfx": [
     "glitch"
@@ -91,189 +150,224 @@
   },
   {
    "ep": 1,
-   "text": "Марк просыпается в своей квартире.",
+   "text": "Но за окном — утро.",
    "scene": {
     "bg": "blue",
-    "set": "room",
+    "set": "apartment",
+    "weather": "dust",
     "actors": [
      {
       "who": "mark",
-      "x": 420,
+      "x": 330,
       "pose": "idle",
-      "mood": "closed"
+      "mood": "normal"
      }
-    ],
-    "weather": "dust"
+    ]
    }
   },
   {
    "ep": 1,
-   "text": "Телефон — без сети. Свет не включается.",
+   "text": "И город молчит.",
    "scene": {
     "bg": "blue",
-    "set": "room",
-    "sub": "НЕТ СЕТИ",
-    "actors": [
-     {
-      "who": "mark",
-      "x": 420,
-      "pose": "hold",
-      "hold": "phone",
-      "mood": "sad"
-     }
-    ],
-    "weather": "dust"
-   }
-  },
-  {
-   "ep": 2,
-   "text": "Он выходит на улицу.",
-   "scene": {
-    "bg": "navy",
-    "set": "street",
-    "actors": [
-     {
-      "who": "mark",
-      "pose": "walk",
-      "from": -120,
-      "to": 420,
-      "t0": 0,
-      "t1": 2.4
-     }
-    ],
-    "weather": "rain",
-    "reflect": true
-   }
-  },
-  {
-   "ep": 2,
-   "text": "Машины стоят посреди дороги. Двери открыты.",
-   "scene": {
-    "bg": "navy",
-    "set": "street",
-    "props": [
-     {
-      "name": "car",
-      "x": 700,
-      "y": 930,
-      "s": 0.75
-     }
-    ],
-    "actors": [
-     {
-      "who": "mark",
-      "x": 330,
-      "pose": "idle",
-      "mood": "wide",
-      "face": "r"
-     }
-    ],
-    "weather": "rain",
-    "reflect": true
-   },
-   "sfx": [
-    "glitch"
-   ]
-  },
-  {
-   "ep": 2,
-   "text": "Моторы ещё тёплые."
-  },
-  {
-   "ep": 2,
-   "text": "В кофейне на столах стоит горячий кофе. Но людей нет.",
-   "scene": {
-    "bg": "amber",
-    "set": "room",
-    "props": [
-     {
-      "name": "cup",
-      "x": 700,
-      "y": 700,
-      "s": 0.4
-     }
-    ],
-    "actors": [
-     {
-      "who": "mark",
-      "x": 330,
-      "pose": "point",
-      "mood": "wide"
-     }
-    ],
-    "weather": "dust"
-   }
-  },
-  {
-   "ep": 2,
-   "text": "Есть кто-нибудь?!",
-   "say": {
-    "who": "mark",
-    "text": "ЕСТЬ КТО-НИБУДЬ?!"
-   },
-   "scene": {
-    "bg": "navy",
-    "set": "street",
+    "set": "apartment",
+    "weather": "dust",
     "actors": [
      {
       "who": "mark",
       "x": 500,
-      "pose": "shock",
-      "mood": "wide"
-     }
-    ],
-    "weather": "rain",
-    "reflect": true
-   },
-   "sfx": [
-    "impact"
-   ]
-  },
-  {
-   "ep": 2,
-   "text": "Тишина. Только один экран на площади ещё светится.",
-   "scene": {
-    "bg": "dark",
-    "set": "street",
-    "props": [
-     {
-      "name": "screen",
-      "x": 640,
-      "y": 760,
-      "s": 0.8
-     }
-    ],
-    "actors": [
-     {
-      "who": "mark",
-      "x": 260,
+      "y": 1450,
+      "s": 2.2,
       "pose": "idle",
       "mood": "wide"
      }
-    ],
-    "weather": "rain",
-    "reflect": true
+    ]
    }
   },
   {
-   "ep": 3,
-   "text": "И тут в кармане вибрирует телефон.",
-   "ad_before": true,
+   "ep": 1,
+   "text": "Сорок семь пропущенных звонков.",
    "scene": {
-    "bg": "purple",
-    "fx": "rings",
-    "prop": "phone",
-    "sub": "НЕИЗВЕСТНЫЙ НОМЕР"
+    "bg": "navy",
+    "prop": "calls"
    },
    "sfx": [
     "phone"
    ]
   },
   {
+   "ep": 1,
+   "text": "Все — с моего номера. В восемнадцать пятьдесят девять.",
+   "tag": "dramatic",
+   "stamp": "С МОЕГО НОМЕРА",
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Я выхожу на улицу.",
+   "scene": {
+    "bg": "steel",
+    "set": "intersection",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "mark",
+      "pose": "walk",
+      "from": -140,
+      "to": 360,
+      "t0": 0,
+      "t1": 2.0
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Ни души. Светофоры мёртвые. Машины брошены с работающими моторами.",
+   "scene": {
+    "bg": "steel",
+    "set": "intersection",
+    "weather": "fog",
+    "props": [
+     {
+      "name": "car",
+      "x": 720,
+      "y": 820,
+      "s": 0.72
+     }
+    ],
+    "actors": [
+     {
+      "who": "mark",
+      "x": 330,
+      "y": 820,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "В кофейне на углу кофе ещё горячий.",
+   "scene": {
+    "bg": "amber",
+    "set": "cafe",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "mark",
+      "pose": "walk",
+      "face": "l",
+      "from": 1150,
+      "to": 480,
+      "t0": 0,
+      "t1": 2.0
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Но странно другое."
+  },
+  {
+   "ep": 2,
+   "text": "Все стулья развёрнуты к окну. Будто люди в одну секунду встали — и посмотрели на небо.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "amber",
+    "set": "cafe",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 480,
+      "pose": "point",
+      "face": "l",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
    "ep": 3,
-   "text": "Одно сообщение.",
+   "text": "На запотевшем стекле кто-то написал пальцем.",
+   "scene": {
+    "bg": "steel",
+    "prop": "note"
+   },
    "sfx": [
     "riser"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "«Они ушли в девятнадцать ноль-ноль. Не смотри в небо».",
+   "ad_before": true,
+   "tag": "dramatic",
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "На площади горит единственный экран.",
+   "scene": {
+    "bg": "dark",
+    "set": "square",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "mark",
+      "pose": "walk",
+      "s": 0.8,
+      "from": -100,
+      "to": 260,
+      "t0": 0,
+      "t1": 2.2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "На нём — обратный отсчёт. До девятнадцати ноль-ноль.",
+   "scene": {
+    "bg": "dark",
+    "set": "square",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 260,
+      "s": 0.8,
+      "pose": "lookup",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "И снова сообщение. С моего номера.",
+   "scene": {
+    "bg": "navy",
+    "prop": "sms"
+   },
+   "sfx": [
+    "phone"
    ]
   },
   {
@@ -283,56 +377,28 @@
    "scene": {
     "bg": "red",
     "fx": "alarm",
-    "big": "НЕ ВЫХОДИ В 19:00",
-    "sub": "ТЫ УЖЕ ОДНАЖДЫ УМЕР"
+    "big": "ТЫ УЖЕ ОДНАЖДЫ УМЕР"
    },
    "sfx": [
     "impact"
    ]
   },
   {
-   "ep": 3,
-   "text": "Марк бежит к банку. В будке охраны ещё работают мониторы.",
+   "ep": 4,
+   "text": "В будке охраны банка ещё работают камеры.",
    "scene": {
-    "bg": "steel",
-    "set": "street",
+    "bg": "dark",
+    "set": "booth",
     "actors": [
      {
       "who": "mark",
       "pose": "run",
-      "from": -120,
-      "to": 560,
+      "from": -140,
+      "to": 420,
       "t0": 0,
-      "t1": 1.8
+      "t1": 1.6
      }
-    ],
-    "weather": "rain",
-    "reflect": true
-   }
-  },
-  {
-   "ep": 3,
-   "text": "Он перематывает запись с площади.",
-   "scene": {
-    "bg": "steel",
-    "set": "office",
-    "props": [
-     {
-      "name": "screen",
-      "x": 650,
-      "y": 640,
-      "s": 0.7
-     }
-    ],
-    "actors": [
-     {
-      "who": "mark",
-      "x": 280,
-      "pose": "point",
-      "mood": "normal"
-     }
-    ],
-    "weather": "dust"
+    ]
    },
    "sfx": [
     "typing"
@@ -340,76 +406,82 @@
   },
   {
    "ep": 4,
-   "text": "На записи — он сам.",
-   "tag": "dramatic",
+   "text": "Запись с площади. Дата — завтра. Девятнадцать ноль-ноль.",
    "scene": {
     "bg": "dark",
-    "prop": "screen",
-    "big": "ЭТО ОН"
-   },
-   "sfx": [
-    "impact"
-   ]
-  },
-  {
-   "ep": 4,
-   "text": "А дата в углу — завтрашняя.",
-   "tag": "dramatic",
-   "scene": {
-    "bg": "red",
-    "fx": "alarm",
-    "prop": "clock",
-    "big": "ЗАВТРА"
-   },
-   "sfx": [
-    "impact"
-   ]
-  },
-  {
-   "ep": 4,
-   "text": "Марк с записи медленно поднимает глаза. Прямо в камеру.",
-   "scene": {
-    "bg": "dark",
-    "set": "office",
-    "focus": [
-     500,
-     420
-    ],
+    "set": "booth",
+    "sub": "ЗАВТРА · 19:00",
     "actors": [
      {
       "who": "mark",
       "x": 500,
+      "y": 1450,
+      "s": 2.2,
       "pose": "idle",
-      "mood": "wide",
-      "face": "r",
-      "s": 1.2
+      "mood": "wide"
      }
-    ],
-    "weather": "dust"
-   }
-  },
-  {
-   "ep": 4,
-   "text": "Если ты это смотришь, значит, я опять не успел.",
-   "say": {
-    "who": "mark",
-    "text": "Если ты это смотришь — я опять не успел"
+    ]
    },
    "sfx": [
     "glitch"
    ]
   },
   {
-   "ep": 5,
-   "text": "До девятнадцати ноль-ноль — двенадцать минут. Что делать Марку?",
+   "ep": 4,
+   "text": "На записи — весь город. Люди стоят на площади и смотрят в небо.",
    "tag": "dramatic",
    "scene": {
-    "bg": "red",
-    "big_top": "ЧТО ДЕЛАТЬ МАРКУ?",
-    "letters": true,
-    "items": [
-     "Запереться дома до утра",
-     "Выйти на площадь в 19:00"
+    "bg": "dark",
+    "set": "square",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "c1",
+      "x": 120,
+      "s": 0.62,
+      "pose": "lookup",
+      "mood": "wide",
+      "face": "r"
+     },
+     {
+      "who": "c2",
+      "x": 300,
+      "s": 0.62,
+      "pose": "lookup",
+      "mood": "wide",
+      "face": "l"
+     },
+     {
+      "who": "c4",
+      "x": 700,
+      "s": 0.62,
+      "pose": "lookup",
+      "mood": "wide",
+      "face": "r"
+     },
+     {
+      "who": "c3",
+      "x": 860,
+      "s": 0.62,
+      "pose": "lookup",
+      "mood": "wide",
+      "face": "l"
+     },
+     {
+      "who": "c5",
+      "x": 560,
+      "s": 0.62,
+      "pose": "lookup",
+      "mood": "wide",
+      "face": "l"
+     },
+     {
+      "who": "mark",
+      "x": 440,
+      "s": 0.66,
+      "pose": "idle",
+      "mood": "normal"
+     }
     ]
    },
    "sfx": [
@@ -417,28 +489,77 @@
    ]
   },
   {
-   "ep": 5,
-   "text": "А — запереться дома и пережить девятнадцать ноль-ноль. Бэ — выйти на площадь и встретить себя с записи."
+   "ep": 4,
+   "text": "А в центре стою я. И смотрю прямо в камеру."
   },
   {
-   "ep": 5,
-   "text": "Пиши букву в комментариях. От тебя зависит, доживёт ли он до утра.",
+   "ep": 4,
+   "text": "Если ты это смотришь — я опять не успел.",
+   "say": {
+    "who": "mark",
+    "text": "Если ты это смотришь — я опять не успел"
+   }
+  },
+  {
+   "ep": 4,
+   "text": "А потом Марк на записи поднимает руку. И показывает за мою спину.",
+   "tag": "dramatic",
    "scene": {
-    "bg": "purple",
-    "set": "street",
-    "weather": "rain",
-    "reflect": true,
-    "big": "А ИЛИ Б?",
+    "bg": "dark",
+    "set": "booth",
     "actors": [
      {
       "who": "mark",
       "x": 500,
-      "pose": "idle",
+      "pose": "point",
+      "face": "l",
       "mood": "wide",
       "s": 1.05
      }
     ]
-   }
+   },
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Сзади тихо щёлкает дверь.",
+   "scene": {
+    "bg": "dark",
+    "set": "booth",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "knock",
+    "impact"
+   ]
+  },
+  {
+   "ep": 5,
+   "text": "Что делать Марку? А — обернуться. Бэ — бежать, не оглядываясь. Пиши букву в комментариях.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big_top": "ЧТО ДЕЛАТЬ МАРКУ?",
+    "letters": true,
+    "items": [
+     "Обернуться",
+     "Бежать, не оглядываясь"
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
   }
  ]
 }

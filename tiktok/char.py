@@ -63,6 +63,8 @@ def pose_params(pose, lt, mood):
         P.update(arF=1.0, elF=-0.6)
     elif pose == "jump":
         P.update(lift=abs(math.sin(lt * 5)) * 90, thF=0.5, shF=-0.9, thB=0.2, shB=-0.6, arF=2.4, arB=-2.4)
+    elif pose == "lookup":  # frozen, staring at the sky
+        P.update(head=-0.6, arF=0.05, arB=-0.05, bob=0.0, lean=-0.1, up=1)
     elif pose == "sleep":
         P.update(rot=-math.pi / 2, arF=0.1, arB=-0.1)
     if pose in ("talk", "point", "shock") or mood == "wide":
@@ -145,7 +147,8 @@ def draw_actor(panel, a, cast, lt, talking=False):
         if mood == "closed" or (mood == "normal" and (lt % 3.7) < 0.12):
             h.line((e_ - 11, c + 2, e_ + 11, c + 2), fill=INK, width=6)
         elif mood == "wide":
-            h.ellipse((e_ - 15, c - 16, e_ + 15, c + 16), fill="white", outline=INK, width=5); h.ellipse((e_ - 5, c - 5, e_ + 7, c + 7), fill=INK)
+            u = -8 if P.get("up") else 0
+            h.ellipse((e_ - 15, c - 16, e_ + 15, c + 16), fill="white", outline=INK, width=5); h.ellipse((e_ - 5, c - 5 + u, e_ + 7, c + 7 + u), fill=INK)
         else:
             h.ellipse((e_ - 8, c - 10, e_ + 8, c + 10), fill=INK)
         bi = {"angry": (14, -2), "sad": (-4, 10), "wide": (-14, -14)}.get(mood, (0, 0))
@@ -212,6 +215,7 @@ def draw_set(panel, name, t):
 def _draw_set(panel, name, t):
     # drawn on an RGB copy: PIL blends translucent fills there (it does not on RGBA targets)
     d = ImageDraw.Draw(panel, "RGBA"); W_, H_ = C.PW, C.PH
+    if _set_new(d, name, t, W_, H_): return
     if name in ("cell", "corridor", "room", "office", "court", "plane"):
         wall = {"cell": (150, 146, 140), "corridor": (130, 130, 140), "room": (196, 170, 140), "office": (170, 180, 196),
                 "court": (150, 110, 80), "plane": (226, 226, 232)}[name]
@@ -285,6 +289,112 @@ def _draw_set(panel, name, t):
                 for k in range(3):
                     y = GROUND - 80 * s - k * 120 * s; d.polygon([(x - 150 * s + k * 30, y), (x + 150 * s - k * 30, y), (x, y - 200 * s)], fill=(30, 100, 60), outline=INK, width=8)
             d.rectangle((0, GROUND, W_, H_), fill=(60, 50, 40), outline=INK, width=OW)
+
+
+def _sky(d, top, bot, y1, W_):
+    for y in range(0, y1, 6):
+        k = y / max(1, y1); d.rectangle((0, y, W_, y + 6), fill=tuple(int(top[i] + (bot[i] - top[i]) * k) for i in range(3)))
+
+
+def _glow(d, x, y, r, col):
+    for rr in (r, r * 0.7, r * 0.45): d.ellipse((x - rr, y - rr, x + rr, y + rr), fill=col + (30,))
+
+
+def _table(d, x, y, w=220, cups=2, t=0):
+    d.ellipse((x - w / 2, y - 26, x + w / 2, y + 26), fill=(150, 98, 60), outline=INK, width=OW)
+    d.rectangle((x - 10, y + 20, x + 10, GROUND), fill=INK)
+    for k in range(cups):
+        cx = x - w / 4 + k * w / 2; d.rounded_rectangle((cx - 22, y - 62, cx + 22, y - 18), 8, fill="white", outline=INK, width=6)
+        d.arc((cx + 12, y - 54, cx + 40, y - 28), -90, 90, fill=INK, width=6)
+        for j in range(2):  # steam, still rising: the coffee is hot
+            sx = cx - 8 + j * 14; d.line([(sx + 6 * math.sin(yy / 9 + t * 4 + j), yy) for yy in range(int(y - 130), int(y - 66), 6)], fill=(255, 255, 255, 150), width=5)
+
+
+def _chair(d, x, face):  # chair turned toward the window (face = +1 right / -1 left)
+    d.rectangle((x - 40, GROUND - 120, x + 40, GROUND - 100), fill=(110, 70, 40), outline=INK, width=6)
+    bx = x - 40 * face; d.rectangle((bx - 8, GROUND - 230, bx + 8, GROUND - 100), fill=(110, 70, 40), outline=INK, width=6)
+    for lx in (x - 34, x + 34): d.line((lx, GROUND - 100, lx, GROUND), fill=INK, width=8)
+
+
+def _set_new(d, name, t, W_, H_):
+    """Rich, distinct locations for the City series. Returns True if handled."""
+    if name == "apartment":
+        d.rectangle((0, 0, W_, GROUND), fill=(76, 92, 120)); d.rectangle((0, 0, W_, 70), fill=(60, 72, 96))
+        d.rectangle((560, 110, 900, 470), fill=(0, 0, 0), outline=INK, width=OW)
+        for y in range(118, 462, 6):
+            k = (y - 118) / 344; d.rectangle((568, y, 892, y + 6), fill=(int(120 + 120 * k), int(140 + 60 * k), int(200 - 60 * k)))
+        for x, h in [(580, 90), (650, 150), (720, 110), (790, 170), (850, 120)]: d.rectangle((x, 462 - h, x + 60, 462), fill=(50, 56, 80))
+        d.line((730, 110, 730, 470), fill=INK, width=OW); d.line((560, 290, 900, 290), fill=INK, width=8)
+        d.polygon([(560, 470), (900, 470), (1000, GROUND), (420, GROUND)], fill=(255, 220, 170, 40))  # dawn light on the floor
+        d.ellipse((120, 120, 300, 300), fill="white", outline=INK, width=OW)  # wall clock stopped at 19:00
+        d.line((210, 210, 210, 132), fill=INK, width=7); d.line((210, 210, 172, 262), fill=INK, width=11)  # 19:00
+        d.rectangle((60, 640, 520, 740), fill=(230, 230, 236), outline=INK, width=OW); d.rectangle((40, 600, 120, 760), fill=(110, 70, 40), outline=INK, width=OW)
+        d.rectangle((60, 610, 220, 650), fill="white", outline=INK, width=6); d.rectangle((60, 740, 520, 780), fill=(110, 70, 40), outline=INK, width=OW)
+        d.rectangle((560, 700, 680, GROUND), fill=(120, 80, 50), outline=INK, width=OW)  # nightstand
+        d.rounded_rectangle((590, 672, 650, 700), 6, fill=(30, 30, 36), outline=INK, width=4)
+        if int(t * 2) % 2: d.rectangle((596, 676, 644, 696), fill=(120, 200, 255))
+        d.rectangle((0, GROUND, W_, H_), fill=(120, 86, 60), outline=INK, width=OW)
+        return True
+    if name == "intersection":
+        _sky(d, (150, 160, 180), (220, 210, 200), GROUND, W_)
+        for x, h, c in [(-30, 560, (120, 116, 110)), (190, 700, (140, 130, 118)), (430, 620, (110, 104, 100)), (650, 760, (130, 122, 112)), (860, 600, (118, 112, 106))]:
+            d.rectangle((x, GROUND - 160 - h, x + 210, GROUND - 160), fill=c, outline=INK, width=OW)
+            for wy in range(GROUND - 140 - h, GROUND - 200, 70):
+                for wx in (x + 25, x + 85, x + 145): d.rectangle((wx, wy, wx + 40, wy + 46), fill=(70, 80, 96), outline=INK, width=4)
+        d.rectangle((0, GROUND - 160, W_, H_), fill=(70, 70, 76), outline=INK, width=OW)
+        for k in range(8): d.rectangle((60 + k * 120, GROUND - 120, 130 + k * 120, GROUND - 40), fill=(230, 230, 226))  # crosswalk
+        d.rectangle((900, GROUND - 620, 916, GROUND - 160), fill=INK); d.rounded_rectangle((870, GROUND - 760, 946, GROUND - 560), 14, fill=(30, 30, 36), outline=INK, width=6)
+        for k in range(3): d.ellipse((888, GROUND - 744 + k * 62, 928, GROUND - 704 + k * 62), fill=(60, 60, 64))  # traffic light: dead
+        d.rectangle((0, 0, W_, H_), fill=(200, 210, 220, 30))
+        return True
+    if name == "cafe":
+        d.rectangle((0, 0, W_, GROUND), fill=(120, 74, 52)); d.rectangle((0, 0, W_, 60), fill=(80, 50, 36))
+        d.rectangle((40, 100, 960, 520), fill=(150, 170, 190), outline=INK, width=OW)  # big window, rainy street outside
+        for x in range(60, 960, 70): d.line((x, 110, x - 40, 510), fill=(200, 215, 230), width=3)
+        d.line((500, 100, 500, 520), fill=INK, width=OW)
+        for k in range(6): d.ellipse((60 + k * 150, 140, 120 + k * 150, 200), fill=(255, 220, 140, 80))  # string lights
+        _table(d, 230, 700, t=t); _table(d, 720, 700, t=t)
+        for x in (110, 350, 600, 840): _chair(d, x, -1)
+        d.rectangle((0, GROUND, W_, H_), fill=(90, 60, 44), outline=INK, width=OW)
+        return True
+    if name == "square":
+        _sky(d, (110, 120, 120), (190, 196, 186), GROUND, W_)
+        d.rectangle((0, 140, 220, GROUND - 120), fill=(150, 140, 126), outline=INK, width=OW); d.rectangle((780, 180, W_, GROUND - 120), fill=(140, 132, 120), outline=INK, width=OW)
+        for y in range(180, GROUND - 160, 90):
+            for x in (30, 120): d.rectangle((x, y, x + 60, y + 60), fill=(70, 76, 86), outline=INK, width=4)
+            for x in (810, 900): d.rectangle((x, y, x + 60, y + 60), fill=(70, 76, 86), outline=INK, width=4)
+        d.rectangle((280, 120, 720, 420), fill=(14, 14, 18), outline=INK, width=OW)  # giant screen
+        d.rectangle((490, 420, 510, GROUND - 120), fill=INK)
+        _glow(d, 500, 270, 300, (255, 60, 60))
+        left = 11 * 3600 + 47 * 60 + 13 - int(t)  # countdown to 19:00, ticking in real time
+        d.text((500, 205), "ДО 19:00", font=C.F("title", 44), fill=(255, 90, 90), anchor="mm")
+        d.text((500, 300), f"{left // 3600:02d}:{left // 60 % 60:02d}:{left % 60:02d}", font=C.F("title", 96), fill=(255, 70, 70), anchor="mm")
+        d.rectangle((0, GROUND - 120, W_, H_), fill=(120, 116, 110), outline=INK, width=OW)
+        d.ellipse((320, GROUND - 60, 680, GROUND + 40), fill=(150, 160, 170), outline=INK, width=OW); d.ellipse((380, GROUND - 40, 620, GROUND + 20), fill=(90, 130, 170))
+        d.rectangle((0, 0, W_, H_), fill=(210, 215, 210, 26))
+        return True
+    if name == "booth":
+        d.rectangle((0, 0, W_, H_), fill=(16, 24, 22))
+        for r in range(3):
+            for c in range(3):
+                x, y = 90 + c * 290, 80 + r * 210; d.rectangle((x, y, x + 250, y + 180), fill=(20, 40, 30), outline=INK, width=OW)
+                rr = np.random.default_rng(int(t * 8) + r * 3 + c)
+                for yy in range(y + 10, y + 170, 6):
+                    g = int(rr.integers(30, 110)); d.line((x + 8, yy, x + 242, yy), fill=(g // 2, g, g // 2), width=4)
+                d.ellipse((x + 12, y + 12, x + 28, y + 28), fill=(220, 40, 40) if int(t * 2) % 2 else (90, 20, 20))
+        _glow(d, W_ / 2, 400, 520, (60, 220, 120))
+        d.rectangle((0, 720, W_, 780), fill=(60, 60, 66), outline=INK, width=OW); d.rectangle((0, GROUND, W_, H_), fill=(30, 30, 34), outline=INK, width=OW)
+        return True
+    if name == "bridge":
+        _sky(d, (40, 30, 70), (240, 120, 80), 620, W_)
+        d.ellipse((380, 420, 620, 660), fill=(255, 190, 120))
+        for x, h in [(0, 160), (120, 260), (260, 200), (640, 300), (800, 180), (900, 240)]: d.rectangle((x, 620 - h, x + 110, 620), fill=(40, 34, 60))
+        for y in range(620, GROUND, 12): d.line((0, y, W_, y), fill=(60 + (y - 620) // 6, 50, 90), width=12)
+        d.rectangle((0, GROUND - 70, W_, GROUND - 50), fill=INK)
+        for x in range(0, W_, 60): d.line((x, GROUND - 60, x, GROUND), fill=INK, width=8)
+        d.rectangle((0, GROUND, W_, H_), fill=(60, 56, 66), outline=INK, width=OW)
+        return True
+    return False
 
 
 def weather(panel, kind, t):

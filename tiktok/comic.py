@@ -342,6 +342,45 @@ def p_screen():
     return im
 
 
+def p_watch():
+    im, d = _c()
+    d.rounded_rectangle((200, 20, 320, 500), 30, fill=(60, 50, 44), outline=INK, width=OW)
+    d.ellipse((90, 120, 430, 460), fill=(200, 204, 210), outline=INK, width=OW + 4); d.ellipse((120, 150, 400, 430), fill="white", outline=INK, width=6)
+    for k in range(12):
+        a = k * math.pi / 6; d.line((260 + 115 * math.cos(a), 290 + 115 * math.sin(a), 260 + 130 * math.cos(a), 290 + 130 * math.sin(a)), fill=INK, width=8)
+    d.line((260, 290, 260, 172), fill=INK, width=8); d.line((260, 290, 215, 368), fill=INK, width=13)  # 19:00 exactly
+    d.line((330, 200, 400, 140), fill=INK, width=6); d.line((345, 225, 420, 190), fill=INK, width=6)  # cracked glass
+    d.ellipse((246, 276, 274, 304), fill=RED)
+    return im
+
+
+def p_calls():
+    im, d = _c()
+    d.rounded_rectangle((120, 20, 400, 500), 40, fill=(30, 30, 36), outline=INK, width=OW); d.rectangle((140, 70, 380, 450), fill=(240, 242, 246))
+    d.text((260, 105), "47 ПРОПУЩЕННЫХ", font=F("title", 24), fill=RED, anchor="mm")
+    for k in range(6):
+        y = 150 + k * 50; d.line((150, y + 22, 370, y + 22), fill=(210, 210, 216), width=2)
+        d.text((160, y), "Марк (я)", font=F("hand", 30), fill=INK); d.text((370, y + 4), "18:59", font=F("hand", 26), fill=(120, 120, 130), anchor="ra")
+    return im
+
+
+def p_sms():
+    im, d = _c()
+    d.rounded_rectangle((110, 20, 410, 500), 40, fill=(30, 30, 36), outline=INK, width=OW); d.rectangle((130, 70, 390, 450), fill=(18, 22, 30))
+    d.text((260, 100), "Марк (я)", font=F("title", 26), fill="white", anchor="mm")
+    d.rounded_rectangle((145, 150, 375, 330), 22, fill=(60, 110, 220))
+    for k, l in enumerate(["Не выходи", "на улицу", "в 19:00.", "Ты уже", "однажды умер"]):
+        d.text((160, 158 + k * 34), l, font=F("hand", 30), fill="white")
+    return im
+
+
+def p_note():
+    im, d = _c()
+    d.polygon([(70, 90), (450, 60), (470, 440), (90, 470)], fill=(250, 246, 220), outline=INK, width=OW)
+    for k, l in enumerate(["Они ушли", "в 19:00.", "Не смотри", "в небо."]): d.text((120, 120 + k * 80), l, font=F("hand", 64), fill=(40, 40, 140))
+    return im
+
+
 PROPS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 EMOJI2PROP = {"🕴️": "person", "👤": "person", "👷": "person", "🧑‍💻": "person", "👥": "crowd", "✈️": "plane", "🛫": "plane",
               "🚪": "door", "💰": "money", "💵": "money", "💸": "money", "📱": "phone", "✉️": "letter", "⏳": "clock",
