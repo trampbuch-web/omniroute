@@ -1,6 +1,6 @@
 # Builds one «Весь дом в курсе» episode (vertical 9:16) from <episode-dir>/episode.json.
 # Usage: python3 build.py <episode-dir> [--frames t1,t2,...]   (--frames: only screenshots for a check)
-import json, os, subprocess, sys, time, zlib
+import hashlib, json, os, subprocess, sys, time, zlib
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 VC = os.path.join(HERE, "..", "v-centre-rodiny")  # shared host markup, TTS with word timings, renderer
@@ -38,12 +38,42 @@ for s in stops:
     for who, _ in s["lines"]:
         assert who in ("H", g or RESIDENT[s["floor"]]), f"on floor {s['floor']} speaks {g or RESIDENT[s['floor']]}, not {who}"
 
-# 1. voices with word timings (edge-tts is flaky: retry)
+# 1. voices with word timings. The host speaks with the channel owner's own voice (OmniVoice clone, his consent,
+# sample shared with «Тень власти»); everyone else is edge-tts (flaky: retry).
 script = [("H", ep["hook_say"])] + [tuple(l) for s in stops for l in s["lines"]]
+TV = os.path.join(HERE, "..", "ten-vlasti")
+REF = os.path.join(TV, "voice", "narrator-ref.wav")
+HOST_KEY = "omni:" + hashlib.md5(open(REF, "rb").read()).hexdigest()[:8]
+HOST_FX = "silenceremove=start_periods=1:start_threshold=-45dB,areverse,silenceremove=start_periods=1:start_threshold=-45dB,areverse," \
+          "equalizer=f=120:t=q:w=1:g=3,equalizer=f=3200:t=q:w=1.2:g=2,acompressor=threshold=0.1:ratio=3:makeup=2"
+jobs = []
+for i, (who, txt) in enumerate(script):
+    mp3, meta = os.path.join(seg_dir, f"{i}.mp3"), os.path.join(seg_dir, f"{i}.txt")
+    if who == "H" and not (os.path.exists(mp3) and os.path.exists(meta) and open(meta).read() == HOST_KEY + txt):
+        jobs.append({"voice": "N", "text": txt, "out": mp3[:-4] + ".raw.wav", "i": i})
+if jobs:
+    jf = os.path.join(seg_dir, "jobs.json")
+    json.dump(jobs, open(jf, "w"), ensure_ascii=False)
+    sh(os.path.expanduser("~/.cache/ov-venv/bin/python"), os.path.join(TV, "tts_ov.py"), jf)
+    for j in jobs:
+        mp3 = os.path.join(seg_dir, f"{j['i']}.mp3")
+        sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", j["out"], "-af", HOST_FX, "-ar", "24000", "-b:a", "96k", mp3)
+        os.remove(j["out"])
+        d = float(subprocess.check_output(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", mp3]))
+        # shortcut: OmniVoice gives no word timestamps, words are spread over the line by length
+        words, a = j["text"].split(), 0.0
+        tot = sum(len(w) + 2 for w in words)
+        timed = []
+        for w in words:
+            b = a + d * (len(w) + 2) / tot
+            timed.append([round(a, 3), round(b, 3), w])
+            a = b
+        json.dump(timed, open(mp3[:-4] + ".words.json", "w"), ensure_ascii=False)
+        open(os.path.join(seg_dir, f"{j['i']}.txt"), "w").write(HOST_KEY + j["text"])
 items = []
 for i, (who, txt) in enumerate(script):
     mp3, meta = os.path.join(seg_dir, f"{i}.mp3"), os.path.join(seg_dir, f"{i}.txt")
-    key = " ".join(VOICES[who]) + who + txt
+    key = (HOST_KEY if who == "H" else " ".join(VOICES[who]) + who) + txt
     if not (os.path.exists(mp3) and os.path.exists(meta) and open(meta).read() == key):
         for _ in range(12):
             if subprocess.run(["python3", os.path.join(VC, "tts_words.py"), *VOICES[who], txt, mp3], capture_output=True).returncode == 0:
