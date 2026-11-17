@@ -14,8 +14,11 @@ FPS = 25
 VOICES = {"H": ("ru-RU-DmitryNeural", "+15%", "+8Hz"), "Z": ("ru-RU-SvetlanaNeural", "-4%", "-14Hz"),
           "T": ("ru-RU-DmitryNeural", "-2%", "-20Hz"), "K": ("ru-RU-SvetlanaNeural", "+16%", "+18Hz"),
           "G": ("ru-RU-DmitryNeural", "+8%", "+24Hz"), "P": ("ru-RU-SvetlanaNeural", "+12%", "+42Hz"),
-          "B": ("ru-RU-SvetlanaNeural", "-10%", "+30Hz")}
-RESIDENT = {1: "Z", 2: "T", 3: "K", 4: "G", 5: "P", "roof": "B"}
+          "B": ("ru-RU-SvetlanaNeural", "-10%", "+30Hz"), "M": ("ru-RU-SvetlanaNeural", "+2%", "-8Hz"),
+          "D": ("ru-RU-DmitryNeural", "-12%", "-32Hz"), "U": ("ru-RU-DmitryNeural", "+4%", "-8Hz"), "A": ("ru-RU-SvetlanaNeural", "+6%", "+4Hz")}
+RESIDENT = {1: "Z", 2: "T", 3: "K", 4: "G", 5: "P", 6: "M", "roof": "B"}
+GUESTS = {"D", "U", "A"}  # дед Михалыч, участковый Семёныч, студентка Аня — заходят на любой этаж
+TOP = 6
 GAP = 0.28
 
 
@@ -29,8 +32,11 @@ os.makedirs(seg_dir, exist_ok=True)
 stops = ep["stops"]
 assert stops[-1]["floor"] == "roof", "the last stop is the roof (the cat closes the loop)"
 for s in stops:
+    g = s.get("guest")
+    assert g is None or (g in GUESTS and s["floor"] != "roof"), f"unknown guest {g}"
+    assert len([x for x in stops if x.get("guest") == g]) == 1 or g is None, f"guest {g} can visit only one floor per episode"
     for who, _ in s["lines"]:
-        assert who in ("H", RESIDENT[s["floor"]]), f"floor {s['floor']} is home to {RESIDENT[s['floor']]}, not {who}"
+        assert who in ("H", g or RESIDENT[s["floor"]]), f"on floor {s['floor']} speaks {g or RESIDENT[s['floor']]}, not {who}"
 
 # 1. voices with word timings (edge-tts is flaky: retry)
 script = [("H", ep["hook_say"])] + [tuple(l) for s in stops for l in s["lines"]]
@@ -76,21 +82,21 @@ for s in stops:
         ride = [round(t, 3), round(t + 0.95, 3)]  # camera dive from the wide shot
         sfx.append((t, "whoosh"))
     else:
-        n = (5 if fl == "roof" else fl) - prev + (1 if fl == "roof" else 0)
+        n = (TOP if fl == "roof" else fl) - prev + (1 if fl == "roof" else 0)
         ride = [round(t, 3), round(t + 0.8 + 0.28 * (abs(n) - 1), 3)]
         sfx.append((t, "hum:%.2f" % (ride[1] - ride[0])))
     t = ride[1]
     if fl != "roof":
         sfx.append((t - 0.05, "ding"))
     t += 0.3
-    seg = {"floor": fl, "who": RESIDENT[fl], "ride": ride, "card": s.get("card"), "lines": []}
+    seg = {"floor": fl, "who": s.get("guest") or RESIDENT[fl], "guest": s.get("guest"), "ride": ride, "card": s.get("card"), "lines": []}
     for _ in s["lines"]:
         seg["lines"].append(place(k, t))
         t = seg["lines"][-1]["t1"] + GAP
         k += 1
     seg["t0"], seg["t1"] = ride[0], round(t, 3)
     segs.append(seg)
-    prev = 5 if fl == "roof" else fl
+    prev = TOP if fl == "roof" else fl
 out0 = round(t + 0.7, 3)  # hold on the cat so its «translation» can be read, then pull back to the first frame
 sfx.append((out0, "whoosh"))
 D = round(out0 + 2.3, 2)

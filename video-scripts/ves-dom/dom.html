@@ -55,7 +55,8 @@
       const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
       const io = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
       const lerp = (a, b, p) => a + (b - a) * p;
-      const NAMES = { Z: ["БАБА ЗИНА · 1 этаж", "#c8323c"], T: ["ДЯДЯ ТОЛЯ · 2 этаж", "#2b4a8a"], K: ["КРИСТИНА · 3 этаж", "#e0457a"], G: ["ГОША · 4 этаж", "#2e7a5c"], P: ["ПЕТЯ · 5 этаж", "#3b6bd6"], B: ["БАРСИК · крыша", "#c46a1a"] };
+      const NAMES = { Z: ["БАБА ЗИНА · 1 этаж", "#c8323c"], T: ["ДЯДЯ ТОЛЯ · 2 этаж", "#2b4a8a"], K: ["КРИСТИНА · 3 этаж", "#e0457a"], G: ["ГОША · 4 этаж", "#2e7a5c"], P: ["ПЕТЯ · 5 этаж", "#3b6bd6"], M: ["МАРИНА ВИКТОРОВНА · 6 этаж", "#7a1f2e"], B: ["БАРСИК · крыша", "#c46a1a"],
+        D: ["ДЕД МИХАЛЫЧ · в гостях", "#6b5a3a"], U: ["УЧАСТКОВЫЙ СЕМЁНЫЧ · в гостях", "#2f4a7a"], A: ["СТУДЕНТКА АНЯ · в гостях", "#4f8a5a"] };
 
       $("cam").innerHTML = houseSVG();
       $("tim").innerHTML = $("hostT").content.querySelector("svg").innerHTML;
@@ -67,7 +68,7 @@
       // long hooks shrink to stay on two lines
       for (const d of $("hook").querySelectorAll("div")) { d.style.whiteSpace = "nowrap"; d.style.fontSize = Math.min(118, 980 / (Math.max(...EP.hook.map((h) => h.length)) * 0.82)) + "px"; }
       $("cta").firstChild.textContent = EP.cta;
-      $("floors").innerHTML = ["К", 5, 4, 3, 2, 1].map((n) => `<div data-n="${n}">${n}</div>`).join("");
+      $("floors").innerHTML = ["К", 6, 5, 4, 3, 2, 1].map((n) => `<div data-n="${n}">${n}</div>`).join("");
 
       // ----- host rig (same as the street show): arms are a shoulder + elbow chain -----
       const POSE = { rest: [15, -112], explain: [20, -150], open: [34, 96], mic: [-47, -129], offer: [77, 113], low: [12, -60] };
@@ -114,7 +115,7 @@
       const WIDE = { x: 2100, y: WH / 2, z: 1920 / WH };
       const hostShot = (n, z = 1.5) => ({ x: SH0 + 250, y: fy(n) - 470, z });
       const twoShot = (n, z = 0.86) => ({ x: 2110, y: fy(n) - 540, z });
-      const resShot = (n, z) => { const k = RES_S["ZTKGP"[n - 1]]; return { x: RES_X[n] - 6, y: fy(n) - 22 - 430 * k, z: z || (k < 0.8 ? 1.75 : 1.5) }; };
+      const resShot = (n, z, g) => { const k = RES_S[g || "ZTKGPM"[n - 1]]; return { x: RES_X[n] + (g ? GUEST_DX : 0) - 6, y: fy(n) - 22 - 430 * k, z: z || (k < 0.8 ? 1.75 : 1.5) }; };
       const roofShot = { x: 2560, y: 960, z: 1 }, catShot = { x: 2420, y: ROOF - 320, z: 1.55 };
       const K = [{ t: 0, ...WIDE }];
       const key = (t, shot, o = {}) => K.push({ t, ...shot, ...o });
@@ -139,8 +140,8 @@
             key(tm + 0.6, twoShot(n));
             key(l.t1, twoShot(n, 0.9));
           } else {
-            key(l.t0 - 0.1, resShot(n), { cut: 1 });
-            const r = resShot(n);
+            key(l.t0 - 0.1, resShot(n, 0, s.guest), { cut: 1 });
+            const r = resShot(n, 0, s.guest);
             key(l.t1, { ...r, z: r.z * 1.09 });
           }
           prevWho = l.who;
@@ -170,14 +171,14 @@
         planets: $$(".planet"), fish: $$(".fish"), bubs: $$(".bub"), smoke: $$(".smoke"), pigeons: $$(".pigeon"), fl: $$("#floors div"),
       };
       const RES = {};
-      for (const who of "ZTKGPB") {
+      for (const who of "ZTKGPMBDUA") {
         const g = $("res-" + who), q = (c) => g.querySelector(c);
         const sx = (el) => (el ? +el.getAttribute("transform").match(/translate\(([-\d.]+) ([-\d.]+)/)[1] : 0);
         RES[who] = { g, body: q(".rBody"), head: q(".rHead"), eyes: q(".rEyes"), iris: q(".rIris"), brows: q(".rBrows"), mouth: q(".rMouth"), lip: q(".rLip"), aL: q(".rArmL"), aR: q(".rArmR"), sh: sx(q(".rArmR")) };
       }
       // resident arm poses: shoulder°, elbow° (outwards positive)
       const RP = { rest: [5, 6], hold: [18, -95], talkA: [32, 100], talkB: [50, 66], up: [84, 58], phone: [54, 104], sip: [34, 150], point: [70, 20] };
-      const IDLE = { Z: ["hold", "hold"], T: ["rest", "talkB"], K: ["rest", "phone"], G: ["rest", "sip"], P: ["rest", "up"] };
+      const IDLE = { Z: ["hold", "hold"], T: ["rest", "talkB"], K: ["rest", "phone"], G: ["rest", "sip"], P: ["rest", "up"], M: ["rest", "phone"], D: ["rest", "phone"], U: ["rest", "hold"], A: ["rest", "sip"] };
       function resArm(r, side, [a1, a2]) {
         const el = side === "L" ? r.aL : r.aR;
         el.setAttribute("transform", `translate(${side === "L" ? -r.sh : r.sh} -388)${side === "L" ? " scale(-1 1)" : ""} rotate(${-a1})`);
@@ -245,8 +246,14 @@
         $("legR").setAttribute("transform", "");
 
         // residents: busy with their own thing, look up when the lift arrives, gesture when they talk
-        "ZTKGP".split("").forEach((w, i) => {
-          const r = RES[w], seg = lift.at && lift.at.floor === i + 1 ? lift.at : null, ph = i * 1.7;
+        for (const st of SEGS) if (st.guest) {
+          const g = $("guest-" + st.guest);
+          g.style.display = t >= st.ride[0] && t < st.t1 + 0.3 ? "" : "none";
+          g.setAttribute("transform", `translate(${RES_X[st.floor] + GUEST_DX} ${fy(st.floor) - 22})`);
+        }
+        [..."ZTKGPM", ...SEGS.filter((st) => st.guest).map((st) => st.guest)].forEach((w, i) => {
+          const fl = i < 6 ? i + 1 : SEGS.find((st) => st.guest === w).floor;
+          const r = RES[w], seg = lift.at && lift.at.floor === fl ? lift.at : null, ph = i * 1.7;
           const att = seg ? ease((t - seg.ride[1]) / 0.5) : 0, talk = who === w, m = mouthAt(w, t);
           const since = talk ? t - line.t0 : -1;
           r.body.setAttribute("transform", `rotate(${Math.sin(t * 0.8 + ph) * 1.2 - att * 2}) scale(1 ${1 + Math.sin(t * 2.2 + ph) * 0.007})`);
@@ -301,6 +308,8 @@
         const tvf = 0.55 + 0.25 * Math.sin(t * 9) * Math.sin(t * 3.3);
         $("tvglow").setAttribute("opacity", tvf);
         $("tvpic").setAttribute("fill", Math.floor(t * 1.2) % 2 ? "#3a6fb8" : "#27508a");
+        document.querySelectorAll(".mClock").forEach((e, i) => e.setAttribute("transform", `rotate(${(i ? 30 : 270) + t * 6})`));
+        $("mLaptop").setAttribute("d", `M98 -310 ${[130, 160, 190, 230].map((x, k) => `L${x} ${-330 + Math.sin(t * 2 + k * 1.7) * 16 - k * 4}`).join(" ")}`);
         N.steam.forEach((e) => {
           const u = (t * 0.7 + +e.dataset.i * 0.37) % 1;
           e.setAttribute("transform", `translate(${Math.sin(u * 6.3) * 6} ${-u * 60})`);
@@ -355,7 +364,7 @@
         $("floors").style.opacity = inIntro || inOutro ? 0 : 1;
         const pv = seg && !inOutro ? ease((t - seg.ride[1]) / 0.4) * clamp((seg.t1 - t) / 0.25) : 0;
         $("place").style.opacity = pv;
-        if (seg) $("place").textContent = "📍 " + (seg.floor === "roof" ? "крыша · кот Барсик" : NAMES[seg.who][0].toLowerCase().replace(/^./, (x) => x.toUpperCase()));
+        if (seg) $("place").textContent = "📍 " + (seg.floor === "roof" ? "крыша · кот Барсик" : (seg.guest ? `${seg.floor} этаж · в гостях ` : "") + NAMES[seg.guest ? seg.guest : seg.who][0].split(" · ")[0].toLowerCase().replace(/(^|\s)\S/g, (x) => x.toUpperCase()) + (seg.guest ? "" : ` · ${seg.floor} этаж`));
         const card = $("card"), first = seg && seg.lines[0];
         const kv = seg && seg.card && seg.card.big && first ? ease((t - first.t0 - 0.35) / 0.45) * clamp((seg.t1 - t - 0.1) / 0.25) : 0;
         card.style.opacity = kv;

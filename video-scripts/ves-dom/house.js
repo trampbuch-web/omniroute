@@ -4,9 +4,9 @@
 let seed = 1;
 const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 const shade = (hex, k) => "#" + hex.slice(1).match(/../g).map((h) => Math.max(0, Math.min(255, Math.round(parseInt(h, 16) * k))).toString(16).padStart(2, "0")).join("");
-const WW = 4200, WH = 7400, BX = 1350, BW = 1500, FH = 1200, F1 = 7000, ROOF = F1 - 5 * FH;
+const WW = 4200, WH = 8600, BX = 1350, BW = 1500, FH = 1200, F1 = 8200, ROOF = F1 - 6 * FH;
 const SH0 = BX + 40, SH1 = SH0 + 380, RX0 = SH1 + 30, RX1 = BX + BW - 40; // shaft and room spans
-const fy = (n) => F1 - FH * (n - 1); // floor line of floor n (1..5)
+const fy = (n) => F1 - FH * (n - 1); // floor line of floor n (1..6)
 const R = (x, y, w, h, f, e = "") => `<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f}" ${e}/>`;
 const C = (x, y, r, f, e = "") => `<circle cx="${x}" cy="${y}" r="${r}" fill="${f}" ${e}/>`;
 const E = (x, y, rx, ry, f, e = "") => `<ellipse cx="${x}" cy="${y}" rx="${rx}" ry="${ry}" fill="${f}" ${e}/>`;
@@ -43,7 +43,7 @@ const DEFS = `<defs>
 // ---------- outside: night sky, moon, neighbours, yard ----------
 function exterior() {
   let s = R(0, 0, WW, WH, "url(#h-sky)");
-  s += times(190, (i) => C(rnd() * WW, rnd() * 5200, 2 + rnd() * 5, "#fff", `opacity="${0.25 + rnd() * 0.6}" ${i < 34 ? 'class="tw"' : ""}`));
+  s += times(220, (i) => C(rnd() * WW, rnd() * (F1 - 1800), 2 + rnd() * 5, "#fff", `opacity="${0.25 + rnd() * 0.6}" ${i < 34 ? 'class="tw"' : ""}`));
   s += G("translate(2890 470)", C(0, 0, 520, "url(#h-moon)") + C(0, 0, 190, "#fff3c4") + C(-60, -50, 34, "#ecdca6") + C(50, 60, 48, "#ecdca6") + C(70, -60, 20, "#ecdca6"));
   // far skyline
   for (let x = -60; x < WW; x += 150 + rnd() * 90) {
@@ -236,6 +236,30 @@ function flat5(y) {
   return s + roomShade(y);
 }
 
+
+// ---------- floor 6: Марина Викторовна (финансист, работает из дома) ----------
+function flat6(y) {
+  let s = room(y, "#dfe3ea", "", "#8a6a4a") + times(9, (i) => R(RX0 + i * 110, y - 1120, 4, 1036, "#c9ced8"));
+  s += ceilLamp(2300, y, "#3a3d46");
+  s += win(1900, y - 990, 330, 400, "#c9b8a6");
+  // доска с планом и графиком
+  s += G(`translate(2470 ${y - 900})`, R(-170, -110, 340, 230, "#fff", 'stroke="#8d95a3" stroke-width="8"') + T(-150, -70, "ПЛАН-2027", 26, "#2b4ac8", 'font-weight="900"') + L("M-150 -40 h150 M-150 -10 h110 M-150 20 h130", "#8d95a3", 5) + `<path id="mChart" d="M-150 90 L-90 60 L-40 75 L10 30 L60 45 L120 0" fill="none" stroke="#2e8a4a" stroke-width="7" stroke-linejoin="round"/>` + C(120, 0, 8, "#2e8a4a") + R(-170, 120, 340, 12, "#c9ced8"));
+  // часы «Москва / Нью-Йорк»
+  s += times(2, (i) => G(`translate(${2200 + i * 120} ${y - 990})`, C(0, 0, 42, "#fff", 'stroke="#3a3d46" stroke-width="6"') + `<path class="mClock" data-i="${i}" d="M0 0 V-28" stroke="#222" stroke-width="5" stroke-linecap="round"/>` + T(0, 66, ["МОСКВА", "НЬЮ-ЙОРК"][i], 15, "#3a3d46", 'text-anchor="middle" font-weight="900"')));
+  // стол: ноутбук с графиком, калькулятор, папки, лампа, кофе
+  s += G(`translate(1930 ${y - 36})`, R(0, -270, 330, 22, "#3a2a20", 'rx="6"') + R(14, -250, 16, 250, "#2a1d15") + R(300, -250, 16, 250, "#2a1d15") +
+    R(80, -400, 170, 120, "#1d1f27", 'rx="8"') + R(90, -390, 150, 100, "#0d1424") + `<path id="mLaptop" d="M98 -310 L130 -330 L160 -320 L190 -350 L230 -340" fill="none" stroke="#e3262f" stroke-width="5"/>` + P("M60 -280 h210 l20 12 h-250 Z", "#3a3d46") +
+    R(20, -320, 46, 48, "#c9ced8", 'rx="6"') + times(9, (i) => R(26 + (i % 3) * 13, -306 + Math.floor(i / 3) * 12, 9, 8, "#3a3d46", 'rx="2"')) + R(24, -316, 38, 8, "#9fe0b0") +
+    times(4, (i) => R(270 - i * 4, -300 - i * 16, 56, 16, ["#e3262f", "#2b4ac8", "#e8a02e", "#5c8a3a"][i], 'rx="3"')) +
+    L("M300 -270 L300 -380 L250 -420", "#1d1f27", 7) + P("M226 -432 l46 -14 l14 40 Z", "#1d1f27") + E(256, -410, 22, 9, "#fff3c4") + lampGlow(256, -380, 240, "h-warm", 0.6) +
+    R(180, -300, 28, 30, "#fff", 'rx="5"') + `<path class="steam" data-i="6" d="M190 -310 q-8 -16 0 -32 q8 -16 0 -32" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>`);
+  // кресло, денежное дерево, сейф
+  s += G(`translate(2170 ${y - 36})`, R(-50, -170, 100, 30, "#1d1f27", 'rx="10"') + P("M-44 -170 q-8 -170 8 -210 h72 q16 40 8 210 Z", "#1d1f27") + L("M0 -140 V-40 M0 -40 L-50 0 M0 -40 L50 0", "#3a3d46", 10));
+  s += G(`translate(2720 ${y - 36})`, P("M-40 0 h80 l-10 -80 h-60 Z", "#c8862e") + L("M0 -80 q-10 -100 -50 -170 M0 -80 q4 -130 40 -200 M0 -80 q-2 -80 -6 -230", "#5c4a2a", 7) + times(14, (i) => E(-50 + ((i * 37) % 100), -180 - ((i * 53) % 150), 16, 10, i % 3 ? "#4f9a3a" : "#3f8a3f", `transform="rotate(${(i * 41) % 90 - 45} ${-50 + ((i * 37) % 100)} ${-180 - ((i * 53) % 150)})"`)) + times(3, (i) => C(-30 + i * 30, -150 - i * 40, 9, "#e2b25a")));
+  s += G(`translate(2560 ${y - 36})`, R(-70, -150, 140, 150, "#3a3d46", 'rx="8"') + R(-58, -138, 116, 126, "#4a4f5c", 'rx="6"') + C(0, -76, 26, "none", 'stroke="#c9ced8" stroke-width="6"') + L("M0 -76 L18 -90", "#c9ced8", 5) + R(44, -96, 10, 40, "#c9ced8", 'rx="4"'));
+  return s + roomShade(y);
+}
+
 // ---------- people ----------
 // origin = feet centre, ~640 tall; classes are animated by dom.html (arms: shoulder + elbow, head, eyes, brows, mouth)
 function person(id, o) {
@@ -322,7 +346,53 @@ const PEOPLE = {
     brows: "M-50 -546 Q-30 -556 -14 -548 M14 -548 Q30 -556 50 -546",
     propR: G("rotate(0)", P("M0 -120 q30 36 22 96 h-44 q-8 -60 22 -96 Z", "#f4f4f4") + C(0, -70, 10, "#4fa8ff") + P("M-22 -40 l-18 26 h18 Z M22 -40 l18 26 h-18 Z", "#e3262f") + P("M-10 -24 q10 34 20 0 Z", "#ffb03a")),
   }),
+  M: () => person("M", {
+    skin: "#f0c8ac", sh: 70, hip: 72, top: "#7a1f2e", bottom: "#2a2a35", eye: "#3a5a3a", lash: "#1a1218", lashW: 4, browC: "#5a2a1e", browW: 5, lip: "#b8323e", lipW: 5, blush: 0.4,
+    legs: R(-50, -170, 40, 164, "#e8bfa0", 'rx="16"') + R(10, -170, 40, 164, "#e8bfa0", 'rx="16"') + P("M-72 -200 h144 l-8 100 h-128 Z", "#2a2a35"),
+    shoes: P("M-60 -14 q20 -14 40 0 l4 14 h-50 Z", "#1a1218") + P("M20 -14 q20 -14 40 0 l4 14 h-50 Z", "#1a1218") + R(-30, -10, 6, 12, "#1a1218") + R(50, -10, 6, 12, "#1a1218"),
+    torso: P("M-70 -392 Q0 -410 70 -392 L76 -196 Q0 -184 -76 -196 Z", "#7a1f2e"),
+    body: P("M-26 -398 L0 -340 L26 -398 Z", "#f4f1ea") + L("M-30 -396 L-6 -300 M30 -396 L6 -300", "#5a1520", 6) + C(0, -270, 6, "#e2b25a") + C(0, -230, 6, "#e2b25a") + L("M-24 -380 q24 50 48 0", "#e2b25a", 2.5),
+    hairBack: P("M-92 -500 Q-100 -614 0 -616 Q100 -614 92 -500 L96 -440 Q60 -424 50 -470 L-50 -470 Q-60 -424 -96 -440 Z", "#7a2e1e"),
+    hairFront: P("M-86 -520 Q-84 -604 0 -606 Q84 -604 86 -520 Q50 -572 -20 -560 Q-60 -548 -86 -520 Z", "#7a2e1e"),
+    headX: R(-50, -528, 40, 30, "none", 'rx="6" stroke="#3a1a10" stroke-width="4"') + R(10, -528, 40, 30, "none", 'rx="6" stroke="#3a1a10" stroke-width="4"') + L("M-10 -516 h20", "#3a1a10", 4) + L("M-50 -510 q-30 60 -20 120 M50 -510 q30 60 20 120", "#e2b25a", 2) + C(-80, -470, 7, "#e2b25a") + C(80, -470, 7, "#e2b25a"),
+    propR: R(-24, -60, 48, 64, "#3a3d46", 'rx="6"') + R(-18, -54, 36, 14, "#9fe0b0") + times(9, (i) => R(-18 + (i % 3) * 13, -34 + Math.floor(i / 3) * 12, 9, 8, "#c9ced8", 'rx="2"')),
+  }),
 };
+
+// guests: neighbours from elsewhere who drop in on any floor
+const GUESTS = {
+  D: () => person("D", {
+    skin: "#e9bfa0", sh: 82, hip: 82, top: "#6b5a3a", bottom: "#3a3d46", eye: "#5a6f8a", browC: "#d8d4d0", browW: 9, blush: 0.5,
+    shoes: E(-38, -8, 34, 14, "#2a1d15") + E(38, -8, 34, 14, "#2a1d15"),
+    body: L("M0 -396 V-170", "#4a3e28", 5) + times(5, (i) => C(10, -360 + i * 44, 6, "#c9b08a")) + R(-70, -260, 40, 44, "#4a3e28", 'rx="6" opacity="0.7"') + R(30, -260, 40, 44, "#4a3e28", 'rx="6" opacity="0.7"'),
+    face: P("M-70 -480 Q-60 -400 0 -390 Q60 -400 70 -480 Q40 -440 0 -444 Q-40 -440 -70 -480 Z", "#e8e4de") + P("M-34 -462 Q0 -474 34 -462 Q20 -448 0 -452 Q-20 -448 -34 -462 Z", "#e8e4de"),
+    hairBack: P("M-86 -500 Q-92 -460 -76 -440 L-70 -520 Z M86 -500 Q92 -460 76 -440 L70 -520 Z", "#d8d4d0"),
+    hairFront: P("M-92 -556 Q-80 -626 0 -628 Q84 -626 96 -560 L120 -548 Q20 -530 -92 -548 Z", "#4a4a4a") + P("M-92 -556 Q-80 -626 0 -628 Q84 -626 96 -560", "none", 'stroke="#3a3a3a" stroke-width="4"') + C(0, -628, 7, "#3a3a3a"),
+    brows: "M-52 -540 Q-30 -552 -12 -542 M12 -542 Q30 -552 52 -540",
+    propR: R(-40, -90, 80, 100, "#efe6d2", 'transform="rotate(-8)"') + L("M-30 -72 h56 M-30 -56 h40 M-30 -40 h52 M-30 -24 h36", "#8a8070", 4, 'transform="rotate(-8)"') + T(0, -78, "ВЕСТИ", 0, "none"),
+  }),
+  U: () => person("U", {
+    skin: "#efc8a8", sh: 84, hip: 78, top: "#2f4a7a", bottom: "#24304a", eye: "#4a3a2a", browC: "#3a2e26", browW: 8,
+    shoes: E(-38, -8, 36, 14, "#111") + E(38, -8, 36, 14, "#111"),
+    body: R(-78, -226, 156, 24, "#1a1a22", 'rx="6"') + R(-14, -226, 28, 24, "#c9b08a", 'rx="4"') + L("M0 -396 V-226", "#22385e", 5) + times(4, (i) => C(10, -370 + i * 40, 6, "#c9b08a")) + R(-70, -360, 44, 30, "#22385e", 'rx="4"') + R(30, -360, 44, 30, "#22385e", 'rx="4"') + R(-80, -400, 30, 12, "#c9b08a", 'rx="3"') + R(50, -400, 30, 12, "#c9b08a", 'rx="3"'),
+    face: P("M-30 -462 Q0 -474 30 -462 Q0 -456 -30 -462 Z", "#3a2e26"),
+    hairBack: P("M-84 -500 Q-90 -470 -76 -450 L-70 -520 Z M84 -500 Q90 -470 76 -450 L70 -520 Z", "#3a2e26"),
+    hairFront: P("M-92 -560 Q-86 -640 0 -644 Q86 -640 92 -560 Z", "#2f4a7a") + R(-96, -566, 192, 22, "#1a1a22", 'rx="6"') + P("M-80 -548 Q0 -520 100 -540 L96 -528 Q0 -508 -80 -536 Z", "#111") + C(0, -600, 14, "#c9b08a"),
+    propR: R(-36, -80, 72, 92, "#3a6fb8", 'rx="4"') + R(-30, -74, 60, 80, "#efe6d2") + L("M-22 -60 h44 M-22 -46 h30 M-22 -32 h40", "#8a8070", 4),
+  }),
+  A: () => person("A", {
+    skin: "#f2cdb2", sh: 64, hip: 64, top: "#5f9a6a", bottom: "#2a3550", eye: "#4a3a2a", eyeR: 13, lash: "#1a1218", lashW: 4, browC: "#3a1e2a", browW: 5, lip: "#c45a73", lipW: 4, blush: 0.5,
+    shoes: R(-64, -34, 60, 34, "#e9eef6", 'rx="14"') + R(4, -34, 60, 34, "#e9eef6", 'rx="14"') + R(-64, -10, 60, 10, "#3a3d46", 'rx="5"') + R(4, -10, 60, 10, "#3a3d46", 'rx="5"'),
+    torso: P("M-66 -392 Q0 -410 66 -392 L74 -176 Q0 -160 -74 -176 Z", "#5f9a6a"),
+    body: P("M-40 -260 h80 l6 60 h-92 Z", "#4f8a5a") + L("M-14 -388 v60 M14 -388 v54", "#e9eef6", 4) + L("M-66 -380 L-40 -200 M66 -380 L40 -200", "#3a3d46", 10) + T(0, -300, "ВУЗ", 30, "#e9eef6", 'text-anchor="middle" font-weight="900"'),
+    front: L("M-62 -404 Q0 -350 62 -404", "#1d1f27", 10) + R(-84, -426, 30, 44, "#1d1f27", 'rx="10"') + R(54, -426, 30, 44, "#1d1f27", 'rx="10"'),
+    hairBack: P("M-90 -510 Q-98 -620 0 -622 Q98 -620 90 -510 L98 -330 Q60 -340 52 -420 L-52 -420 Q-60 -340 -98 -330 Z", "#4a2a5a"),
+    hairFront: P("M-84 -526 Q-80 -604 0 -606 Q80 -604 84 -526 Q40 -560 0 -566 Q-50 -560 -84 -526 Z", "#4a2a5a") + R(-70, -520, 26, 30, "#b48ad8", 'rx="8" opacity="0.8"'),
+    headX: C(-82, -470, 6, "#c9ced8") + C(82, -470, 6, "#c9ced8") + C(-72, -490, 4, "#c9ced8"),
+    propR: R(-22, -64, 44, 70, "#fff", 'rx="8"') + R(-22, -44, 44, 18, "#5f9a6a") + `<path class="steam" data-i="7" d="M-4 -78 q-10 -16 0 -32 q10 -16 0 -32" stroke="#fff" stroke-width="6" fill="none" stroke-linecap="round" opacity="0.5"/>`,
+  }),
+};
+
 
 // Барсик: рыжий кот на крыше (тот самый, чья лежанка пустует на первом этаже)
 const CAT = `<g id="res-B" class="res"><ellipse cx="0" cy="2" rx="110" ry="12" fill="#000" opacity="0.3"/>
@@ -338,13 +408,14 @@ const CAT = `<g id="res-B" class="res"><ellipse cx="0" cy="2" rx="110" ry="12" f
     <path d="M-16 -216 h16 l-8 10 Z" fill="#f08a9a"/><ellipse class="rMouth" cx="-8" cy="-192" rx="12" ry="2" fill="#7e222b"/><path d="M-8 -206 q-12 14 -24 4 M-8 -206 q12 14 24 4" stroke="#8a5a34" stroke-width="3" fill="none"/>
     <path d="M-50 -206 l-70 -12 M-50 -196 l-70 6 M34 -206 l70 -12 M34 -196 l70 6" stroke="#fff" stroke-width="3" stroke-linecap="round"/></g></g></g>`;
 
-const RES_X = { 1: 2290, 2: 2310, 3: 2330, 4: 2290, 5: 2360, roof: 2380 };
-const RES_S = { Z: 0.95, T: 1.04, K: 1, G: 1.02, P: 0.72, B: 1 };
+const RES_X = { 1: 2290, 2: 2310, 3: 2330, 4: 2290, 5: 2360, 6: 2330, roof: 2380 };
+const GUEST_DX = 260; // a guest stands this far to the right of the resident
+const RES_S = { Z: 0.95, T: 1.04, K: 1, G: 1.02, P: 0.72, M: 0.98, D: 0.96, U: 1.04, A: 0.94, B: 1 };
 
 // ---------- the house itself ----------
 function building() {
   let s = "";
-  const GRAF = ["Здесь был Вася", "ЦОЙ ЖИВ", "Оля + Дима = ♡", "кв. 8, не сверли!", "Барсик, вернись"];
+  const GRAF = ["Здесь был Вася", "ЦОЙ ЖИВ", "Оля + Дима = ♡", "кв. 8, не сверли!", "Барсик, вернись", "6 этаж — тише!"];
   // roof: slab, parapet, lift machine room, aerials, vent with smoke, pigeons
   s += R(BX - 30, ROOF - 60, BW + 60, 60, "url(#h-cut)") + R(BX - 30, ROOF - 76, BW + 60, 18, "#eef3fb") + R(BX - 30, ROOF - 150, 26, 90, "#6f6a62") + R(BX + BW + 4, ROOF - 150, 26, 90, "#6f6a62");
   s += G(`translate(${SH0 - 20} ${ROOF - 60})`, R(0, -330, 420, 330, "#7d776c") + R(-14, -352, 448, 26, "#5a554c") + R(-14, -366, 448, 16, "#eef3fb") + R(40, -280, 340, 250, "#22242e") + `<g id="mwheel" transform="translate(210 -160)">${C(0, 0, 84, "#3a3d46", 'stroke="#8d95a3" stroke-width="10"')}${L("M-84 0 H84 M0 -84 V84 M-60 -60 L60 60 M-60 60 L60 -60", "#8d95a3", 6)}${C(0, 0, 18, "#e3262f")}</g>` + R(60, -70, 110, 40, "#e8a02e") + T(115, -42, "380 В", 20, "#222", 'text-anchor="middle" font-weight="900"'));
@@ -354,8 +425,8 @@ function building() {
   s += times(2, (i) => `<g class="pigeon" data-i="${i}" transform="translate(${BX + 470 + i * 96} ${ROOF - 76})">${E(0, -22, 34, 22, "#8d95a3")}${P("M20 -26 l40 10 l-36 12 Z", "#6f7786")}<g class="pHead">${C(-26, -48, 16, "#6f7786")}${P("M-40 -48 l-16 4 l16 4 Z", "#e8a02e")}${C(-30, -52, 3.5, "#ff8a2a")}</g>${L("M-8 0 v-6 M8 0 v-6", "#e8a02e", 4)}</g>`);
   // shell + floors
   s += R(BX, ROOF, BW, F1 - ROOF + 90, "url(#h-cut)");
-  const flats = [flat1, flat2, flat3, flat4, flat5];
-  for (let n = 1; n <= 5; n++) {
+  const flats = [flat1, flat2, flat3, flat4, flat5, flat6];
+  for (let n = 1; n <= 6; n++) {
     const y = fy(n);
     s += R(SH0, y - 1200, 380, 1200, "url(#h-brick)") + R(SH0 + 30, y - 1200, 14, 1200, "#3d414f") + R(SH1 - 44, y - 1200, 14, 1200, "#3d414f");
     s += times(4, (i) => R(SH0 + 26, y - 1100 + i * 300, 22, 14, "#555a6b") + R(SH1 - 48, y - 1100 + i * 300, 22, 14, "#555a6b"));
@@ -381,7 +452,7 @@ function building() {
     <rect x="${SH0 + 46}" y="-838" width="288" height="844" rx="10" fill="#c9ced8"/><rect x="${SH0 + 56}" y="-828" width="268" height="820" fill="#e3e6ec"/>
     ${R(SH0 + 56, -828, 268, 820, "url(#h-side)")}${R(SH0 + 56, -300, 268, 292, "#a8763e")}${times(5, (i) => R(SH0 + 56 + i * 54, -300, 3, 292, "#8a5a2a"))}${R(SH0 + 56, -318, 268, 18, "#8d95a3")}
     ${R(SH0 + 70, -700, 96, 330, "#bcd4e6", 'rx="6" opacity="0.8"')}${L(`M${SH0 + 84} -680 l40 -10 M${SH0 + 84} -650 l66 -18`, "#fff", 6, 'opacity="0.7"')}
-    ${R(SH0 + 264, -640, 46, 230, "#8d95a3", 'rx="6"')}${times(5, (i) => `<circle class="btn" data-n="${5 - i}" cx="${SH0 + 287}" cy="${-612 + i * 40}" r="13" fill="#3a3d46"/><text x="${SH0 + 287}" y="${-605 + i * 40}" font-size="17" font-weight="900" text-anchor="middle" fill="#fff" font-family="DejaVu Sans, Arial">${5 - i}</text>`)}
+    ${R(SH0 + 264, -660, 46, 260, "#8d95a3", 'rx="6"')}${times(6, (i) => `<circle class="btn" data-n="${6 - i}" cx="${SH0 + 287}" cy="${-640 + i * 40}" r="13" fill="#3a3d46"/><text x="${SH0 + 287}" y="${-633 + i * 40}" font-size="17" font-weight="900" text-anchor="middle" fill="#fff" font-family="DejaVu Sans, Arial">${6 - i}</text>`)}
     ${R(SH0 + 150, -812, 80, 46, "#111", 'rx="6"')}<text id="liftDisp" x="${SH0 + 190}" y="-776" font-size="36" font-weight="900" text-anchor="middle" fill="#ff4f3a" font-family="DejaVu Sans Mono, monospace">1</text>
     ${R(SH0 + 80, -350, 150, 9, "#6f7786", 'rx="4"')}
     ${G(`translate(${SH0 + 96} -240) rotate(-8)`, T(0, 0, "♡ лифт", 22, "#6b4226", 'opacity="0.7" font-style="italic"'))}
@@ -391,10 +462,11 @@ function building() {
     <rect x="${SH0 + 46}" y="-8" width="288" height="16" fill="#6f7786"/><rect x="${SH0 + 46}" y="-838" width="14" height="844" fill="#8d95a3"/><rect x="${SH0 + 320}" y="-838" width="14" height="120" fill="#8d95a3"/>
   </g>`;
   // the residents (in front of everything in their rooms) and the cat on the roof
-  for (let n = 1; n <= 5; n++) {
-    const who = "ZTKGP"[n - 1];
+  for (let n = 1; n <= 6; n++) {
+    const who = "ZTKGPM"[n - 1];
     s += G(`translate(${RES_X[n]} ${fy(n) - 22}) scale(${RES_S[who]})`, PEOPLE[who]());
   }
+  for (const g in GUESTS) s += `<g id="guest-${g}" style="display:none">${G(`scale(${RES_S[g]})`, GUESTS[g]())}</g>`;
   s += G(`translate(${RES_X.roof} ${ROOF - 76})`, CAT);
   return s;
 }
