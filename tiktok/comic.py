@@ -310,6 +310,38 @@ def p_seat():
     return im
 
 
+def p_car():
+    im, d = _c()
+    d.polygon([(40, 330), (120, 230), (380, 230), (470, 330)], fill=(180, 40, 40), outline=INK, width=OW)
+    d.rounded_rectangle((20, 320, 500, 420), 30, fill=(200, 50, 50), outline=INK, width=OW)
+    d.polygon([(140, 245), (240, 245), (240, 320), (85, 320)], fill=(150, 200, 240), outline=INK, width=8)
+    d.polygon([(260, 245), (370, 245), (430, 320), (260, 320)], fill=(150, 200, 240), outline=INK, width=8)
+    for x in (130, 390): d.ellipse((x - 60, 370, x + 60, 490), fill=(30, 30, 36), outline=INK, width=OW); d.ellipse((x - 25, 405, x + 25, 455), fill=(170, 170, 180))
+    d.ellipse((460, 340, 495, 370), fill=(255, 230, 120), outline=INK, width=5)
+    return im
+
+
+def p_cup():
+    im, d = _c()
+    for k in range(3):
+        x = 200 + k * 50; d.line([(x + 15 * math.sin(y / 20), y) for y in range(60, 200, 10)], fill=(255, 255, 255), width=10)
+    d.ellipse((60, 400, 460, 470), fill="white", outline=INK, width=OW)
+    d.polygon([(130, 220), (390, 220), (360, 430), (160, 430)], fill="white", outline=INK, width=OW)
+    d.arc((340, 250, 450, 360), -90, 90, fill=INK, width=24); d.ellipse((130, 205, 390, 245), fill=(110, 60, 30), outline=INK, width=8)
+    return im
+
+
+def p_screen():
+    im, d = _c()
+    d.rectangle((30, 60, 490, 400), fill=(30, 30, 36), outline=INK, width=OW)
+    r = np.random.default_rng(3)
+    for y in range(80, 385, 8):
+        g = int(r.integers(60, 200)); d.line((50, y, 470, y), fill=(g, g, int(g * 1.1)), width=5)
+    d.rectangle((60, 90, 200, 125), fill=RED); d.text((130, 108), "REC", font=F("title", 26), fill="white", anchor="mm")
+    d.rectangle((240, 400, 280, 480), fill=INK); d.rectangle((150, 470, 370, 500), fill=INK)
+    return im
+
+
 PROPS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 EMOJI2PROP = {"🕴️": "person", "👤": "person", "👷": "person", "🧑‍💻": "person", "👥": "crowd", "✈️": "plane", "🛫": "plane",
               "🚪": "door", "💰": "money", "💵": "money", "💸": "money", "📱": "phone", "✉️": "letter", "⏳": "clock",

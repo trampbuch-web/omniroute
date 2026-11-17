@@ -28,6 +28,8 @@ for i, c in enumerate(clips):
         cur += 0.5
     starts.append(cur); cur += dur + GAP
 total = cur + 1.6
+END = SPEC.get("end_card"); END_T = total
+if END: total += 1.0  # 1 s poster at the very end: series title + episode number (handy for picking covers)
 ends = [s + len(c) / SR for s, c in zip(starts, clips)]
 words = []
 for i in range(len(L)):
@@ -327,6 +329,7 @@ def hud(im, t, ep):
 
 
 import comic as C
+import char as CH
 
 
 def comic_frame(t, captions=True):
@@ -349,7 +352,25 @@ def comic_frame(t, captions=True):
         dp.rectangle((0, 0, 120, C.PH), fill=(255, 30, 30, 90) if side else (30, 60, 255, 90))
         dp.rectangle((C.PW - 120, 0, C.PW, C.PH), fill=(30, 60, 255, 90) if side else (255, 30, 30, 90))
     items = sc.get("items", [])
-    name = sc.get("prop") or C.EMOJI2PROP.get(sc.get("emoji", ""), "question" if sc.get("emoji") else None)
+    if sc.get("set"): CH.draw_set(panel, sc["set"], t); dp = ImageDraw.Draw(panel, "RGBA")
+    for pr_ in sc.get("props", []):
+        im_p = C.prop(pr_["name"]); sz = int(520 * pr_.get("s", 0.5)); im_p = im_p.resize((sz, sz), Image.LANCZOS)
+        panel.alpha_composite(im_p, (int(pr_.get("x", 500) - sz / 2), int(pr_.get("y", CH.GROUND) - sz)))
+    anchors = {}
+    for ac in sc.get("actors", []):
+        if lt >= ac.get("at", 0):
+            talking = any(L[j].get("say", {}).get("who") == ac.get("who") and starts[j] <= t < ends[j] for j in sc["lines"])
+            anchors[ac.get("who")] = CH.draw_actor(panel, ac, SPEC.get("cast", {}), lt - ac.get("at", 0), talking)
+    for j in sc["lines"]:
+        sy = L[j].get("say")
+        if sy and starts[j] <= t < ends[j] + 0.3 and sy.get("who") in anchors:
+            CH.balloon(panel, anchors[sy["who"]], sy["text"], (t - starts[j]) / 0.3)
+    if sc.get("actors") or sc.get("set"):
+        dp = ImageDraw.Draw(panel, "RGBA")
+        if sc.get("big"): C.title_text(dp, sc["big"], C.PW / 2, 955, 70, col=C.YEL)
+        if sc.get("sub"): panel.alpha_composite(C.narration_box(sc["sub"]), (30, 30))
+        sc = dict(sc, big=None, sub=None, prop=None, emoji=None)
+    name = sc.get("prop") or C.EMOJI2PROP.get(sc.get("emoji") or "", "question" if sc.get("emoji") else None)
     if name:
         dur = max(1.0, sc["end"] - sc["start"]); k = ease(lt / 0.3)
         size = int((260 if items else (480 if sc.get("big") else 600)) * (0.55 + 0.45 * k) * (1 + 0.08 * min(1, lt / dur)))
@@ -378,15 +399,22 @@ def comic_frame(t, captions=True):
         hit = [s_ for s_ in L[j].get("sfx", []) if s_ in C.SFX]
         if hit and 0 <= t - starts[j] < 0.9 and scene_of[j] == si:
             bu = C.burst(C.SFX[hit[0]], (t - starts[j]) / 0.9); panel.alpha_composite(bu, (int(C.PW - bu.width + 20), 120))
+    if sc_cam := scenes[si].get("actors") or scenes[si].get("set"):
+        z = 1 + 0.07 * min(1, lt / max(1.0, scenes[si]["end"] - scenes[si]["start"]))
+        zw, zh = int(C.PW / z), int(C.PH / z); fx_, fy_ = scenes[si].get("focus", (C.PW / 2, C.PH / 2))
+        x0 = int(min(max(fx_ - zw / 2, 0), C.PW - zw)); y0 = int(min(max(fy_ - zh / 2, 0), C.PH - zh))
+        panel = panel.crop((x0, y0, x0 + zw, y0 + zh)).resize((C.PW, C.PH), Image.BICUBIC); dp = ImageDraw.Draw(panel, "RGBA")
+    shake = any("impact" in L[j].get("sfx", []) and 0 <= t - starts[j] < 0.3 for j in range(len(L)))
     dp.rectangle((0, 0, C.PW - 1, C.PH - 1), outline=C.INK, width=14)
     k = ease(lt / 0.3) if si else 1.0
     pr = panel.rotate((1.2 if si % 2 else -1.2) * (1 + 2 * (1 - k)), expand=True, resample=Image.BICUBIC)
-    im.alpha_composite(pr, (int(W / 2 - pr.width / 2 + (1 - k) * 1100), int(200 + C.PH / 2 - pr.height / 2)))
+    sx = int(10 * np.sin(t * 90)) if shake else 0
+    im.alpha_composite(pr, (int(W / 2 - pr.width / 2 + (1 - k) * 1100) + sx, int(200 + C.PH / 2 - pr.height / 2) + sx // 2))
     for st, txt in stamps:
         if st <= t and scene_of[line_at(st)] == si: stamp(im, txt, t - st)
     if captions:
         gs = [g for g in groups if g[0][1] <= t]
-        if gs and t < ends[-1] + 0.6:
+        if gs and t < min(ends[-1] + 0.6, END_T):
             g = gs[-1]; d = ImageDraw.Draw(im)
             parts = [w.upper() for w, _ in g]; f = C.F("title", 70)
             while sum(d.textlength(p + " ", font=f) for p in parts) > 900: f = C.F("title", f.size - 4)
@@ -398,7 +426,20 @@ def comic_frame(t, captions=True):
     return im.convert("RGB")
 
 
+def poster():
+    im = Image.new("RGBA", (W, H), (14, 16, 24, 255)); panel = C.halftone((34, 40, 60))
+    if END.get("set"): CH.draw_set(panel, END["set"], 0)
+    if END.get("actor"): CH.draw_actor(panel, dict(END["actor"]), SPEC.get("cast", {}), 0.5)
+    dp = ImageDraw.Draw(panel); dp.rectangle((0, 0, C.PW - 1, C.PH - 1), outline=C.INK, width=14)
+    im.alpha_composite(panel, (40, 330)); d = ImageDraw.Draw(im)
+    C.title_text(d, END["title"], W / 2, 190, 76, 1000, C.YEL)
+    C.title_text(d, END["ep"], W / 2, 1440, 130, 1000, (255, 255, 255))
+    if END.get("name"): C.title_text(d, END["name"], W / 2, 1580, 64, 1000, C.YEL)
+    return im.convert("RGB")
+
+
 def frame(t, captions=True):
+    if END and t >= END_T: return poster()
     if SPEC.get("style") == "comic": return comic_frame(t, captions)
     i = line_at(t); sc = scenes[scene_of[i]]
     im = bgimg(sc.get("bg", "dark"))
@@ -411,7 +452,7 @@ def frame(t, captions=True):
     hud(im, t, L[i]["ep"])
     if captions:
         gs = [g for g in groups if g[0][1] <= t]
-        if gs and t < ends[-1] + 0.6:
+        if gs and t < min(ends[-1] + 0.6, END_T):
             g = gs[-1]; d = ImageDraw.Draw(im)
             parts = [w.upper() for w, _ in g]; sz = 78
             while sum(d.textlength(p + " ", font=font(sz)) for p in parts) > 940: sz -= 4

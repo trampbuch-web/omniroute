@@ -33,7 +33,9 @@ A `scene` lasts until the next line that has one: `bg` (blue navy green red dark
 Real events: only well-known, verifiable facts.
 
 ## Daily routine (two videos a day, ready by 10:30 MSK)
-1. Series episode: read `series.md`, write `specs/nolik-s01eNN.json`, build, update `series.md`.
+1. Series episode: «Город, который умер вчера» — read `city/series.md` + the episode's script in `city/PRODUCTION.md`,
+   write `specs/city-s01eNN.json` (comic style with characters, see `specs/city-s01e01.json`), build, update `city/series.md`.
+   The old «Нолик» series (`series.md`) is finished/replaced — do not continue it.
 2. Documentary story (comic style — NO emoji): spec `"style": "comic"`; every scene uses `"prop"` (one of:
    balloon, boat, bomb, building, city, clock, crowd, door, eye, flashlight, folder, gavel, head, island, key, letter, lock, magnifier, money, painting, person, phone, plane, police, prison, question, rain, seat, spoon, suitcase, trees, waves) instead of `emoji`, plus `big` (comic title), `sub` (yellow narration box), `fx`
    (alarm/police/rings/shake), `sfx` (impact/glitch/siren/knock/coins/gavel/phone/typing draw a «БАХ!»-style burst),

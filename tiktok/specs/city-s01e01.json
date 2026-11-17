@@ -1,0 +1,382 @@
+{
+ "id": "city-s01e01",
+ "kind": "story",
+ "style": "comic",
+ "voice": "narrator2",
+ "tempo": 1.22,
+ "gap": 0.15,
+ "cast": {
+  "mark": {
+   "top": "coat",
+   "hair": "short",
+   "color": [
+    74,
+    84,
+    62
+   ],
+   "pants": [
+    38,
+    44,
+    60
+   ],
+   "hair_color": [
+    42,
+    30,
+    24
+   ],
+   "skin": [
+    236,
+    196,
+    166
+   ]
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ТИШИНА",
+   "date": "07:00",
+   "music": "m3"
+  },
+  "2": {
+   "title": "ГОРОД БЕЗ ЛЮДЕЙ",
+   "date": "07:40",
+   "music": "m3"
+  },
+  "3": {
+   "title": "СООБЩЕНИЕ",
+   "date": "08:15",
+   "music": "m1"
+  },
+  "4": {
+   "title": "ЗАПИСЬ",
+   "date": "ЗАВТРА",
+   "music": "m1"
+  }
+ },
+ "hud_label": "СЕРИЯ 1",
+ "end_card": {
+  "title": "ГОРОД, КОТОРЫЙ УМЕР ВЧЕРА",
+  "ep": "СЕРИЯ 1",
+  "name": "Город без людей",
+  "set": "street",
+  "actor": {
+   "who": "mark",
+   "x": 500,
+   "pose": "idle",
+   "mood": "wide",
+   "s": 1.1
+  }
+ },
+ "description": "Он проснулся — а город пуст. И ему пришло сообщение: «Не выходи в 19:00. Ты уже однажды умер» 🌆 Серия 1/6\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #сериал #мистика #триллер #городкоторыйумервчера",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Семь утра. Город на два миллиона человек. И ни одного звука.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "navy",
+    "set": "street",
+    "big": "НИ ДУШИ"
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Марк просыпается в своей квартире.",
+   "scene": {
+    "bg": "blue",
+    "set": "room",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 420,
+      "pose": "sit",
+      "y": 900,
+      "mood": "closed"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Телефон — без сети. Свет не включается.",
+   "scene": {
+    "bg": "blue",
+    "set": "room",
+    "sub": "НЕТ СЕТИ",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 420,
+      "pose": "hold",
+      "hold": "phone",
+      "mood": "sad"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Он выходит на улицу.",
+   "scene": {
+    "bg": "navy",
+    "set": "street",
+    "actors": [
+     {
+      "who": "mark",
+      "pose": "walk",
+      "from": -120,
+      "to": 420,
+      "t0": 0,
+      "t1": 2.4
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Машины стоят посреди дороги. Двери открыты.",
+   "scene": {
+    "bg": "navy",
+    "set": "street",
+    "props": [
+     {
+      "name": "car",
+      "x": 700,
+      "y": 930,
+      "s": 0.75
+     }
+    ],
+    "actors": [
+     {
+      "who": "mark",
+      "x": 330,
+      "pose": "idle",
+      "mood": "wide",
+      "face": "r"
+     }
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Моторы ещё тёплые."
+  },
+  {
+   "ep": 2,
+   "text": "В кофейне на столах стоит горячий кофе. Но людей нет.",
+   "scene": {
+    "bg": "amber",
+    "set": "room",
+    "props": [
+     {
+      "name": "cup",
+      "x": 700,
+      "y": 700,
+      "s": 0.4
+     }
+    ],
+    "actors": [
+     {
+      "who": "mark",
+      "x": 330,
+      "pose": "point",
+      "mood": "wide"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Есть кто-нибудь?!",
+   "say": {
+    "who": "mark",
+    "text": "ЕСТЬ КТО-НИБУДЬ?!"
+   },
+   "scene": {
+    "bg": "navy",
+    "set": "street",
+    "actors": [
+     {
+      "who": "mark",
+      "x": 500,
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Тишина. Только один экран на площади ещё светится.",
+   "scene": {
+    "bg": "dark",
+    "set": "street",
+    "props": [
+     {
+      "name": "screen",
+      "x": 640,
+      "y": 760,
+      "s": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "who": "mark",
+      "x": 260,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "И тут в кармане вибрирует телефон.",
+   "ad_before": true,
+   "scene": {
+    "bg": "purple",
+    "fx": "rings",
+    "prop": "phone",
+    "sub": "НЕИЗВЕСТНЫЙ НОМЕР"
+   },
+   "sfx": [
+    "phone"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Одно сообщение.",
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Не выходи на улицу в девятнадцать ноль-ноль. Ты уже однажды умер.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "fx": "alarm",
+    "big": "НЕ ВЫХОДИ В 19:00",
+    "sub": "ТЫ УЖЕ ОДНАЖДЫ УМЕР"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Марк бежит к банку. В будке охраны ещё работают мониторы.",
+   "scene": {
+    "bg": "steel",
+    "set": "street",
+    "actors": [
+     {
+      "who": "mark",
+      "pose": "run",
+      "from": -120,
+      "to": 560,
+      "t0": 0,
+      "t1": 1.8
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Он перематывает запись с площади.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "props": [
+     {
+      "name": "screen",
+      "x": 650,
+      "y": 640,
+      "s": 0.7
+     }
+    ],
+    "actors": [
+     {
+      "who": "mark",
+      "x": 280,
+      "pose": "point",
+      "mood": "normal"
+     }
+    ]
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "На записи — он сам.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "prop": "screen",
+    "big": "ЭТО ОН"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "А дата в углу — завтрашняя.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "fx": "alarm",
+    "prop": "clock",
+    "big": "ЗАВТРА"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Марк с записи медленно поднимает глаза. Прямо в камеру.",
+   "scene": {
+    "bg": "dark",
+    "set": "office",
+    "focus": [
+     500,
+     420
+    ],
+    "actors": [
+     {
+      "who": "mark",
+      "x": 500,
+      "pose": "idle",
+      "mood": "wide",
+      "face": "r",
+      "s": 1.2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Если ты это смотришь, значит, я опять не успел.",
+   "say": {
+    "who": "mark",
+    "text": "Если ты это смотришь — я опять не успел"
+   },
+   "sfx": [
+    "glitch"
+   ]
+  }
+ ]
+}
