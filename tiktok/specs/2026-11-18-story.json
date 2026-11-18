@@ -1,0 +1,667 @@
+{
+ "id": "apollo-13",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "lovell": {
+   "top": "shirt",
+   "hair": "short",
+   "color": [
+    236,
+    236,
+    240
+   ],
+   "pants": [
+    200,
+    200,
+    206
+   ],
+   "hair_color": [
+    80,
+    60,
+    40
+   ]
+  },
+  "swig": {
+   "top": "shirt",
+   "hair": "short",
+   "color": [
+    236,
+    236,
+    240
+   ],
+   "pants": [
+    200,
+    200,
+    206
+   ],
+   "hair_color": [
+    200,
+    170,
+    110
+   ]
+  },
+  "haise": {
+   "top": "shirt",
+   "hair": "short",
+   "color": [
+    236,
+    236,
+    240
+   ],
+   "pants": [
+    200,
+    200,
+    206
+   ],
+   "hair_color": [
+    40,
+    30,
+    24
+   ],
+   "skin": [
+    220,
+    176,
+    140
+   ]
+  },
+  "kranz": {
+   "top": "suit",
+   "hair": "short",
+   "color": [
+    245,
+    245,
+    245
+   ],
+   "pants": [
+    60,
+    60,
+    70
+   ],
+   "hair_color": [
+    30,
+    26,
+    22
+   ]
+  },
+  "eng1": {
+   "top": "shirt",
+   "hair": "short",
+   "color": [
+    150,
+    190,
+    230
+   ],
+   "glasses": true,
+   "hair_color": [
+    60,
+    40,
+    30
+   ]
+  },
+  "eng2": {
+   "top": "shirt",
+   "hair": "bald",
+   "color": [
+    230,
+    220,
+    170
+   ],
+   "mustache": true,
+   "skin": [
+    210,
+    166,
+    130
+   ]
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ПОЛЁТ",
+   "date": "11.04.1970",
+   "music": "m1"
+  },
+  "2": {
+   "title": "ВЗРЫВ",
+   "date": "13.04.1970",
+   "music": "m2"
+  },
+  "3": {
+   "title": "ЛУННЫЙ МОДУЛЬ",
+   "date": "14.04.1970",
+   "music": "m1"
+  },
+  "4": {
+   "title": "НОСОК И ИЗОЛЕНТА",
+   "date": "15.04.1970",
+   "music": "m2"
+  },
+  "5": {
+   "title": "ВОЗВРАЩЕНИЕ",
+   "date": "17.04.1970",
+   "music": "m3"
+  }
+ },
+ "description": "300 000 км от Земли — и кончается воздух. Их спас носок и изолента 🚀\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #космос #аполлон13 #nasa",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Они были в трёхстах тысячах километров от Земли. И у них заканчивался воздух.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "navy",
+    "set": "night",
+    "big": "ВОЗДУХ КОНЧАЕТСЯ",
+    "props": [
+     {
+      "name": "plane",
+      "x": 520,
+      "y": 560,
+      "s": 0.7
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Апрель семидесятого. Аполлон-тринадцать летит к Луне.",
+   "scene": {
+    "bg": "navy",
+    "set": "night",
+    "sub": "АПРЕЛЬ 1970",
+    "props": [
+     {
+      "name": "plane",
+      "x": 300,
+      "y": 640,
+      "s": 0.55
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "На борту трое. Ловелл, Суиджерт и Хейз.",
+   "scene": {
+    "bg": "blue",
+    "set": "plane",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 250,
+      "pose": "idle",
+      "mood": "happy"
+     },
+     {
+      "who": "swig",
+      "x": 500,
+      "pose": "idle",
+      "mood": "happy"
+     },
+     {
+      "who": "haise",
+      "x": 750,
+      "face": "l",
+      "pose": "idle",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Пятьдесят шестой час полёта. Обычная проверка баков.",
+   "scene": {
+    "bg": "blue",
+    "set": "plane",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 250,
+      "pose": "talk"
+     },
+     {
+      "who": "swig",
+      "x": 520,
+      "pose": "hold",
+      "hold": "clock"
+     }
+    ]
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "И тут — удар.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "plane",
+    "fx": "alarm",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 250,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "swig",
+      "x": 500,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "haise",
+      "x": 750,
+      "face": "l",
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Взрывается кислородный бак.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "fx": "alarm",
+    "prop": "bomb",
+    "big": "ВЗРЫВ"
+   },
+   "sfx": [
+    "impact",
+    "static"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Хьюстон, у нас проблема.",
+   "say": {
+    "who": "lovell",
+    "text": "Хьюстон, у нас проблема"
+   },
+   "scene": {
+    "bg": "red",
+    "set": "plane",
+    "fx": "alarm",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 500,
+      "pose": "talk",
+      "mood": "wide",
+      "s": 1.1
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "В центре управления — гробовая тишина. Потом зал взрывается голосами.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "kranz",
+      "x": 500,
+      "pose": "idle",
+      "mood": "wide"
+     },
+     {
+      "who": "eng1",
+      "x": 220,
+      "pose": "talk"
+     },
+     {
+      "who": "eng2",
+      "x": 790,
+      "pose": "point",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Командный модуль умирает. Энергии почти нет.",
+   "scene": {
+    "bg": "dark",
+    "set": "plane",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 250,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "swig",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "haise",
+      "x": 750,
+      "face": "l",
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Решение безумное. Перебраться в лунный модуль.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "kranz",
+      "x": 500,
+      "pose": "point",
+      "mood": "angry"
+     }
+    ]
+   },
+   "say": {
+    "who": "kranz",
+    "text": "Все в лунный модуль!"
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Он рассчитан на двоих. И на двое суток.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "big": "2 МЕСТА · 2 ДНЯ",
+    "prop": "clock"
+   }
+  },
+  {
+   "ep": 3,
+   "text": "А лететь — четверо суток. Втроём.",
+   "ad_before": true,
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "4 ДНЯ · 3 ЧЕЛОВЕКА",
+    "prop": "clock"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Внутри холодает почти до нуля. Окна покрываются инеем.",
+   "scene": {
+    "bg": "navy",
+    "set": "plane",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 250,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "swig",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "haise",
+      "x": 750,
+      "face": "l",
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Но страшнее другое. Растёт углекислый газ.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "fx": "alarm",
+    "set": "plane",
+    "actors": [
+     {
+      "who": "haise",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad",
+      "y": 1450,
+      "s": 2.2
+     }
+    ]
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Запасные фильтры есть. Но они квадратные. А гнёзда — круглые.",
+   "scene": {
+    "bg": "steel",
+    "big_top": "НЕ ПОДХОДИТ",
+    "items": [
+     "Фильтр — квадратный",
+     "Гнездо — круглое"
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "На Земле инженеры высыпают на стол всё, что есть на борту.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "eng1",
+      "x": 300,
+      "pose": "dig"
+     },
+     {
+      "who": "eng2",
+      "x": 700,
+      "pose": "point",
+      "face": "l"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Пакеты. Картон. Носок. Изолента.",
+   "scene": {
+    "bg": "amber",
+    "big_top": "ВСЁ, ЧТО ЕСТЬ",
+    "items": [
+     "Пакеты",
+     "Картон",
+     "Носок",
+     "Изолента"
+    ]
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "И собирают переходник. Квадрат — в круг.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "kranz",
+      "x": 500,
+      "pose": "talk"
+     }
+    ]
+   },
+   "say": {
+    "who": "kranz",
+    "text": "Объясните им. Шаг за шагом."
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Астронавты повторяют по радио. Шаг за шагом.",
+   "scene": {
+    "bg": "navy",
+    "set": "plane",
+    "actors": [
+     {
+      "who": "swig",
+      "x": 350,
+      "pose": "dig"
+     },
+     {
+      "who": "lovell",
+      "x": 700,
+      "pose": "talk",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "И уровень газа начинает падать.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "green",
+    "set": "plane",
+    "actors": [
+     {
+      "who": "lovell",
+      "x": 250,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "swig",
+      "x": 500,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "haise",
+      "x": 750,
+      "face": "l",
+      "pose": "cheer",
+      "mood": "happy"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 5,
+   "text": "Семнадцатое апреля. Капсула падает в Тихий океан.",
+   "scene": {
+    "bg": "teal",
+    "set": "sea",
+    "props": [
+     {
+      "name": "boat",
+      "x": 500,
+      "y": 760,
+      "s": 0.6
+     }
+    ],
+    "sub": "17.04.1970"
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 5,
+   "text": "Все трое живы.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "green",
+    "set": "office",
+    "big": "ВСЕ ЖИВЫ",
+    "actors": [
+     {
+      "who": "kranz",
+      "x": 500,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "eng1",
+      "x": 220,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "eng2",
+      "x": 790,
+      "pose": "cheer",
+      "face": "l",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 5,
+   "text": "А ты бы смог починить корабль носком и изолентой? Пиши в комментариях.",
+   "scene": {
+    "bg": "purple",
+    "set": "night",
+    "big": "СМОГ БЫ?",
+    "props": [
+     {
+      "name": "plane",
+      "x": 500,
+      "y": 600,
+      "s": 0.6
+     }
+    ]
+   }
+  }
+ ]
+}
