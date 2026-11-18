@@ -154,11 +154,11 @@
    "tag": "dramatic",
    "scene": {
     "bg": "navy",
-    "set": "night",
+    "set": "space",
     "big": "ВОЗДУХ КОНЧАЕТСЯ",
     "props": [
      {
-      "name": "plane",
+      "name": "capsule",
       "x": 520,
       "y": 560,
       "s": 0.7
@@ -171,11 +171,11 @@
    "text": "Апрель семидесятого. Аполлон-тринадцать летит к Луне.",
    "scene": {
     "bg": "navy",
-    "set": "night",
+    "set": "space",
     "sub": "АПРЕЛЬ 1970",
     "props": [
      {
-      "name": "plane",
+      "name": "capsule",
       "x": 300,
       "y": 640,
       "s": 0.55
@@ -651,11 +651,11 @@
    "text": "А ты бы смог починить корабль носком и изолентой? Пиши в комментариях.",
    "scene": {
     "bg": "purple",
-    "set": "night",
+    "set": "space",
     "big": "СМОГ БЫ?",
     "props": [
      {
-      "name": "plane",
+      "name": "capsule",
       "x": 500,
       "y": 600,
       "s": 0.6

@@ -381,6 +381,17 @@ def p_note():
     return im
 
 
+def p_capsule():
+    im, d = _c()
+    d.rectangle((70, 210, 300, 330), fill=(200, 204, 212), outline=INK, width=OW)  # service module
+    for x in range(100, 300, 50): d.line((x, 214, x, 326), fill=(150, 154, 162), width=6)
+    d.polygon([(30, 230), (70, 250), (70, 290), (30, 310)], fill=(90, 90, 100), outline=INK, width=8)  # engine bell
+    d.polygon([(300, 205), (300, 335), (460, 290), (460, 250)], fill=(226, 228, 234), outline=INK, width=OW)  # command module
+    d.ellipse((350, 245, 380, 275), fill=(90, 150, 220), outline=INK, width=5)
+    d.rectangle((150, 330, 230, 350), fill=(60, 60, 70)); d.polygon([(150, 120), (250, 120), (230, 210), (170, 210)], fill=(230, 200, 80), outline=INK, width=8)  # antenna/panel
+    return im
+
+
 PROPS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 EMOJI2PROP = {"🕴️": "person", "👤": "person", "👷": "person", "🧑‍💻": "person", "👥": "crowd", "✈️": "plane", "🛫": "plane",
               "🚪": "door", "💰": "money", "💵": "money", "💸": "money", "📱": "phone", "✉️": "letter", "⏳": "clock",

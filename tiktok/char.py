@@ -385,6 +385,18 @@ def _set_new(d, name, t, W_, H_):
         _glow(d, W_ / 2, 400, 520, (60, 220, 120))
         d.rectangle((0, 720, W_, 780), fill=(60, 60, 66), outline=INK, width=OW); d.rectangle((0, GROUND, W_, H_), fill=(30, 30, 34), outline=INK, width=OW)
         return True
+    if name == "space":
+        d.rectangle((0, 0, W_, H_), fill=(6, 8, 18))
+        rr = np.random.default_rng(5)
+        for k in range(160):
+            x, y, r = rr.integers(0, W_), rr.integers(0, H_), rr.uniform(1, 3.2)
+            if (t * 1.5 + k * 0.37) % 4 > 0.3: d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 255, 240))
+        d.ellipse((-260, 620, 520, 1400), fill=(40, 110, 200), outline=INK, width=OW)  # Earth, far behind
+        for cx, cy, rx, ry in [(40, 760, 160, 70), (240, 900, 120, 60), (-20, 980, 140, 90)]: d.ellipse((cx - rx, cy - ry, cx + rx, cy + ry), fill=(70, 150, 80))
+        d.ellipse((-270, 610, 530, 1410), outline=(150, 200, 255, 120), width=10)
+        d.ellipse((720, 70, 900, 250), fill=(200, 200, 196), outline=INK, width=OW)  # Moon
+        for cx, cy, r in [(780, 130, 22), (840, 190, 16), (760, 200, 12)]: d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(170, 170, 166))
+        return True
     if name == "tunnel":
         d.rectangle((0, 0, W_, H_), fill=(54, 40, 30))
         for k in range(30):
