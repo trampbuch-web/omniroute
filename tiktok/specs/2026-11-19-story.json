@@ -1,0 +1,610 @@
+{
+ "id": "chile-miners-2010",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "luis": {
+   "top": "shirt",
+   "hair": "helmet",
+   "color": [
+    230,
+    120,
+    40
+   ],
+   "pants": [
+    50,
+    56,
+    70
+   ],
+   "mustache": true,
+   "skin": [
+    204,
+    156,
+    120
+   ]
+  },
+  "m2": {
+   "top": "shirt",
+   "hair": "helmet",
+   "color": [
+    210,
+    100,
+    40
+   ],
+   "pants": [
+    60,
+    60,
+    70
+   ],
+   "skin": [
+    190,
+    140,
+    104
+   ]
+  },
+  "m3": {
+   "top": "shirt",
+   "hair": "helmet",
+   "color": [
+    240,
+    140,
+    50
+   ],
+   "pants": [
+    50,
+    50,
+    60
+   ],
+   "skin": [
+    214,
+    170,
+    130
+   ],
+   "glasses": true
+  },
+  "eng": {
+   "top": "coat",
+   "hair": "cap",
+   "color": [
+    200,
+    60,
+    40
+   ],
+   "pants": [
+    40,
+    44,
+    56
+   ]
+  },
+  "wife": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    60,
+    90,
+    150
+   ],
+   "hair_color": [
+    30,
+    24,
+    20
+   ],
+   "skin": [
+    210,
+    166,
+    130
+   ]
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ОБВАЛ",
+   "date": "05.08.2010",
+   "music": "m1"
+  },
+  "2": {
+   "title": "ТИШИНА",
+   "date": "ДЕНЬ 1—16",
+   "music": "m3"
+  },
+  "3": {
+   "title": "ЗАПИСКА",
+   "date": "ДЕНЬ 17",
+   "music": "m2"
+  },
+  "4": {
+   "title": "ФЕНИКС",
+   "date": "13.10.2010",
+   "music": "m1"
+  }
+ },
+ "description": "700 метров под землёй, 33 человека и две ложки еды раз в двое суток ⛏️ Они продержались 69 дней\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #шахтёры #чили #спасение",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Семьсот метров под землёй. Тридцать три человека. И ни одной двери наружу.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "big": "700 МЕТРОВ ВНИЗ",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "idle",
+      "mood": "wide"
+     },
+     {
+      "who": "m2",
+      "x": 230,
+      "pose": "idle",
+      "mood": "wide"
+     },
+     {
+      "who": "m3",
+      "x": 770,
+      "face": "l",
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Чили. Пустыня Атакама. Пятое августа две тысячи десятого.",
+   "scene": {
+    "bg": "amber",
+    "set": "desert",
+    "sub": "АТАКАМА · 05.08.2010"
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Обычная смена на медной шахте Сан-Хосе.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "m2",
+      "x": 300,
+      "pose": "dig"
+     },
+     {
+      "who": "m3",
+      "x": 720,
+      "pose": "dig",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "И тут гора над ними просто… садится.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "tunnel",
+    "fx": "shake",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "m2",
+      "x": 230,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "m3",
+      "x": 770,
+      "face": "l",
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "boom",
+    "impact"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Огромная скала перекрывает единственный выход.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "big": "ВЫХОДА НЕТ",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "point",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Наверху их считают погибшими.",
+   "scene": {
+    "bg": "amber",
+    "set": "desert",
+    "actors": [
+     {
+      "who": "wife",
+      "x": 420,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "eng",
+      "x": 700,
+      "pose": "talk",
+      "face": "l",
+      "mood": "sad"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "А внизу бригадир Луис Урсуа делит еду.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "talk",
+      "mood": "angry"
+     }
+    ]
+   },
+   "say": {
+    "who": "luis",
+    "text": "Делим всё поровну."
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Две ложки консервов. Раз в двое суток. На человека.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "2 ЛОЖКИ · РАЗ В 2 ДНЯ",
+    "prop": "spoon"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Проходит неделя. Две. Связи нет.",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "sit",
+      "mood": "sad"
+     },
+     {
+      "who": "m2",
+      "x": 230,
+      "pose": "sit",
+      "mood": "sad"
+     },
+     {
+      "who": "m3",
+      "x": 770,
+      "face": "l",
+      "pose": "sit",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Наверху бурят скважины вслепую. Одна, другая — мимо.",
+   "scene": {
+    "bg": "amber",
+    "set": "desert",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "eng",
+      "x": 430,
+      "pose": "point",
+      "mood": "angry"
+     }
+    ]
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Семнадцатый день. Сверху в потолок пробивается бур.",
+   "ad_before": true,
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "m2",
+      "x": 230,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "m3",
+      "x": 770,
+      "face": "l",
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Они привязывают к нему записку. Красными буквами.",
+   "scene": {
+    "bg": "steel",
+    "prop": "note",
+    "sub": "ДЕНЬ 17"
+   },
+   "sfx": [
+    "riser"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "«Мы в порядке. В убежище. Нас тридцать три».",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "НАС 33",
+    "sub": "«МЫ В ПОРЯДКЕ, В УБЕЖИЩЕ»"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Наверху лагерь взрывается от крика.",
+   "scene": {
+    "bg": "amber",
+    "set": "desert",
+    "actors": [
+     {
+      "who": "wife",
+      "x": 380,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "eng",
+      "x": 680,
+      "pose": "cheer",
+      "face": "l",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Но поднять их — ещё не значит спасти.",
+   "scene": {
+    "bg": "dark",
+    "set": "desert",
+    "big": "ЕЩЁ 52 ДНЯ"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Чтобы пробить широкий ствол, нужно ещё почти два месяца.",
+   "scene": {
+    "bg": "steel",
+    "set": "desert",
+    "actors": [
+     {
+      "who": "eng",
+      "x": 500,
+      "pose": "talk"
+     }
+    ]
+   },
+   "say": {
+    "who": "eng",
+    "text": "Мы их достанем. Всех."
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Тринадцатое октября. В шахту опускают узкую капсулу «Феникс».",
+   "scene": {
+    "bg": "navy",
+    "set": "desert",
+    "sub": "13.10.2010",
+    "props": [
+     {
+      "name": "suitcase",
+      "x": 780,
+      "y": 900,
+      "s": 0.35
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Каждый подъём — пятнадцать минут в железной трубе.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "tunnel",
+    "actors": [
+     {
+      "who": "m2",
+      "x": 500,
+      "pose": "idle",
+      "mood": "wide",
+      "y": 1450,
+      "s": 2.2
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Один за другим. Тридцать три раза.",
+   "scene": {
+    "bg": "amber",
+    "set": "desert",
+    "actors": [
+     {
+      "who": "m2",
+      "pose": "walk",
+      "from": -120,
+      "to": 380,
+      "t0": 0,
+      "t1": 2
+     },
+     {
+      "who": "wife",
+      "x": 650,
+      "pose": "cheer",
+      "face": "l",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Последним поднимается Луис. Шестьдесят девятый день.",
+   "scene": {
+    "bg": "amber",
+    "set": "desert",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 480,
+      "pose": "cheer",
+      "mood": "happy"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Все тридцать три живы.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "green",
+    "set": "desert",
+    "big": "ВСЕ 33 ЖИВЫ",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "m2",
+      "x": 230,
+      "pose": "cheer",
+      "mood": "happy"
+     },
+     {
+      "who": "m3",
+      "x": 770,
+      "face": "l",
+      "pose": "cheer",
+      "mood": "happy"
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "А ты бы продержался шестьдесят девять дней под землёй? Пиши в комментариях.",
+   "scene": {
+    "bg": "purple",
+    "set": "tunnel",
+    "weather": "dust",
+    "big": "69 ДНЕЙ",
+    "actors": [
+     {
+      "who": "luis",
+      "x": 500,
+      "pose": "lookup",
+      "mood": "wide"
+     }
+    ]
+   }
+  }
+ ]
+}

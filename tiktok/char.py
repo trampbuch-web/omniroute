@@ -141,6 +141,10 @@ def draw_actor(panel, a, cast, lt, talking=False):
     if hair == "fedora":
         h.ellipse((c - 92, c - 46, c + 92, c - 18), fill=INK); h.rounded_rectangle((c - 56, c - 104, c + 56, c - 30), 16, fill=(40, 40, 50), outline=INK, width=6)
         h.rectangle((c - 56, c - 52, c + 56, c - 38), fill=(140, 30, 30))
+    if hair == "helmet":  # miner's hard hat with headlamp
+        h.chord((c - 76, c - 92, c + 76, c + 26), 180, 360, fill=(250, 200, 40), outline=INK, width=OW)
+        h.rounded_rectangle((c - 84, c - 40, c + 90, c - 24), 8, fill=(230, 180, 30), outline=INK, width=5)
+        h.ellipse((c + 34, c - 80, c + 64, c - 50), fill=(255, 250, 200), outline=INK, width=5)
     if hair == "beanie": h.chord((c - 72, c - 86, c + 72, c + 30), 180, 360, fill=(160, 40, 40), outline=INK, width=OW); h.rectangle((c - 72, c - 36, c + 72, c - 18), fill=(130, 30, 30), outline=INK, width=5)
     ex = [c + 8, c + 44]
     for e_ in ex:
@@ -396,6 +400,18 @@ def _set_new(d, name, t, W_, H_):
         d.ellipse((-270, 610, 530, 1410), outline=(150, 200, 255, 120), width=10)
         d.ellipse((720, 70, 900, 250), fill=(200, 200, 196), outline=INK, width=OW)  # Moon
         for cx, cy, r in [(780, 130, 22), (840, 190, 16), (760, 200, 12)]: d.ellipse((cx - r, cy - r, cx + r, cy + r), fill=(170, 170, 166))
+        return True
+    if name == "desert":
+        for y in range(0, 640, 6):
+            k = y / 640; d.rectangle((0, y, W_, y + 6), fill=(int(70 + 180 * k), int(90 + 80 * k), int(160 - 60 * k)))
+        d.polygon([(0, 640), (180, 420), (360, 560), (560, 380), (780, 540), (1000, 430), (1000, 640)], fill=(150, 90, 70), outline=INK)
+        d.rectangle((0, 640, W_, H_), fill=(214, 168, 112)); d.line((0, 640, W_, 640), fill=INK, width=OW)
+        for k in range(8):
+            x = 40 + k * 130; d.polygon([(x, GROUND - 40), (x + 50, GROUND - 120), (x + 100, GROUND - 40)], fill=(70, 120, 180), outline=INK, width=6)  # tents
+        d.line((720, GROUND - 40, 790, 300, 860, GROUND - 40), fill=INK, width=14); d.line((745, GROUND - 200, 835, GROUND - 200), fill=INK, width=8)  # drill rig
+        d.polygon([(770, 300), (810, 300), (800, 250), (780, 250)], fill=(220, 60, 50), outline=INK, width=5)
+        for k in range(5): d.line((40 + k * 200, 700, 80 + k * 200, 690), fill=(240, 240, 240), width=4)
+        d.rectangle((0, GROUND, W_, H_), fill=(196, 150, 96), outline=INK, width=OW)
         return True
     if name == "tunnel":
         d.rectangle((0, 0, W_, H_), fill=(54, 40, 30))
