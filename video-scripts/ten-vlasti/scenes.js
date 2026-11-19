@@ -286,4 +286,58 @@ const SCENES = {
       root.querySelector("#pp-circle").setAttribute("stroke-dashoffset", 1 - io((p - 0.35) / 0.3));
     },
   }),
+
+  // a huge clock face counting down an hour; the minute hand sweeps, a red sector fills
+  clock: (seg) => ({
+    svg: R(0, 0, 1080, 1920, INK) + LY(0.2, R(-100, 0, 1280, 1920, "url(#t-wall)") + C(540, 900, 720, "url(#t-pool)", 'opacity="0.35"')) +
+      LY(0.7, G("translate(540 900)", C(0, 0, 420, "#0d111b", `stroke="${GOLD}" stroke-width="10"`) + C(0, 0, 392, "none", 'stroke="#1b2233" stroke-width="4"') +
+        times(60, (i) => `<rect x="-3" y="-388" width="6" height="${i % 5 ? 18 : 44}" fill="${i % 5 ? "#3a4160" : GOLD}" transform="rotate(${i * 6})"/>`) +
+        `<path id="ck-sector" d="" fill="${RED}" opacity="0.35"/>` +
+        `<g id="ck-min">${P("M-8 30 L-4 -360 L4 -360 L8 30 Z", "#e8e2cf")}</g><g id="ck-hour">${P("M-12 26 L-7 -230 L7 -230 L12 26 Z", GOLD)}</g>` + C(0, 0, 22, GOLD) + C(0, 0, 8, INK))) +
+      `<text id="ck-big" x="540" y="1520" font-size="150" font-weight="900" text-anchor="middle" fill="${GOLD}" font-family="DejaVu Sans Mono, monospace">${seg.big || ""}</text>` + LY(0.6, dust(24, 150, 930, 400, 1500, "#ffe2a0")),
+    update(root, p, lt) {
+      moveDust(root, lt);
+      const m = io(p) * 0.35; // the hand sweeps a third of the hour during the scene
+      root.querySelector("#ck-min").setAttribute("transform", `rotate(${m * 360})`);
+      root.querySelector("#ck-hour").setAttribute("transform", `rotate(${300 + m * 30})`);
+      const a = m * Math.PI * 2;
+      root.querySelector("#ck-sector").setAttribute("d", m > 0.001 ? `M0 0 L0 -380 A380 380 0 ${m > 0.5 ? 1 : 0} 1 ${Math.sin(a) * 380} ${-Math.cos(a) * 380} Z` : "");
+      const left = Math.round(60 - m * 60);
+      root.querySelector("#ck-big").textContent = `${String(left).padStart(2, "0")}:00`;
+    },
+  }),
+
+  // airport apron: a red carpet runs to the jet's stairs, an honour guard lines it, flags ripple
+  airport: (seg) => {
+    const guard = (x, y, k) => G(`translate(${x} ${y}) scale(${k})`, E(0, 0, 40, 8, "#000", 'opacity="0.5"') + R(-22, -150, 18, 150, "#0b0d14") + R(4, -150, 18, 150, "#0b0d14") + P("M-32 -300 h64 l6 150 h-76 Z", "#1a2f5a") + L("M-32 -300 h64", GOLD, 4) + E(0, -326, 22, 26, "#e0b896") + R(-26, -366, 52, 26, "#1a2f5a", 'rx="6"') + R(-30, -348, 60, 8, "#0b0d14") + L("M30 -290 L44 -420", "#c9ced8", 4) + C(44, -426, 6, GOLD));
+    const flag = (x, cols, i) => G(`translate(${x} 1060)`, R(-4, 0, 8, 420, "#8d95a3") + `<g class="fl" data-i="${i}">${cols.map((c, k) => R(4, k * (120 / cols.length), 190, 120 / cols.length, c)).join("")}</g>`);
+    return {
+      svg: R(0, 0, 1080, 1920, INK) + LY(0.1, R(-100, 0, 1280, 1300, "#0a1022") + times(50, () => C(rnd() * 1280 - 100, rnd() * 800, 1 + rnd() * 2, "#fff", `opacity="${0.2 + rnd() * 0.5}"`)) + times(6, (i) => C(80 + i * 190, 1060, 160, "url(#t-pool)", 'opacity="0.35"')) + times(6, (i) => R(70 + i * 190, 640, 20, 420, "#141b2b") + E(80 + i * 190, 640, 60, 16, "#fff3c4"))) +
+        LY(0.3, P("M640 1100 q140 -80 400 -84 h140 v200 h-560 Z", "#c9ced8") + P("M720 1060 h320", "none", 'stroke="#2b4ac8" stroke-width="12"') + times(6, (i) => R(780 + i * 52, 1050, 26, 22, "#ffe9b8", 'rx="6"')) + P("M700 1160 l-90 230 h40 l100 -230 Z", "#8d95a3") + times(8, (i) => R(616 + i * 11, 1380 - i * 28, 54, 6, "#5a6072"))) +
+        LY(0.5, P("M-100 1300 H1180 V1920 H-100 Z", "#0d111b") + P("M600 1390 L860 1920 H320 Z", "#9a111a") + P("M600 1390 L860 1920 H320 Z", "url(#t-ray)", 'opacity="0.25"') + L("M600 1390 L320 1920 M600 1390 L860 1920", GOLD, 5, 'opacity="0.7"')) +
+        LY(0.65, flag(120, ["#fff", "#0039a6", "#d52b1e"], 0) + flag(960, ["#de2910", "#de2910", "#de2910"], 1) + times(4, (i) => guard(470 - i * 70, 1480 + i * 110, 0.8 + i * 0.25) + guard(760 + i * 70, 1480 + i * 110, 0.8 + i * 0.25))) +
+        LY(1.1, `<rect id="ap-flash" width="1080" height="1920" fill="#fff" opacity="0"/>`),
+      update(root, p, lt) {
+        root.querySelectorAll(".fl").forEach((e, i) => e.setAttribute("transform", `skewY(${Math.sin(lt * 3 + i) * 5}) scale(${1 - 0.06 * Math.abs(Math.sin(lt * 2.4 + i))} 1)`));
+        root.querySelector("#ap-flash").setAttribute("opacity", ((lt * 1.7) % 1 < 0.05 ? 0.12 : 0) + ((lt * 1.13 + 0.4) % 1 < 0.04 ? 0.08 : 0));
+      },
+    };
+  },
+
+  // the family photo: a long row of leaders on a stage; three in the centre light up
+  photo: (seg) => {
+    const n = 11, mid = 5;
+    const row = times(n, (i) => { const x = 540 + (i - mid) * 150, c = Math.abs(i - mid) <= 1, k = c ? 0.62 : 0.5; return `<g class="ph" data-i="${i}" transform="translate(${x} ${c ? 1400 : 1380})">${suit(0, 0, k, c ? (i === mid ? "#ff8a7a" : i < mid ? "#9fc4ff" : "#ffd98a") : "#3a4160", i === mid + 1 ? RED : "#3a1418")}</g>`; });
+    return {
+      svg: R(0, 0, 1080, 1920, INK) + LY(0.15, R(-100, 0, 1280, 1500, "#0b1424") + times(9, (i) => R(-100 + i * 160, 160, 120, 1040, "#0f1c33")) + R(40, 380, 1000, 220, "#0f2a4a", 'rx="12"') + T(540, 470, "APEC · CHINA 2026", 64, "#9fc4ff", 'text-anchor="middle" font-weight="900" letter-spacing="8" opacity="0.55"') + T(540, 540, "ШЭНЬЧЖЭНЬ", 40, "#9fc4ff", 'text-anchor="middle" letter-spacing="14" opacity="0.4"')) +
+        LY(0.4, P("M540 0 L240 1450 H840 Z", "url(#t-cone)", 'opacity="0.5" style="mix-blend-mode:screen"')) + LY(0.55, R(-100, 1400, 1280, 520, "url(#t-floor)") + R(-100, 1400, 1280, 30, "#1b2233")) + LY(0.7, row) +
+        LY(1.15, times(8, (i) => G(`translate(${70 + i * 135} ${1900 - (i % 2) * 40})`, E(0, -120, 64, 76, "#020306") + P("M-110 0 q0 -110 110 -110 q110 0 110 110 Z", "#020306") + G(`translate(${i % 2 ? 36 : -40} -220)`, R(-44, -32, 88, 58, "#0b0d14", 'rx="8"') + `<circle class="flash" data-i="${i}" cx="0" cy="-28" r="20" fill="#fff" opacity="0"/>`))) + `<rect id="ph-flash" width="1080" height="1920" fill="#fff" opacity="0"/>`),
+      update(root, p, lt) {
+        root.querySelectorAll(".ph").forEach((e) => { const i = +e.dataset.i, c = Math.abs(i - 5) <= 1; e.setAttribute("opacity", c ? 0.5 + 0.5 * ease((p - 0.2) / 0.3) : 0.55 - 0.3 * ease((p - 0.2) / 0.3)); });
+        let f = 0;
+        root.querySelectorAll(".flash").forEach((e) => { const i = +e.dataset.i, ph = (lt * (1.1 + (i % 3) * 0.4) + i * 0.37) % 1, on = ph < 0.06 ? 1 - ph / 0.06 : 0; e.setAttribute("opacity", on); f = Math.max(f, on); });
+        root.querySelector("#ph-flash").setAttribute("opacity", f * 0.15);
+      },
+    };
+  },
 };
