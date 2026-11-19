@@ -315,20 +315,20 @@
      {
       "who": "luis",
       "x": 500,
-      "pose": "sit",
+      "pose": "idle",
       "mood": "sad"
      },
      {
       "who": "m2",
       "x": 230,
-      "pose": "sit",
+      "pose": "idle",
       "mood": "sad"
      },
      {
       "who": "m3",
       "x": 770,
       "face": "l",
-      "pose": "sit",
+      "pose": "idle",
       "mood": "sad"
      }
     ]
