@@ -16,6 +16,8 @@ const clamp = (x) => Math.max(0, Math.min(1, x));
 const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
 const io = (x) => { x = clamp(x); return x * x * (3 - 2 * x); };
 const lerp = (a, b, p) => a + (b - a) * p;
+// scene texts follow the episode language (EP is defined by the page before scenes are built)
+const tr = (ru, en) => (typeof EP !== "undefined" && EP.lang === "en" ? en : ru);
 const GOLD = "#e2b25a", RED = "#e3262f", INK = "#05070d";
 
 const DEFS = `<defs>
@@ -95,7 +97,7 @@ const SCENES = {
     const inside = (x, y, pts) => { let c = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if (yi > y !== yj > y && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) c = !c; } return c; };
     let dots = "";
     for (let lon = -170; lon < 175; lon += 2.3) for (let lat = -52; lat < 76; lat += 2.3) if (POLY.some((pl) => inside(lon, lat, pl))) dots += C(px(lon), py(lat), 5.2, "#2c3d63");
-    const CITY = { w: [-77, 38.9, "ВАШИНГТОН"], m: [37.6, 55.75, "МОСКВА"], b: [116.4, 39.9, "ПЕКИН"], s: [114.06, 22.54, "ШЭНЬЧЖЭНЬ"] };
+    const CITY = { w: [-77, 38.9, tr("ВАШИНГТОН", "WASHINGTON")], m: [37.6, 55.75, tr("МОСКВА", "MOSCOW")], b: [116.4, 39.9, tr("ПЕКИН", "BEIJING")], s: [114.06, 22.54, tr("ШЭНЬЧЖЭНЬ", "SHENZHEN")] };
     const S = [px(CITY.s[0]), py(CITY.s[1])];
     const arc = (k, lift) => { const a = [px(CITY[k][0]), py(CITY[k][1])]; return `<path class="arc" data-k="${k}" d="M${a[0]} ${a[1]} Q${(a[0] + S[0]) / 2} ${Math.min(a[1], S[1]) - lift} ${S[0]} ${S[1]}" fill="none" stroke="${GOLD}" stroke-width="7" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`; };
     const node = (k) => { const [lon, lat, name] = CITY[k], red = k === "s"; return `<g class="node" data-k="${k}" opacity="0">${C(px(lon), py(lat), 90, red ? "url(#t-red)" : "url(#t-gold)")}${C(px(lon), py(lat), red ? 17 : 13, red ? RED : GOLD)}${C(px(lon), py(lat), red ? 30 : 24, "none", `stroke="${red ? RED : GOLD}" stroke-width="3" class="ring"`)}${T(px(lon), py(lat) + (k === "b" ? -44 : 72), name, red ? 46 : 36, "#fff", 'text-anchor="middle" font-weight="900" letter-spacing="3"')}</g>`; };
@@ -123,7 +125,7 @@ const SCENES = {
       times(7, (i) => G(`translate(${-330 + i * 110} -60)`, E(0, -150, 26, 32, "#5b4a32") + P("M-40 -116 Q0 -134 40 -116 L46 60 H-46 Z", "#5b4a32"), 'opacity="0.7"')) +
       G("translate(0 110)", fig(-250, 1, false) + fig(0, 1.04, false) + fig(250, 1, true)) + R(-400, 250, 800, 40, "#6b5a3c") +
       times(6, (i) => `<path class="scr" d="M${-360 + i * 140} -310 v600" stroke="#fff" stroke-width="2" opacity="0.2"/>`) +
-      T(0, 334, "ЯЛТА · ФЕВРАЛЬ 1945", 30, "#3b2f20", 'text-anchor="middle" font-weight="900" letter-spacing="4"') +
+      T(0, 334, tr("ЯЛТА · ФЕВРАЛЬ 1945", "YALTA · FEBRUARY 1945"), 30, "#3b2f20", 'text-anchor="middle" font-weight="900" letter-spacing="4"') +
       `<path id="y-line" d="M-400 -250 L-120 -40 L60 60 L400 250" fill="none" stroke="${RED}" stroke-width="14" stroke-linecap="round" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1"/>`;
     return {
       svg: R(0, 0, 1080, 1920, INK) + LY(0.3, R(0, 0, 1080, 1920, "url(#t-wood)") + C(540, 820, 760, "url(#t-pool)", 'opacity="0.5"')) + LY(0.9, `<g id="y-photo">${photo}</g>`) + LY(0.5, dust(20, 100, 980, 300, 1400, "#ffe2a0")),
@@ -151,7 +153,7 @@ const SCENES = {
       // exhibition hall: arched windows, the bronze group of three on a pedestal, schoolchildren looking on
       bg = LY(0.2, R(-100, 0, 1280, 1500, "#0a1020") + times(4, (i) => P(`M${-20 + i * 300} 1100 V520 q110 -150 220 0 V1100 Z`, "#16223f") + P(`M${10 + i * 300} 1100 V540 q80 -110 160 0 V1100 Z`, "#2b4a7a", 'opacity="0.55"') + R(86 + i * 300, 430, 8, 670, "#0a1020"))) +
         LY(0.4, times(3, (i) => P(`M${120 + i * 300} 440 l520 1100 h-260 Z`, "url(#t-ray)", 'opacity="0.35" style="mix-blend-mode:screen"'))) + LY(0.5, R(-100, 1440, 1280, 520, "url(#t-floor)")) +
-        LY(0.55, G("translate(210 1470) scale(0.9)", R(-190, -150, 380, 150, "#1a1410") + R(-206, -168, 412, 24, "#2a2118") + times(3, (i) => G(`translate(${-116 + i * 116} -168)`, E(0, -196, 30, 36, "#6b5230") + P("M-50 -156 Q0 -176 50 -156 L58 0 H-58 Z", "#5b4526") + L("M-50 -156 Q0 -176 50 -156", "#c9a15a", 4, 'opacity="0.7"'))) + T(0, -70, "ЯЛТА · 1945", 26, "#c9a15a", 'text-anchor="middle" font-weight="900" letter-spacing="3"'))) +
+        LY(0.55, G("translate(210 1470) scale(0.9)", R(-190, -150, 380, 150, "#1a1410") + R(-206, -168, 412, 24, "#2a2118") + times(3, (i) => G(`translate(${-116 + i * 116} -168)`, E(0, -196, 30, 36, "#6b5230") + P("M-50 -156 Q0 -176 50 -156 L58 0 H-58 Z", "#5b4526") + L("M-50 -156 Q0 -176 50 -156", "#c9a15a", 4, 'opacity="0.7"'))) + T(0, -70, tr("ЯЛТА · 1945", "YALTA · 1945"), 26, "#c9a15a", 'text-anchor="middle" font-weight="900" letter-spacing="3"'))) +
         LY(0.7, times(3, (i) => G(`translate(${800 + i * 86} ${1620 + (i % 2) * 20}) scale(0.5)`, P(body, "#060810", `stroke="#9fc4ff" stroke-opacity="0.35" stroke-width="8"`) + R(-70, -560, 140, 150, "#0b1020", 'rx="26"'))));
     } else if (seg.who === "trump") {
       // oval room: three tall windows with drapes, two flags, the desk
@@ -181,7 +183,7 @@ const SCENES = {
       `<g id="f-hostslot"></g>` + LY(1, R(-100, 1080, 1280, 900, "url(#t-wood)") + R(-100, 1080, 1280, 10, "#4a3020") + C(540, 1330, 620, "url(#t-pool)", 'opacity="0.55"') +
         G("translate(540 1300) rotate(-3)", R(-390, -190, 780, 400, "#7a1016", 'rx="10"') + R(-372, -174, 744, 368, "#efe6d2") + times(2, (i) => R(-340, -128 + i * 170, 680, 130, "#fff", 'opacity="0.5"')) +
           seg.items.map(([st, txt], i) => T(-320, -22 + i * 170, txt, 31, "#1a1410", 'font-weight="700"') + `<g class="stamp" data-i="${i}" opacity="0">${R(-322, -116 + i * 170, 300, 46, "none", `rx="6" stroke="${i ? "#c8862e" : "#2e8a4a"}" stroke-width="5"`)}${T(-172, -82 + i * 170, st, 28, i ? "#c8862e" : "#2e8a4a", 'text-anchor="middle" font-weight="900" letter-spacing="2"')}</g>`).join("") +
-          `<g id="f-cover">${R(-390, -190, 780, 400, "#b3141c", 'rx="10"')}${R(-390, -190, 780, 400, "url(#t-ray)", 'rx="10" opacity="0.25"')}${T(0, 0, "ТЕНЬ ВЛАСТИ", 54, "#f0d9a0", 'text-anchor="middle" font-weight="900" letter-spacing="8"')}${T(0, 56, "ДОСЬЕ", 26, "#f0d9a0", 'text-anchor="middle" letter-spacing="10" opacity="0.8"')}</g>`)),
+          `<g id="f-cover">${R(-390, -190, 780, 400, "#b3141c", 'rx="10"')}${R(-390, -190, 780, 400, "url(#t-ray)", 'rx="10" opacity="0.25"')}${T(0, 0, tr("ТЕНЬ ВЛАСТИ", "SHADOW OF POWER"), 54, "#f0d9a0", 'text-anchor="middle" font-weight="900" letter-spacing="8"')}${T(0, 56, tr("ДОСЬЕ", "DOSSIER"), 26, "#f0d9a0", 'text-anchor="middle" letter-spacing="10" opacity="0.8"')}</g>`)),
     update(root, p) {
       const o = ease(p / 0.1);
       root.querySelector("#f-cover").setAttribute("transform", `translate(-390 0) scale(${1 - o} 1) translate(390 0)`);
@@ -279,7 +281,7 @@ const SCENES = {
         times(16, (i) => (i === 7 ? "" : R(-280, -290 + i * 42, 300 + ((i * 97) % 260), 16, i % 5 === 3 ? "#111" : "#8a8070", 'opacity="0.8"'))) +
         T(-280, -290 + 7 * 42 + 12, seg.mark || "", 30, "#1a1410", 'font-weight="900"') +
         `<ellipse id="pp-circle" cx="-60" cy="${-290 + 7 * 42 + 2}" rx="250" ry="44" fill="none" stroke="${RED}" stroke-width="8" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-3 -150 ${-290 + 7 * 42})"/>` +
-        G("translate(170 360) rotate(-10)", R(-130, -36, 260, 72, "none", `rx="8" stroke="${RED}" stroke-width="6" opacity="0.8"`) + T(0, 14, seg.seal || "БЕЗ ПОДПИСИ", 34, RED, 'text-anchor="middle" font-weight="900" letter-spacing="4" opacity="0.8"')))) +
+        G("translate(170 360) rotate(-10)", R(-130, -36, 260, 72, "none", `rx="8" stroke="${RED}" stroke-width="6" opacity="0.8"`) + T(0, 14, seg.seal || tr("БЕЗ ПОДПИСИ", "UNSIGNED"), 34, RED, 'text-anchor="middle" font-weight="900" letter-spacing="4" opacity="0.8"')))) +
       LY(1.1, G("translate(860 260)", L("M0 0 L-120 -260 L-40 -420", "#1d1f27", 22) + P("M-90 -440 l140 -40 l40 120 Z", "#1d1f27") + E(-10, -390, 40, 18, "#fff3c4") + C(-10, -380, 300, "url(#t-pool)", 'opacity="0.6"'))) + LY(0.6, dust(22, 200, 900, 400, 1500, "#ffe2a0")),
     update(root, p, lt) {
       moveDust(root, lt);
@@ -330,7 +332,7 @@ const SCENES = {
     const n = 11, mid = 5;
     const row = times(n, (i) => { const x = 540 + (i - mid) * 150, c = Math.abs(i - mid) <= 1, k = c ? 0.62 : 0.5; return `<g class="ph" data-i="${i}" transform="translate(${x} ${c ? 1400 : 1380})">${suit(0, 0, k, c ? (i === mid ? "#ff8a7a" : i < mid ? "#9fc4ff" : "#ffd98a") : "#3a4160", i === mid + 1 ? RED : "#3a1418")}</g>`; });
     return {
-      svg: R(0, 0, 1080, 1920, INK) + LY(0.15, R(-100, 0, 1280, 1500, "#0b1424") + times(9, (i) => R(-100 + i * 160, 160, 120, 1040, "#0f1c33")) + R(40, 380, 1000, 220, "#0f2a4a", 'rx="12"') + T(540, 470, "APEC · CHINA 2026", 64, "#9fc4ff", 'text-anchor="middle" font-weight="900" letter-spacing="8" opacity="0.55"') + T(540, 540, "ШЭНЬЧЖЭНЬ", 40, "#9fc4ff", 'text-anchor="middle" letter-spacing="14" opacity="0.4"')) +
+      svg: R(0, 0, 1080, 1920, INK) + LY(0.15, R(-100, 0, 1280, 1500, "#0b1424") + times(9, (i) => R(-100 + i * 160, 160, 120, 1040, "#0f1c33")) + R(40, 380, 1000, 220, "#0f2a4a", 'rx="12"') + T(540, 470, "APEC · CHINA 2026", 64, "#9fc4ff", 'text-anchor="middle" font-weight="900" letter-spacing="8" opacity="0.55"') + T(540, 540, tr("ШЭНЬЧЖЭНЬ", "SHENZHEN"), 40, "#9fc4ff", 'text-anchor="middle" letter-spacing="14" opacity="0.4"')) +
         LY(0.4, P("M540 0 L240 1450 H840 Z", "url(#t-cone)", 'opacity="0.5" style="mix-blend-mode:screen"')) + LY(0.55, R(-100, 1400, 1280, 520, "url(#t-floor)") + R(-100, 1400, 1280, 30, "#1b2233")) + LY(0.7, row) +
         LY(1.15, times(8, (i) => G(`translate(${70 + i * 135} ${1900 - (i % 2) * 40})`, E(0, -120, 64, 76, "#020306") + P("M-110 0 q0 -110 110 -110 q110 0 110 110 Z", "#020306") + G(`translate(${i % 2 ? 36 : -40} -220)`, R(-44, -32, 88, 58, "#0b0d14", 'rx="8"') + `<circle class="flash" data-i="${i}" cx="0" cy="-28" r="20" fill="#fff" opacity="0"/>`))) + `<rect id="ph-flash" width="1080" height="1920" fill="#fff" opacity="0"/>`),
       update(root, p, lt) {
