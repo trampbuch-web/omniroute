@@ -51,6 +51,7 @@
         $("chap").querySelector("b").textContent = k >= 0 ? CH[k][0] : "";
         $("toc").querySelectorAll("div").forEach((d) => (d.className = +d.dataset.k === k ? "on" : +d.dataset.k < k ? "done" : ""));
         $("place").textContent = seg.place || "";
+        $("place").style.visibility = seg.place ? "visible" : "hidden";
         $("stamp").style.display = seg.stamp ? "inline-block" : "none";
         $("stamp").textContent = seg.stamp || "";
         $("stamp").style.color = $("stamp").style.borderColor = STAMP[seg.stamp] || "#e2b25a";
