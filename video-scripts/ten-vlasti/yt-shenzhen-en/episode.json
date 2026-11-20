@@ -4,7 +4,7 @@
  "episode": 5,
  "date": "November 20, 2026",
  "lang": "en",
- "wide": true,
+ "wide": false,
  "max_len": 720,
  "chunk": [
   7,
@@ -28,6 +28,17 @@
  "scenes": [
   {
    "chapter": "Prologue",
+   "type": "host",
+   "bg": "newsroom",
+   "title": true,
+   "lines": [
+    [
+     "N",
+     "I'm Timofey, and this is Shadow of Power — the show about what happens behind the closed doors of big politics. Today: the full story of the Shenzhen summit — what led up to it, what happened at the table, and what comes next."
+    ]
+   ]
+  },
+  {
    "stamp": "RECONSTRUCTION",
    "type": "street",
    "city": "shenzhen",
@@ -88,7 +99,7 @@
    "stamp": "CONFIRMED",
    "src": "BBC · 12.11",
    "type": "host",
-   "bg": "newsroom",
+   "bg": "skyline",
    "lines": [
     [
      "N",
@@ -595,7 +606,7 @@
    "stamp": "VERSION",
    "src": "The Times — via BBC · 19.11",
    "type": "host",
-   "bg": "studio",
+   "bg": "kremlin",
    "lines": [
     [
      "N",
@@ -647,7 +658,7 @@
    "stamp": "CONFIRMED",
    "src": "NBC, BBC · 19.11",
    "type": "host",
-   "bg": "newsroom",
+   "bg": "skyline",
    "lines": [
     [
      "N",
@@ -724,7 +735,7 @@
    "stamp": "CONFIRMED",
    "src": "BBC · 20.11",
    "type": "host",
-   "bg": "skyline",
+   "bg": "newsroom",
    "lines": [
     [
      "N",
@@ -759,7 +770,7 @@
    "stamp": "VERSION",
    "src": "BBC, RUSI",
    "type": "host",
-   "bg": "newsroom",
+   "bg": "studio",
    "lines": [
     [
      "N",
@@ -901,5 +912,6 @@
     ]
    ]
   }
- ]
+ ],
+ "land": true
 }

@@ -104,7 +104,7 @@ sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", vN, "-ar", "16000", n16)
 mouth = lipsync.frames(n16, D)
 
 # 4. page
-data = {"D": D, "fps": FPS, "out0": out0, "lang": ep.get("lang", "ru"), "wide": ep.get("wide", False), "title": ep["title"], "season": ep["season"], "episode": ep["episode"], "sources": ep.get("sources", []),
+data = {"D": D, "fps": FPS, "out0": out0, "lang": ep.get("lang", "ru"), "wide": ep.get("wide", False), "land": ep.get("land", False), "title": ep["title"], "season": ep["season"], "episode": ep["episode"], "sources": ep.get("sources", []),
         "next": ep.get("next", "СЛЕДУЮЩАЯ СЕРИЯ — ЧЕРЕЗ ДВА ДНЯ"), "mouth": mouth,
         "scenes": [{**s, "lines": [{kk: v for kk, v in l.items() if kk != "audio"} for l in s["lines"]]} for s in scenes]}
 page = open(os.path.join(HERE, "shadow.html")).read()
@@ -112,6 +112,11 @@ page = page.replace("__SCENES__", open(os.path.join(HERE, "scenes.js")).read()).
 html_path = os.path.join(EP_DIR, "episode.html")
 open(html_path, "w").write(page)
 print(f"timeline: {D} s, cuts at", cuts)
+if ep.get("land"):  # YouTube chapters for the description
+    with open(os.path.join(EP_DIR, "chapters.txt"), "w") as f:
+        for i, s in enumerate(x for x in scenes if x.get("chapter")):
+            t0 = 0 if i == 0 else s["t0"]
+            f.write(f"{int(t0 // 60)}:{int(t0 % 60):02d} {s['chapter']}\n")
 
 if "--frames" in sys.argv:
     sh("node", os.path.join(VC, "shots.mjs"), html_path, os.path.join(EP_DIR, "check"), *sys.argv[sys.argv.index("--frames") + 1].split(","))

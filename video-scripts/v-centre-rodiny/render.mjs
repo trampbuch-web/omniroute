@@ -14,6 +14,8 @@ const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
 const errors = [];
 page.on("pageerror", (e) => errors.push(e.message));
 await page.goto(pathToFileURL(path.resolve(html)).href + "?capture");
+const size = await page.evaluate(() => window.SIZE); // landscape pages declare their own size
+if (size) await page.setViewportSize({ width: size[0], height: size[1] });
 const duration = await page.evaluate(() => window.DURATION);
 if (errors.length) throw new Error(errors.join("\n"));
 const ff = spawn(

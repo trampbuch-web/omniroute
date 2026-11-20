@@ -10,6 +10,8 @@ const p = await b.newPage({ viewport: { width: 1080, height: 1920 } });
 const errs = [];
 p.on("pageerror", (e) => errs.push(e.message));
 await p.goto(pathToFileURL(path.resolve(html)).href + "?capture");
+const size = await p.evaluate(() => window.SIZE); // landscape pages declare their own size
+if (size) await p.setViewportSize({ width: size[0], height: size[1] });
 for (const t of ts) {
   await p.evaluate((t) => window.render(t), +t);
   await p.screenshot({ path: `${out}-${t}.jpg`, quality: 70 });
