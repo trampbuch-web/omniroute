@@ -297,15 +297,16 @@ const SCENES = {
         `<path id="ck-sector" d="" fill="${RED}" opacity="0.35"/>` +
         `<g id="ck-min">${P("M-8 30 L-4 -360 L4 -360 L8 30 Z", "#e8e2cf")}</g><g id="ck-hour">${P("M-12 26 L-7 -230 L7 -230 L12 26 Z", GOLD)}</g>` + C(0, 0, 22, GOLD) + C(0, 0, 8, INK))) +
       `<text id="ck-big" x="540" y="1520" font-size="150" font-weight="900" text-anchor="middle" fill="${GOLD}" font-family="DejaVu Sans Mono, monospace">${seg.big || ""}</text>` + LY(0.6, dust(24, 150, 930, 400, 1500, "#ffe2a0")),
-    update(root, p, lt) {
+    update(root, p, lt, seg) {
       moveDust(root, lt);
       const m = io(p) * 0.35; // the hand sweeps a third of the hour during the scene
       root.querySelector("#ck-min").setAttribute("transform", `rotate(${m * 360})`);
       root.querySelector("#ck-hour").setAttribute("transform", `rotate(${300 + m * 30})`);
       const a = m * Math.PI * 2;
       root.querySelector("#ck-sector").setAttribute("d", m > 0.001 ? `M0 0 L0 -380 A380 380 0 ${m > 0.5 ? 1 : 0} 1 ${Math.sin(a) * 380} ${-Math.cos(a) * 380} Z` : "");
-      const left = Math.round(60 - m * 60);
-      root.querySelector("#ck-big").textContent = `${String(left).padStart(2, "0")}:00`;
+      // "MM:00" counts down from MM; any other label (e.g. a treaty name) stays as written
+      const mm = /^(\d+):00$/.exec(seg.big || "");
+      root.querySelector("#ck-big").textContent = mm ? `${String(Math.max(0, Math.round(+mm[1] - m * 60))).padStart(2, "0")}:00` : seg.big || "";
     },
   }),
 
