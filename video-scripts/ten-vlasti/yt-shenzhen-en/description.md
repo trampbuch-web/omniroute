@@ -8,17 +8,17 @@ We mark on screen what is confirmed and what is only a version. Assessments and 
 
 ⏱ Chapters:
 0:00 Prologue
-0:29 The shadow of Yalta
-1:15 The road to the table
-2:12 Two versions
-3:11 Summit day
-3:52 Ninety minutes
-5:00 The declaration
-5:27 Putin's word
-6:37 The world reacts
-7:28 Who got what
-8:26 What comes next
-9:22 Epilogue
+0:43 The shadow of Yalta
+1:28 The road to the table
+2:26 Two versions
+3:25 Summit day
+4:06 Ninety minutes
+5:14 The declaration
+5:41 Putin's word
+6:51 The world reacts
+7:41 Who got what
+8:40 What comes next
+9:36 Epilogue
 
 📚 Sources:
 — BBC News Russian: "A new Yalta? Why a Putin–Trump–Xi meeting matters" (Nov 12); "'It was not agreed with us'" (Nov 17); "APEC summit in China: Putin, Trump and Xi meet ahead of trilateral talks" (Nov 18); "First-ever trilateral meeting in Shenzhen: what did they say?" (Nov 19); "No ceasefire and an invitation to Moscow" (Nov 19); "'Putin and Xi are not our friends': Western reactions" (Nov 20)
