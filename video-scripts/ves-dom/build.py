@@ -193,7 +193,7 @@ sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", video, "-i", mix, "-map", "0
 # sponsor banner (same rules as the other channel videos): full screen at 1.1x, chroma key removed, the episode frozen
 # and darkened behind it. It goes in as the doors close after the middle stop — an ad break between floors.
 BANNER, BD = os.path.join(HERE, "assets", "banner.mp4"), 3.9 / 1.1
-if ep.get("ad", True):
+if ep.get("ad", False):  # sponsor banner only when an episode asks for it ("ad": true)
     AD = segs[len(segs) // 2]["ride"][0]
     fc = (f"[0:v]trim=0:{AD},setpts=PTS-STARTPTS,tpad=stop_mode=clone:stop_duration={BD}[p1];[0:v]trim=start={AD},setpts=PTS-STARTPTS[p2];"
           f"[p1][p2]concat=n=2:v=1:a=0,drawbox=c=black@0.88:t=fill:enable='between(t,{AD},{AD + BD})'[bg];"
