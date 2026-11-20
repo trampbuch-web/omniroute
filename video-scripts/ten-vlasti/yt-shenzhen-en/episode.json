@@ -28,13 +28,21 @@
  "scenes": [
   {
    "chapter": "Prologue",
-   "type": "chairs",
    "stamp": "RECONSTRUCTION",
+   "type": "street",
+   "city": "shenzhen",
+   "motorcade": true,
    "lines": [
     [
      "N",
      "On November nineteenth, in Shenzhen, China, the leaders of Russia, China and the United States sat at one table for the first time in history."
-    ],
+    ]
+   ]
+  },
+  {
+   "stamp": "RECONSTRUCTION",
+   "type": "summit",
+   "lines": [
     [
      "N",
      "Ninety minutes. Three powers. One declaration. And not a single word about Ukraine."
@@ -77,9 +85,10 @@
    ]
   },
   {
-   "type": "empty",
    "stamp": "CONFIRMED",
    "src": "BBC · 12.11",
+   "type": "host",
+   "bg": "newsroom",
    "lines": [
     [
      "N",
@@ -88,7 +97,14 @@
     [
      "N",
      "So when a meeting of the three leaders was announced, Kyiv answered like this."
-    ],
+    ]
+   ]
+  },
+  {
+   "type": "empty",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 12.11",
+   "lines": [
     [
      "Q3",
      "I really don't want this to be Yalta two.",
@@ -191,7 +207,16 @@
     [
      "N",
      "The Europeans came, but they were not allowed at the main table. The head of the Russian delegation called them tourists."
-    ],
+    ]
+   ]
+  },
+  {
+   "place": "ABU DHABI · 10–11 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 13.11",
+   "type": "host",
+   "bg": "studio",
+   "lines": [
     [
      "N",
      "The only concrete result: an agreement on a new prisoner exchange."
@@ -199,11 +224,11 @@
    ]
   },
   {
-   "type": "press",
-   "city": "moscow",
    "place": "MOSCOW · 12 NOV",
    "stamp": "CONFIRMED",
    "src": "BBC · 13.11",
+   "type": "street",
+   "city": "moscow",
    "lines": [
     [
      "N",
@@ -233,11 +258,11 @@
   },
   {
    "chapter": "Two versions",
-   "type": "press",
-   "city": "washington",
    "place": "12–13 NOV",
    "stamp": "CONFIRMED",
    "src": "BBC · 17.11",
+   "type": "street",
+   "city": "washington",
    "lines": [
     [
      "N",
@@ -246,7 +271,16 @@
     [
      "N",
      "After the Kremlin, Witkoff told reporters:"
-    ],
+    ]
+   ]
+  },
+  {
+   "type": "press",
+   "city": "washington",
+   "place": "12–13 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 17.11",
+   "lines": [
     [
      "Q5",
      "At the next meeting, the Europeans will join us.",
@@ -269,7 +303,16 @@
      "Q4",
      "Some people talk about expanding the format, but this was not agreed with us.",
      "YURI USHAKOV"
-    ],
+    ]
+   ]
+  },
+  {
+   "place": "MOSCOW · 16 NOV",
+   "stamp": "CONFIRMED",
+   "src": "Interfax, BBC · 16.11",
+   "type": "host",
+   "bg": "kremlin",
+   "lines": [
     [
      "N",
      "And Foreign Minister Lavrov added that he did not know which of today's European leaders could be a sensible partner."
@@ -372,9 +415,9 @@
   },
   {
    "chapter": "Ninety minutes",
-   "type": "chairs",
-   "stamp": "CONFIRMED",
+   "stamp": "RECONSTRUCTION",
    "src": "BBC · 19.11",
+   "type": "summit",
    "lines": [
     [
      "N",
@@ -387,11 +430,12 @@
    ]
   },
   {
-   "type": "leader",
-   "who": "xi",
    "place": "PUBLIC SESSION",
-   "stamp": "CONFIRMED",
+   "stamp": "RECONSTRUCTION",
    "src": "BBC · 19.11",
+   "type": "summit",
+   "focus": "xi",
+   "active": "xi",
    "lines": [
     [
      "N",
@@ -400,11 +444,12 @@
    ]
   },
   {
-   "type": "leader",
-   "who": "putin",
    "place": "PUBLIC SESSION",
-   "stamp": "CONFIRMED",
+   "stamp": "RECONSTRUCTION",
    "src": "BBC · 19.11",
+   "type": "summit",
+   "focus": "putin",
+   "active": "putin",
    "lines": [
     [
      "N",
@@ -413,11 +458,12 @@
    ]
   },
   {
-   "type": "leader",
-   "who": "trump",
    "place": "PUBLIC SESSION",
-   "stamp": "CONFIRMED",
+   "stamp": "RECONSTRUCTION",
    "src": "BBC · 19.11",
+   "type": "summit",
+   "focus": "trump",
+   "active": "trump",
    "lines": [
     [
      "N",
@@ -430,10 +476,10 @@
    ]
   },
   {
-   "type": "map",
-   "big": "SIPRI",
    "stamp": "CONFIRMED",
    "src": "BBC, SIPRI · 19.11",
+   "type": "host",
+   "bg": "newsroom",
    "lines": [
     [
      "N",
@@ -529,11 +575,11 @@
    ]
   },
   {
-   "type": "press",
-   "city": "moscow",
    "place": "PRESS CONFERENCE",
    "stamp": "CONFIRMED",
    "src": "BBC, RIA · 19.11",
+   "type": "street",
+   "city": "shenzhen",
    "lines": [
     [
      "N",
@@ -546,13 +592,10 @@
    ]
   },
   {
-   "type": "papers",
-   "head": "THE TIMES",
-   "sub": "ONE NEWSPAPER'S ACCOUNT",
-   "mark": "the bridge — a symbolic gesture",
-   "seal": "VERSION",
    "stamp": "VERSION",
    "src": "The Times — via BBC · 19.11",
+   "type": "host",
+   "bg": "studio",
    "lines": [
     [
      "N",
@@ -596,7 +639,16 @@
      "Q2",
      "He's my friend.",
      "DONALD TRUMP"
-    ],
+    ]
+   ]
+  },
+  {
+   "place": "NBC INTERVIEW",
+   "stamp": "CONFIRMED",
+   "src": "NBC, BBC · 19.11",
+   "type": "host",
+   "bg": "newsroom",
+   "lines": [
     [
      "N",
      "From Air Force One he called the Europeans gathered in Berlin and advised them to talk to Putin directly."
@@ -651,11 +703,11 @@
    ]
   },
   {
-   "type": "press",
-   "city": "washington",
    "place": "WASHINGTON",
    "stamp": "CONFIRMED",
    "src": "BBC · 20.11",
+   "type": "street",
+   "city": "washington",
    "lines": [
     [
      "N",
@@ -664,7 +716,16 @@
     [
      "N",
      "NATO Secretary General Rutte, by contrast, was completely relaxed: for nuclear powers, he said, it is normal to meet."
-    ],
+    ]
+   ]
+  },
+  {
+   "place": "WASHINGTON",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 20.11",
+   "type": "host",
+   "bg": "skyline",
+   "lines": [
     [
      "N",
      "And China's Foreign Minister Wang Yi called it a summit of peace."
@@ -694,11 +755,11 @@
    ]
   },
   {
-   "type": "leader",
-   "who": "trump",
    "place": "ANALYSTS' VIEWS",
    "stamp": "VERSION",
    "src": "BBC, RUSI",
+   "type": "host",
+   "bg": "newsroom",
    "lines": [
     [
      "N",
@@ -786,10 +847,10 @@
    ]
   },
   {
-   "type": "clock",
-   "big": "NEW START",
    "stamp": "VERSION",
    "src": "BBC · 19.11",
+   "type": "host",
+   "bg": "skyline",
    "lines": [
     [
      "N",

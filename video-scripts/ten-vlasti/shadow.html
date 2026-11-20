@@ -73,12 +73,12 @@
         $("stage").appendChild(d);
         return { ...s, el: d, layers: [...d.querySelectorAll(".ly")].map((e) => [e, +e.dataset.d]) };
       });
-      // the host rig lives in the scene that asks for it
-      const hostScene = SC.find((s) => s.host);
-      if (hostScene) {
-        const h = hostScene.host, hgt = (h.w * 1500) / 680;
-        hostScene.el.querySelector("#f-hostslot").innerHTML = `<svg id="tim" x="${h.x}" y="${h.y}" width="${h.w}" height="${hgt}" viewBox="-40 -20 680 1500">${$("hostT").content.querySelector("svg").innerHTML}</svg>`;
-        for (const id of ["armL", "armR"]) { const g = $(id); g.replaceChildren(document.querySelector("#tim #arm").cloneNode(true)); g.firstChild.removeAttribute("id"); }
+      // the host rig: one svg, moved into whichever scene shows the narrator (a ".hostslot" group in that scene)
+      if (SC.some((s) => s.host)) {
+        const g = document.createElementNS("http://www.w3.org/2000/svg", "g");
+        g.innerHTML = `<svg id="tim" viewBox="-40 -20 680 1500">${$("hostT").content.querySelector("svg").innerHTML}</svg>`;
+        SC.find((s) => s.host).el.querySelector(".hostslot").appendChild(g.firstChild);
+        for (const id of ["armL", "armR"]) { const a = $(id); a.replaceChildren(document.querySelector("#tim #arm").cloneNode(true)); a.firstChild.removeAttribute("id"); }
         document.querySelector("#tim defs #arm").remove();
         for (const q of [".mic", ".cup", ".fork"]) document.querySelectorAll("#tim " + q).forEach((e) => e.setAttribute("opacity", 0));
       }
@@ -100,14 +100,19 @@
         const punch = Math.exp(-lt * 9) * 0.05, drift = lerp(-26, 26, p);
         $("stage").style.transform = `scale(${1.03 + 0.07 * io(p) + punch})`;
         sc.layers.forEach(([e, d]) => e.setAttribute("transform", `translate(${(d - 0.5) * drift} ${(d - 0.5) * -10 * p})`));
-        sc.update(sc.el, p, lt, seg);
+        const line = lines.find((l) => t >= l.t0 && t < l.t1 + 0.2);
+        sc.update(sc.el, p, lt, seg, line, t);
         $("black").style.opacity = Math.max(clamp(1 - lt / 0.2), si === 0 ? clamp(1 - t / 0.5) : 0, clamp((t - EP.out0 + 0.15) / 0.3));
         $("grain").style.transform = `translate(${Math.floor(rnd() * 180)}px, ${Math.floor(rnd() * 180)}px) scale(4)`;
         $("grain").style.transformOrigin = "0 0";
         $("prog").style.width = (t / EP.D) * 100 + "%";
 
-        const line = lines.find((l) => t >= l.t0 && t < l.t1 + 0.2);
         if (sc.host) {
+          const tim = $("tim"), slot = sc.el.querySelector(".hostslot");
+          if (tim.parentNode !== slot) slot.appendChild(tim);
+          tim.setAttribute("x", sc.host.x);
+          tim.setAttribute("width", sc.host.w);
+          tim.setAttribute("height", (sc.host.w * 1500) / 680);
           const talk = line && line.who === "N", m = talk ? EP.mouth[Math.floor(t * FPS)] || [0, 1] : [0, 1];
           const beat = talk ? Math.sin(t * 4.6) * 7 + Math.sin(t * 2.1) * 4 : 0;
           setArm($("armL"), Math.floor(t / 2.4) % 2 ? POSE.explain : POSE.rest, beat * 0.6);
