@@ -16,6 +16,6 @@ ref = os.path.join(HERE, "voice", "narrator-ref.wav")
 ref_text = open(os.path.join(HERE, "voice", "narrator-ref.txt")).read().strip()
 for j in jobs:
     kw = {"ref_audio": ref, "ref_text": ref_text} if j["voice"] == "N" else {"instruct": j["voice"]}
-    audio = model.generate(text=j["text"], language="ru", **kw)
+    audio = model.generate(text=j["text"], language=j.get("lang", "ru"), **kw)
     sf.write(j["out"], audio[0], model.sampling_rate)
     print("ok", j["out"], flush=True)

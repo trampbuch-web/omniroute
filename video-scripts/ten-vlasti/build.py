@@ -35,16 +35,18 @@ jobs, lines = [], []
 for s in ep["scenes"]:
     for l in s["lines"]:
         voice = "N" if l[0] == "N" else ep["voices"][l[0]]
-        key = voice + (NARR_ID if voice == "N" else "") + l[1]  # a new narrator sample re-voices his lines
+        LANG = ep.get("lang", "ru")
+        key = voice + (NARR_ID if voice == "N" else "") + (LANG if LANG != "ru" else "") + l[1]  # a new narrator sample re-voices his lines
         raw = os.path.join(seg_dir, hashlib.md5(key.encode()).hexdigest()[:10] + ".wav")
         if not os.path.exists(raw):
-            jobs.append({"voice": voice, "text": l[1], "out": raw})
+            jobs.append({"voice": voice, "text": l[1], "out": raw, "lang": LANG})
         lines.append((s, l, raw))
 if jobs:
     jf = os.path.join(seg_dir, "jobs.json")
     json.dump(jobs, open(jf, "w"), ensure_ascii=False)
     sh(OV_PY, os.path.join(HERE, "tts_ov.py"), jf)
 
+CW, CC = ep.get("chunk", [3, 17])  # caption chunk: max words, max letters
 # 2. timeline: scenes back to back, each as long as its lines
 t, scenes, k, cuts = 0.45, [], 0, []
 for s in ep["scenes"]:
@@ -68,7 +70,7 @@ for s in ep["scenes"]:
             a = b
         chunks, cur = [], []
         for w in ws:
-            if cur and (len(cur) == 3 or sum(len(x[2]) for x in cur) + len(w[2]) > 17):
+            if cur and (len(cur) == CW or sum(len(x[2]) for x in cur) + len(w[2]) > CC):
                 chunks.append(cur)
                 cur = []
             cur.append(w)
@@ -102,7 +104,7 @@ sh("ffmpeg", "-nostdin", "-v", "error", "-y", "-i", vN, "-ar", "16000", n16)
 mouth = lipsync.frames(n16, D)
 
 # 4. page
-data = {"D": D, "fps": FPS, "out0": out0, "title": ep["title"], "season": ep["season"], "episode": ep["episode"], "sources": ep.get("sources", []),
+data = {"D": D, "fps": FPS, "out0": out0, "lang": ep.get("lang", "ru"), "wide": ep.get("wide", False), "title": ep["title"], "season": ep["season"], "episode": ep["episode"], "sources": ep.get("sources", []),
         "next": ep.get("next", "СЛЕДУЮЩАЯ СЕРИЯ — ЧЕРЕЗ ДВА ДНЯ"), "mouth": mouth,
         "scenes": [{**s, "lines": [{kk: v for kk, v in l.items() if kk != "audio"} for l in s["lines"]]} for s in scenes]}
 page = open(os.path.join(HERE, "shadow.html")).read()

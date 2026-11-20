@@ -341,4 +341,22 @@ const SCENES = {
       },
     };
   },
+
+  // a vertical timeline: dated nodes light up one after another, the newest glows red
+  timeline: (seg) => {
+    const it = seg.items || [], n = it.length, gap = 1500 / Math.max(1, n - 1 || 1);
+    const nodes = it.map(([d, txt], i) => { const y = 260 + i * Math.min(300, gap), last = i === n - 1; return `<g class="tl" data-i="${i}" opacity="0.2">${C(300, y, last ? 30 : 22, last ? RED : GOLD)}${C(300, y, 60, last ? "url(#t-red)" : "url(#t-gold)", 'opacity="0.6"')}${T(250, y + 16, d, 46, last ? RED : GOLD, 'text-anchor="end" font-weight="900"')}${T(350, y + 14, txt, 40, "#e8e2cf", 'font-weight="700"')}</g>`; }).join("");
+    return {
+      svg: R(0, 0, 1080, 1920, INK) + LY(0.2, R(-100, 0, 1280, 1920, "url(#t-wall)") + times(14, (i) => L(`M-100 ${140 * i} H1180`, "#0f1524", 2))) +
+        LY(0.6, `<g id="tl-all">${L(`M300 200 V${260 + (n - 1) * Math.min(300, gap) + 60}`, "#2a3350", 6)}<path id="tl-line" d="M300 200 V200" stroke="${GOLD}" stroke-width="6"/>${nodes}</g>`) + LY(0.5, dust(20, 100, 980, 300, 1700, "#ffe2a0")),
+      update(root, p, lt) {
+        moveDust(root, lt);
+        const step = Math.min(300, gap), k = io(p / 0.85) * (n - 1);
+        root.querySelector("#tl-line").setAttribute("d", `M300 200 V${260 + k * step}`);
+        root.querySelectorAll(".tl").forEach((e) => { const i = +e.dataset.i; e.setAttribute("opacity", 0.2 + 0.8 * ease((k - i + 0.6) / 0.6)); });
+        const h = 260 + (n - 1) * step;
+        root.querySelector("#tl-all").setAttribute("transform", `translate(0 ${h > 1500 ? -(h - 1500) * io(p) : 0})`);
+      },
+    };
+  },
 };

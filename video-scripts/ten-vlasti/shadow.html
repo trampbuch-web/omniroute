@@ -47,9 +47,16 @@
       __SCENES__
       const EP = __EP__;
       const FPS = EP.fps, $ = (id) => document.getElementById(id);
-      $("epi").textContent = `сезон ${EP.season} · серия ${EP.episode} · «${EP.title}»`;
+      const EN = EP.lang === "en";
+      const TXT = EN ? { brand: "SHADOW OF POWER", end: "SHADOW<br />OF POWER", epi: `season ${EP.season} · episode ${EP.episode} · “${EP.title}”`, src: "source: ", quote: "QUOTE", sources: "Sources: " }
+                     : { brand: "ТЕНЬ ВЛАСТИ", end: "ТЕНЬ<br />ВЛАСТИ", epi: `сезон ${EP.season} · серия ${EP.episode} · «${EP.title}»`, src: "источник: ", quote: "ЦИТАТА", sources: "Источники: " };
+      $("brand").textContent = TXT.brand;
+      $("end").querySelector("h1").innerHTML = TXT.end;
+      $("epi").textContent = TXT.epi;
       $("end").querySelector("h2").textContent = EP.next;
-      $("end").querySelector("p").innerHTML = "Источники: " + EP.sources.join(" · ");
+      $("end").querySelector("p").innerHTML = TXT.sources + EP.sources.join(" · ");
+      // wide (YouTube 16:9): the side panels and captions are drawn by wide.html, the scene stays clean
+      if (EP.wide) for (const id of ["brand", "epi", "place", "stamp", "src", "caps", "prog"]) $(id).style.display = "none";
       // film grain: one noise tile, shifted every frame
       {
         const c = $("grain"), g = c.getContext("2d"), im = g.createImageData(370, 580);
@@ -82,7 +89,7 @@
         el.querySelector(".finger").setAttribute("opacity", 0);
       }
       const lines = EP.scenes.flatMap((s) => s.lines);
-      const STAMP = { "ПОДТВЕРЖДЕНО": "#4fd38a", "ВЕРСИЯ": "#ffb03a", "РЕКОНСТРУКЦИЯ": "#9fc4ff" };
+      const STAMP = { "ПОДТВЕРЖДЕНО": "#4fd38a", "ВЕРСИЯ": "#ffb03a", "РЕКОНСТРУКЦИЯ": "#9fc4ff", CONFIRMED: "#4fd38a", VERSION: "#ffb03a", RECONSTRUCTION: "#9fc4ff" };
 
       function render(t) {
         let si = EP.scenes.findIndex((s) => t < s.t1);
@@ -125,12 +132,12 @@
         st.textContent = seg.stamp || "";
         st.style.color = st.style.borderColor = STAMP[seg.stamp] || "#e2b25a";
         st.style.transform = `rotate(3deg) scale(${1.7 - 0.7 * v})`;
-        $("src").textContent = seg.src && !end ? "источник: " + seg.src : "";
+        $("src").textContent = seg.src && !end ? TXT.src + seg.src : "";
         let html = "", cls = "";
         if (line && !end) {
           const ch = line.chunks.find((c) => t >= c.t0 && t < c.t1) || line.chunks[line.chunks.length - 1];
           cls = line.who === "N" ? "" : "q";
-          html = (line.label ? `<span class="who"><span>ЦИТАТА · ${line.label}</span></span>` : "") + ch.words.map((w) => `<span class="${t >= w[0] && t < w[1] + 0.06 ? "on" : ""}">${w[2]}</span>`).join(" ");
+          html = (line.label ? `<span class="who"><span>${TXT.quote} · ${line.label}</span></span>` : "") + ch.words.map((w) => `<span class="${t >= w[0] && t < w[1] + 0.06 ? "on" : ""}">${w[2]}</span>`).join(" ");
         }
         if ($("caps").dataset.h !== html) { $("caps").dataset.h = html; $("caps").innerHTML = html; $("caps").className = cls; }
         const ev = clamp((t - EP.out0 - 0.1) / 0.5);
