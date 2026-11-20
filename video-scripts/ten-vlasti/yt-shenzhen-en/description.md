@@ -7,7 +7,18 @@ In this episode of Shadow of Power: the full story. Why Europe feared a "new Yal
 We mark on screen what is confirmed and what is only a version. Assessments and forecasts are analysts' opinions, not facts.
 
 ⏱ Chapters:
-__CHAPTERS__
+0:00 Prologue
+0:29 The shadow of Yalta
+1:15 The road to the table
+2:12 Two versions
+3:11 Summit day
+3:52 Ninety minutes
+5:00 The declaration
+5:27 Putin's word
+6:37 The world reacts
+7:28 Who got what
+8:26 What comes next
+9:22 Epilogue
 
 📚 Sources:
 — BBC News Russian: "A new Yalta? Why a Putin–Trump–Xi meeting matters" (Nov 12); "'It was not agreed with us'" (Nov 17); "APEC summit in China: Putin, Trump and Xi meet ahead of trilateral talks" (Nov 18); "First-ever trilateral meeting in Shenzhen: what did they say?" (Nov 19); "No ceasefire and an invitation to Moscow" (Nov 19); "'Putin and Xi are not our friends': Western reactions" (Nov 20)
