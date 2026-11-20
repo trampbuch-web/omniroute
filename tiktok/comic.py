@@ -392,6 +392,17 @@ def p_capsule():
     return im
 
 
+def p_tent():
+    im, d = _c()
+    d.polygon([(30, 440), (180, 160), (470, 200), (500, 440)], fill=(140, 120, 80), outline=INK, width=OW)
+    d.polygon([(30, 440), (180, 160), (250, 440)], fill=(120, 100, 66), outline=INK, width=OW)
+    d.line((300, 230, 330, 420), fill=INK, width=8); d.line((330, 230, 360, 420), fill=INK, width=8)  # slits cut from inside
+    d.polygon([(300, 230), (330, 420), (345, 420), (318, 230)], fill=(20, 20, 26))
+    d.polygon([(0, 440), (520, 440), (520, 520), (0, 520)], fill=(236, 240, 250), outline=INK, width=6)
+    d.polygon([(330, 200), (470, 200), (500, 300), (360, 260)], fill=(236, 240, 250))  # half buried in snow
+    return im
+
+
 PROPS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 EMOJI2PROP = {"🕴️": "person", "👤": "person", "👷": "person", "🧑‍💻": "person", "👥": "crowd", "✈️": "plane", "🛫": "plane",
               "🚪": "door", "💰": "money", "💵": "money", "💸": "money", "📱": "phone", "✉️": "letter", "⏳": "clock",

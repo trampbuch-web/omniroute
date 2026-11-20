@@ -1,0 +1,577 @@
+{
+ "id": "dyatlov-1959",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "igor": {
+   "top": "coat",
+   "hair": "beanie",
+   "color": [
+    60,
+    70,
+    120
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "hair_color": [
+    60,
+    40,
+    30
+   ]
+  },
+  "zina": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    150,
+    50,
+    60
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "hair_color": [
+    50,
+    34,
+    24
+   ]
+  },
+  "yura": {
+   "top": "coat",
+   "hair": "short",
+   "color": [
+    70,
+    100,
+    70
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "hair_color": [
+    150,
+    110,
+    60
+   ]
+  },
+  "kolya": {
+   "top": "hoodie",
+   "hair": "beanie",
+   "color": [
+    90,
+    80,
+    60
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ]
+  },
+  "inv": {
+   "top": "coat",
+   "hair": "fedora",
+   "color": [
+    50,
+    50,
+    56
+   ],
+   "pants": [
+    30,
+    30,
+    36
+   ],
+   "mustache": true
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ПОХОД",
+   "date": "02.1959",
+   "music": "m3"
+  },
+  "2": {
+   "title": "НОЧЬ",
+   "date": "01—02.02.1959",
+   "music": "m1"
+  },
+  "3": {
+   "title": "НАХОДКИ",
+   "date": "02—05.1959",
+   "music": "m3"
+  },
+  "4": {
+   "title": "ВЕРСИИ",
+   "date": "1959 — 2019",
+   "music": "m1"
+  }
+ },
+ "description": "Палатку разрезали изнутри. Девять человек ушли в −30 босиком 🏔️ Тайна перевала Дятлова\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #перевалдятлова #мистика #загадка",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Палатку разрезали изнутри. Девять человек выбежали в мороз минус тридцать. Босиком.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "big": "РАЗРЕЗАНО ИЗНУТРИ",
+    "props": [
+     {
+      "name": "tent",
+      "x": 500,
+      "y": 930,
+      "s": 0.8
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Северный Урал. Февраль пятьдесят девятого.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "sub": "УРАЛ · ФЕВРАЛЬ 1959",
+    "actors": [
+     {
+      "who": "igor",
+      "pose": "walk",
+      "from": -120,
+      "to": 360,
+      "t0": 0,
+      "t1": 2.4
+     },
+     {
+      "who": "zina",
+      "pose": "walk",
+      "from": -320,
+      "to": 160,
+      "t0": 0,
+      "t1": 2.4
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Группа опытных туристов. Ведёт Игорь Дятлов.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "actors": [
+     {
+      "who": "igor",
+      "x": 500,
+      "pose": "talk",
+      "mood": "happy"
+     },
+     {
+      "who": "zina",
+      "x": 260,
+      "pose": "idle",
+      "mood": "happy"
+     },
+     {
+      "who": "yura",
+      "x": 760,
+      "pose": "idle",
+      "face": "l"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Они ставят палатку на склоне горы, которую манси называют Мёртвой.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "props": [
+     {
+      "name": "tent",
+      "x": 640,
+      "y": 930,
+      "s": 0.55
+     }
+    ],
+    "actors": [
+     {
+      "who": "kolya",
+      "x": 260,
+      "pose": "dig"
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Ночью что-то происходит.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "snowpeak",
+    "weather": "snow",
+    "props": [
+     {
+      "name": "tent",
+      "x": 500,
+      "y": 930,
+      "s": 0.7
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Они режут палатку ножом. Изнутри.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "fx": "alarm",
+    "prop": "tent",
+    "big": "НОЖОМ"
+   },
+   "sfx": [
+    "static",
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "И бегут вниз по склону. В носках. Без курток.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "actors": [
+     {
+      "who": "igor",
+      "pose": "run",
+      "face": "l",
+      "from": 1150,
+      "to": 200,
+      "t0": 0,
+      "t1": 2
+     },
+     {
+      "who": "zina",
+      "pose": "run",
+      "face": "l",
+      "from": 1350,
+      "to": 420,
+      "t0": 0.2,
+      "t1": 2.2
+     },
+     {
+      "who": "yura",
+      "pose": "run",
+      "face": "l",
+      "from": 1550,
+      "to": 650,
+      "t0": 0.4,
+      "t1": 2.4
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "От чего можно бежать в мороз — туда, где верная смерть?",
+   "scene": {
+    "bg": "dark",
+    "set": "snowpeak",
+    "weather": "snow",
+    "actors": [
+     {
+      "who": "zina",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Через три недели поисковики находят палатку.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "props": [
+     {
+      "name": "tent",
+      "x": 650,
+      "y": 930,
+      "s": 0.55
+     }
+    ],
+    "actors": [
+     {
+      "who": "inv",
+      "pose": "walk",
+      "from": -120,
+      "to": 330,
+      "t0": 0,
+      "t1": 2.2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Внутри — еда, одежда, обувь. Всё на месте.",
+   "ad_before": true,
+   "tag": "dramatic",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "props": [
+     {
+      "name": "tent",
+      "x": 650,
+      "y": 930,
+      "s": 0.55
+     }
+    ],
+    "actors": [
+     {
+      "who": "inv",
+      "x": 330,
+      "pose": "point",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "У кедра — следы костра. И первые тела.",
+   "scene": {
+    "bg": "dark",
+    "set": "forest",
+    "weather": "snow",
+    "actors": [
+     {
+      "who": "inv",
+      "x": 500,
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "hit"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Трое лежат между кедром и палаткой. Будто ползли обратно.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "big": "ПОЛЗЛИ НАЗАД"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Последних четверых находят только в мае. В овраге.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "forest",
+    "weather": "fog",
+    "sub": "МАЙ 1959",
+    "actors": [
+     {
+      "who": "inv",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "У них тяжёлые травмы. Как после удара машины. Но снаружи — ни синяка.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "НИ СИНЯКА",
+    "sub": "ТЯЖЁЛЫЕ ТРАВМЫ"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "А на одежде — следы радиации.",
+   "scene": {
+    "bg": "green",
+    "prop": "folder",
+    "big": "РАДИАЦИЯ"
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Следствие закрывают с формулировкой: «стихийная сила, преодолеть которую они не могли».",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "inv",
+      "x": 500,
+      "pose": "talk",
+      "mood": "sad"
+     }
+    ]
+   },
+   "say": {
+    "who": "inv",
+    "text": "Стихийная сила. Дело закрыто."
+   },
+   "sfx": [
+    "gavel"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Шестьдесят лет версий. Ракеты. Лавина. Инфразвук. Даже снежный человек.",
+   "scene": {
+    "bg": "purple",
+    "big_top": "ВЕРСИИ",
+    "items": [
+     "Испытания ракет",
+     "Лавина",
+     "Инфразвук",
+     "Снежный человек"
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "В две тысячи девятнадцатом дело снова открывают.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "sub": "2019",
+    "actors": [
+     {
+      "who": "inv",
+      "x": 500,
+      "pose": "point"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Вывод — небольшая снежная лавина ночью сдвинула снег на палатку.",
+   "scene": {
+    "bg": "navy",
+    "set": "snowpeak",
+    "weather": "snow",
+    "props": [
+     {
+      "name": "tent",
+      "x": 500,
+      "y": 930,
+      "s": 0.6
+     }
+    ],
+    "big": "ЛАВИНА?"
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Но родственники погибших с этим не согласны до сих пор.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "snowpeak",
+    "weather": "snow",
+    "actors": [
+     {
+      "who": "zina",
+      "x": 500,
+      "pose": "lookup",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "А ты как думаешь, что случилось той ночью? Пиши в комментариях.",
+   "scene": {
+    "bg": "purple",
+    "set": "snowpeak",
+    "weather": "snow",
+    "big": "ЧТО ЭТО БЫЛО?",
+    "props": [
+     {
+      "name": "tent",
+      "x": 500,
+      "y": 930,
+      "s": 0.6
+     }
+    ]
+   }
+  }
+ ]
+}

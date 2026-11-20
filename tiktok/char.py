@@ -413,6 +413,18 @@ def _set_new(d, name, t, W_, H_):
         for k in range(5): d.line((40 + k * 200, 700, 80 + k * 200, 690), fill=(240, 240, 240), width=4)
         d.rectangle((0, GROUND, W_, H_), fill=(196, 150, 96), outline=INK, width=OW)
         return True
+    if name == "snowpeak":
+        for y in range(0, GROUND, 6):
+            k = y / GROUND; d.rectangle((0, y, W_, y + 6), fill=(int(14 + 40 * k), int(20 + 50 * k), int(48 + 70 * k)))
+        d.ellipse((780, 70, 900, 190), fill=(230, 236, 250), outline=INK, width=OW)
+        d.polygon([(0, 620), (260, 300), (420, 470), (640, 220), (1000, 600), (1000, GROUND), (0, GROUND)], fill=(150, 166, 196), outline=INK)
+        d.polygon([(640, 220), (590, 300), (620, 290), (660, 330), (700, 280)], fill=(240, 244, 252))
+        d.polygon([(260, 300), (220, 360), (250, 350), (290, 380), (310, 350)], fill=(240, 244, 252))
+        for x, s_ in [(60, .7), (900, .8)]:
+            for k in range(3):
+                y = GROUND - 60 * s_ - k * 90 * s_; d.polygon([(x - 110 * s_ + k * 22, y), (x + 110 * s_ - k * 22, y), (x, y - 150 * s_)], fill=(24, 60, 50), outline=INK, width=6)
+        d.rectangle((0, GROUND, W_, H_), fill=(226, 232, 244), outline=INK, width=OW)
+        return True
     if name == "tunnel":
         d.rectangle((0, 0, W_, H_), fill=(54, 40, 30))
         for k in range(30):
@@ -459,6 +471,11 @@ def weather(panel, kind, t):
         for k in range(10):  # splashes on the ground
             x = rng.uniform(0, W_); ph = (t * 2 + k * 0.37) % 1
             d.ellipse((x - 26 * ph, GROUND + 20 - 6 * ph, x + 26 * ph, GROUND + 20 + 6 * ph), outline=(220, 235, 255, int(160 * (1 - ph))), width=2)
+    elif kind == "snow":
+        for k in range(160):
+            x0, y0, sp = rng.uniform(0, W_), rng.uniform(0, H_), rng.uniform(60, 160)
+            y = (y0 + t * sp) % H_; x = (x0 + 30 * math.sin(t * 1.3 + k) + t * 40) % W_; r = rng.uniform(2, 6)
+            d.ellipse((x - r, y - r, x + r, y + r), fill=(255, 255, 255, 200))
     elif kind == "fog":
         for k in range(5):
             y = 300 + k * 140; x = (t * (20 + 8 * k) + k * 300) % (W_ + 800) - 800
