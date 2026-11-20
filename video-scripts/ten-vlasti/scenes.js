@@ -279,7 +279,7 @@ const SCENES = {
         times(16, (i) => (i === 7 ? "" : R(-280, -290 + i * 42, 300 + ((i * 97) % 260), 16, i % 5 === 3 ? "#111" : "#8a8070", 'opacity="0.8"'))) +
         T(-280, -290 + 7 * 42 + 12, seg.mark || "", 30, "#1a1410", 'font-weight="900"') +
         `<ellipse id="pp-circle" cx="-60" cy="${-290 + 7 * 42 + 2}" rx="250" ry="44" fill="none" stroke="${RED}" stroke-width="8" pathLength="1" stroke-dasharray="1" stroke-dashoffset="1" transform="rotate(-3 -150 ${-290 + 7 * 42})"/>` +
-        G("translate(170 360) rotate(-10)", R(-130, -36, 260, 72, "none", `rx="8" stroke="${RED}" stroke-width="6" opacity="0.8"`) + T(0, 14, "БЕЗ ПОДПИСИ", 34, RED, 'text-anchor="middle" font-weight="900" letter-spacing="4" opacity="0.8"')))) +
+        G("translate(170 360) rotate(-10)", R(-130, -36, 260, 72, "none", `rx="8" stroke="${RED}" stroke-width="6" opacity="0.8"`) + T(0, 14, seg.seal || "БЕЗ ПОДПИСИ", 34, RED, 'text-anchor="middle" font-weight="900" letter-spacing="4" opacity="0.8"')))) +
       LY(1.1, G("translate(860 260)", L("M0 0 L-120 -260 L-40 -420", "#1d1f27", 22) + P("M-90 -440 l140 -40 l40 120 Z", "#1d1f27") + E(-10, -390, 40, 18, "#fff3c4") + C(-10, -380, 300, "url(#t-pool)", 'opacity="0.6"'))) + LY(0.6, dust(22, 200, 900, 400, 1500, "#ffe2a0")),
     update(root, p, lt) {
       moveDust(root, lt);
