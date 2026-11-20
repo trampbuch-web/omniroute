@@ -13,8 +13,10 @@ await p.evaluate((t) => {
   const c = document.getElementById("caps");
   c.dataset.h = "";
   c.className = "";
-  c.innerHTML = `«${EP.title.toUpperCase()}»`;
-  c.style.cssText += "font-size:120px;color:#ffd98a;top:1500px;letter-spacing:4px";
+  const [name, tag] = EP.title.split(" · ");
+  const size = Math.min(120, 940 / ((name.length + 2) * 0.86)); // long titles shrink to one line
+  c.innerHTML = `«${name.toUpperCase()}»` + (tag ? `<div style="font-size:48px;color:#e3262f;letter-spacing:8px;margin-top:10px">${tag.toUpperCase()}</div>` : "");
+  c.style.cssText += `font-size:${size}px;color:#ffd98a;top:1500px;letter-spacing:4px`;
   for (const id of ["prog", "src"]) document.getElementById(id).style.display = "none";
   document.querySelectorAll("[id$=\"-big\"]").forEach((e) => (e.style.display = "none")); // scene numbers would clash with the title
 }, +(process.argv[3] || 4.6));
