@@ -521,7 +521,7 @@ const SCENES = {
       LY(0.55, R(-100, 1360, 1280, 560, "#141826") + times(22, (i) => R(-80 + i * 60, 1380, 8, 200, "#05070d")) + R(-100, 1380, 1280, 10, "#05070d") + R(-100, 1480, 1280, 8, "#05070d") +
         R(-60, 1300, 30, 290, "#1a1f30") + C(-45, 1290, 22, "#fff3c4") + E(-45, 1560, 200, 30, "#fff3c4", 'opacity="0.12"') + R(1110, 1300, 30, 290, "#1a1f30")) +
       LY(0.8, `<g id="em-car">${R(-160, -70, 320, 70, "#05060a", 'rx="22"')}${R(-100, -116, 190, 52, "#0b0d14", 'rx="16"')}${C(-96, 4, 28, "#000")}${C(96, 4, 28, "#000")}${C(-154, -40, 12, RED)}${P("M160 -40 l420 -60 v120 Z", "#fff3c4", 'opacity="0.13"')}${C(156, -40, 12, "#fff3c4")}</g>`) +
-      LY(1.1, R(-100, 1720, 1280, 200, "#2a2d3c") + R(-100, 1720, 1280, 8, "#4a4f66") + R(80, 1600, 420, 90, "#0f1428", `stroke="#cfe0ff" stroke-width="3" stroke-opacity="0.5" rx="8"`) + T(290, 1660, seg.sign || tr("КОПЕНГАГЕН", "COPENHAGEN"), 42, "#cfe0ff", 'text-anchor="middle" font-weight="700" letter-spacing="3"')) +
+      LY(1.1, R(-100, 1720, 1280, 200, "#2a2d3c") + R(-100, 1720, 1280, 8, "#4a4f66") + R(80, 1250, 420, 90, "#0f1428", `stroke="#cfe0ff" stroke-width="3" stroke-opacity="0.5" rx="8"`) + T(290, 1310, seg.sign || tr("КОПЕНГАГЕН", "COPENHAGEN"), 42, "#cfe0ff", 'text-anchor="middle" font-weight="700" letter-spacing="3"')) +
       LY(0.9, times(50, () => `<path class="em-rain" data-x="${rnd() * 1280 - 100}" data-p="${rnd()}" d="" stroke="#cfe0ff" stroke-width="2" opacity="0.3"/>`)),
     update(root, p, lt) {
       root.querySelector("#em-flag").setAttribute("transform", `skewY(${Math.sin(lt * 2.2) * 4})`);
