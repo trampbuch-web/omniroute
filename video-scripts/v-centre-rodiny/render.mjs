@@ -1,5 +1,5 @@
 // Renders a vertical 1080×1920 episode page to MP4 frame by frame.
-// Usage: node render.mjs page.html out.mp4 [fps]
+// Usage: node render.mjs page.html out.mp4 [fps] [from-second] [to-second]
 import { spawn } from "node:child_process";
 import { createRequire } from "node:module";
 import { pathToFileURL } from "node:url";
@@ -7,7 +7,7 @@ import path from "node:path";
 
 // require() also finds a globally installed Playwright (NODE_PATH), ESM import does not
 const { chromium } = createRequire(import.meta.url)("playwright");
-const [html, out, fpsArg] = process.argv.slice(2);
+const [html, out, fpsArg, fromArg, toArg] = process.argv.slice(2);
 const fps = Number(fpsArg || 25);
 const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
@@ -42,9 +42,10 @@ const ff = spawn(
   ],
   { stdio: ["pipe", "inherit", "inherit"] }
 );
-const frames = Math.round(duration * fps);
+const t0 = Number(fromArg || 0), t1 = Math.min(Number(toArg || duration), duration);
+const frames = Math.round((t1 - t0) * fps);
 for (let i = 0; i < frames; i++) {
-  await page.evaluate((t) => window.render(t), i / fps);
+  await page.evaluate((t) => window.render(t), t0 + i / fps);
   const buf = await page.screenshot({ type: "jpeg", quality: 90 });
   if (!ff.stdin.write(buf)) await new Promise((r) => ff.stdin.once("drain", r));
 }
