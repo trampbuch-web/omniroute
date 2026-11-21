@@ -443,9 +443,9 @@ const SCENES = {
   summit: (seg) => {
     const LEAD = {
       putin: { x: 250, skin: "#e9c6aa", suit: "#1f2a44", tie: "#6b1f2e", rx: 66, ry: 84, flag: "ru",
-        hair: P("M-66 -560 q-6 -50 18 -66 M66 -560 q6 -50 -18 -66", "none", 'stroke="#b39a7c" stroke-width="16" stroke-linecap="round"') + P("M-40 -628 q40 -18 80 0", "none", 'stroke="#c9b293" stroke-width="6" opacity="0.7"'), brow: "#9a8064", eye: "#6f8aa8" },
+        hair: P("M-68 -505 Q-74 -578 -30 -596 Q0 -604 30 -596 Q74 -578 68 -505 Q62 -548 44 -566 Q0 -582 -44 -566 Q-62 -548 -68 -505 Z", "#b39a7c") + P("M-36 -584 Q0 -594 36 -584", "none", 'stroke="#d2bc9c" stroke-width="5" stroke-linecap="round"'), brow: "#9a8064", eye: "#6f8aa8" },
       xi: { x: 540, skin: "#f0ccab", suit: "#1d1f27", tie: "#9a1a22", rx: 80, ry: 84, flag: "cn",
-        hair: P("M-80 -560 q-6 -86 80 -92 q86 4 82 92 q-10 -40 -50 -52 q-50 -6 -112 52 Z", "#141414"), brow: "#141414", eye: "#2a1a10" },
+        hair: P("M-82 -505 Q-92 -598 -10 -606 Q72 -610 88 -540 Q87 -522 82 -505 Q74 -556 30 -568 Q-24 -576 -52 -556 Q-74 -538 -82 -505 Z", "#141414") + P("M-30 -598 Q20 -604 60 -586", "none", 'stroke="#3a3a44" stroke-width="5" stroke-linecap="round"'), brow: "#141414", eye: "#2a1a10" },
       trump: { x: 830, skin: "#f0c39c", suit: "#1d2f6b", tie: "#c8102e", rx: 84, ry: 92, flag: "us",
         hair: P("M-90 -520 Q-100 -600 -40 -616 Q20 -630 70 -610 Q104 -594 92 -520 Q80 -566 40 -580 Q-30 -596 -70 -566 Q-84 -548 -90 -520 Z", "#e6c36a") + P("M-60 -572 Q0 -600 70 -584", "none", 'stroke="#f3d98a" stroke-width="6" stroke-linecap="round"'), brow: "#d9b45a", eye: "#4a6a8a" },
     };
