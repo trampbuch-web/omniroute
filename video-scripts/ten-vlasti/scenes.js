@@ -485,4 +485,49 @@ const SCENES = {
       },
     };
   },
+  // a land border crossing at night: floodlit booth, a barrier that lowers, snow (seg.sign, seg.big)
+  border: (seg) => ({
+    svg: `<defs><linearGradient id="bd-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0a1230"/><stop offset="1" stop-color="#2a3a66"/></linearGradient></defs>` +
+      R(0, 0, 1080, 1920, "url(#bd-sky)") + LY(0.1, times(40, () => C(rnd() * 1280 - 100, rnd() * 700, 1 + rnd() * 2, "#fff", `opacity="${0.2 + rnd() * 0.5}"`))) +
+      LY(0.2, P("M-100 1000 L140 820 L260 900 L380 760 L520 880 L700 740 L860 860 L1180 780 V1000 Z", "#141c36") + P("M640 1000 V620 h50 v-70 l40 -60 40 60 v70 h50 V1000 Z", "#1c2442") + C(730, 520, 6, RED, 'class="bd-blink"')) +
+      (seg.big ? T(540, 440, seg.big, 120, "#fff", 'text-anchor="middle" font-weight="900" letter-spacing="6" opacity="0.92"') : "") +
+      LY(0.45, R(-100, 990, 1280, 40, "#3a4566") + times(14, (i) => R(-100 + i * 95, 960, 12, 40, "#4a5578")) + R(-100, 968, 1280, 6, "#4a5578")) +
+      LY(0.6, R(-100, 1020, 1280, 900, "#1a2034") + P("M380 1020 L-100 1920 H1180 L700 1020 Z", "#252c42") + times(8, (i) => R(532, 1060 + i * 110 + i * i * 6, 16, 50 + i * 8, "#e9e4c8", 'opacity="0.5"')) +
+        P("M200 1040 L880 1040 L920 1120 L160 1120 Z", "#3a4566") + R(180, 1120, 720, 24, "#e9e4c8", 'opacity="0.85"') + times(5, (i) => R(200 + i * 160, 1144, 22, 180, "#2e3652")) +
+        P("M330 1144 L20 1500 H620 L520 1144 Z", "#fff3c4", 'opacity="0.10"') + P("M760 1144 L560 1500 H1080 L860 1144 Z", "#fff3c4", 'opacity="0.10"') + C(420, 1132, 14, "#fff3c4") + C(800, 1132, 14, "#fff3c4") +
+        R(690, 1180, 150, 220, "#2e3652", 'rx="6"') + R(706, 1200, 118, 90, "#ffe2a0", 'opacity="0.75"') + R(690, 1170, 150, 14, "#e3262f", 'opacity="0.8"') +
+        R(300, 1080, 480, 70, "#0f1428", `stroke="#cfe0ff" stroke-width="3" stroke-opacity="0.5"`) + T(540, 1128, seg.sign || tr("НАРВА · ЭСТОНИЯ", "NARVA · ESTONIA"), 40, "#cfe0ff", 'text-anchor="middle" font-weight="700" letter-spacing="3"')) +
+      LY(0.85, R(250, 1380, 50, 200, "#1a1f30") + `<g id="bd-bar">${times(10, (i) => R(300 + i * 60, 1400, 60, 26, i % 2 ? "#fff" : RED))}${C(300, 1413, 22, "#0f1428")}</g>` + C(275, 1370, 16, RED, 'class="bd-lamp"') +
+        `<g id="bd-sign" opacity="0">${R(560, 1470, 420, 120, RED, 'rx="10"')}${T(770, 1548, tr("ЗАКРЫТО", "CLOSED"), 64, "#fff", 'text-anchor="middle" font-weight="900" letter-spacing="6"')}</g>`) +
+      LY(1.1, R(-100, 1700, 1280, 220, "#2a2d3c") + times(4, (i) => R(40 + i * 280, 1640, 160, 70, "#c8ccd8", 'rx="10" opacity="0.9"')) + times(4, (i) => R(40 + i * 280, 1620, 160, 24, "#e3262f", 'opacity="0.5"'))) +
+      LY(0.9, times(60, () => `<circle class="bd-snow" r="${2 + rnd() * 4}" fill="#fff" data-x="${rnd() * 1180 - 50}" data-p="${rnd()}" opacity="0.8"/>`)),
+    update(root, p, lt) {
+      const a = -80 * (1 - ease((p - 0.25) / 0.35));
+      root.querySelector("#bd-bar").setAttribute("transform", `rotate(${a} 300 1413)`);
+      root.querySelector("#bd-sign").setAttribute("opacity", ease((p - 0.55) / 0.2));
+      root.querySelectorAll(".bd-blink,.bd-lamp").forEach((e) => e.setAttribute("opacity", Math.sin(lt * 5) > 0 ? 1 : 0.25));
+      root.querySelectorAll(".bd-snow").forEach((e) => { e.setAttribute("cx", +e.dataset.x + Math.sin(lt + +e.dataset.p * 6) * 24); e.setAttribute("cy", ((lt * 0.09 + +e.dataset.p) % 1) * 1920); });
+    },
+  }),
+
+  // an embassy at night: columns, a flag on the roof, a black car leaving through the gate (seg.big, seg.sign)
+  embassy: (seg) => ({
+    svg: `<defs><linearGradient id="em-sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0b1028"/><stop offset="1" stop-color="#26355e"/></linearGradient></defs>` +
+      R(0, 0, 1080, 1920, "url(#em-sky)") + LY(0.1, C(860, 260, 70, "#e9e4c8", 'opacity="0.85"') + C(890, 240, 64, "#1a2448", 'opacity="0.9"') + times(30, () => C(rnd() * 1280 - 100, rnd() * 700, 1 + rnd() * 2, "#fff", `opacity="${0.2 + rnd() * 0.5}"`))) +
+      (seg.big ? T(540, 470, seg.big, 120, "#fff", 'text-anchor="middle" font-weight="900" letter-spacing="6" opacity="0.92"') : "") +
+      LY(0.35, R(536, 560, 8, 220, "#8d95a3") + `<g id="em-flag">${R(544, 566, 150, 34, "#fff")}${R(544, 600, 150, 34, "#1c4fd8")}${R(544, 634, 150, 34, RED)}</g>` +
+        P("M120 860 L540 720 L960 860 Z", "#d8d2c0") + R(140, 860, 800, 40, "#cfc8b4") + times(6, (i) => R(190 + i * 136, 900, 50, 420, "#e4dece") + R(180 + i * 136, 900, 70, 20, "#cfc8b4")) +
+        R(140, 900, 800, 420, "#8a8676", 'opacity="0.35"') + times(5, (i) => R(256 + i * 136, 960, 54, 110, "#ffe2a0", `class="em-w" opacity="0.7"`)) + R(470, 1120, 140, 200, "#3a2c1c") + R(100, 1320, 880, 40, "#b8b2a0")) +
+      LY(0.55, R(-100, 1360, 1280, 560, "#141826") + times(22, (i) => R(-80 + i * 60, 1380, 8, 200, "#05070d")) + R(-100, 1380, 1280, 10, "#05070d") + R(-100, 1480, 1280, 8, "#05070d") +
+        R(-60, 1300, 30, 290, "#1a1f30") + C(-45, 1290, 22, "#fff3c4") + E(-45, 1560, 200, 30, "#fff3c4", 'opacity="0.12"') + R(1110, 1300, 30, 290, "#1a1f30")) +
+      LY(0.8, `<g id="em-car">${R(-160, -70, 320, 70, "#05060a", 'rx="22"')}${R(-100, -116, 190, 52, "#0b0d14", 'rx="16"')}${C(-96, 4, 28, "#000")}${C(96, 4, 28, "#000")}${C(-154, -40, 12, RED)}${P("M160 -40 l420 -60 v120 Z", "#fff3c4", 'opacity="0.13"')}${C(156, -40, 12, "#fff3c4")}</g>`) +
+      LY(1.1, R(-100, 1720, 1280, 200, "#2a2d3c") + R(-100, 1720, 1280, 8, "#4a4f66") + R(80, 1600, 420, 90, "#0f1428", `stroke="#cfe0ff" stroke-width="3" stroke-opacity="0.5" rx="8"`) + T(290, 1660, seg.sign || tr("КОПЕНГАГЕН", "COPENHAGEN"), 42, "#cfe0ff", 'text-anchor="middle" font-weight="700" letter-spacing="3"')) +
+      LY(0.9, times(50, () => `<path class="em-rain" data-x="${rnd() * 1280 - 100}" data-p="${rnd()}" d="" stroke="#cfe0ff" stroke-width="2" opacity="0.3"/>`)),
+    update(root, p, lt) {
+      root.querySelector("#em-flag").setAttribute("transform", `skewY(${Math.sin(lt * 2.2) * 4})`);
+      root.querySelector("#em-car").setAttribute("transform", `translate(${lerp(300, 1500, io((p - 0.3) / 0.7))} 1640)`);
+      root.querySelectorAll(".em-w").forEach((e, i) => e.setAttribute("opacity", Math.sin(lt * 0.7 + i * 1.7) > 0.85 ? 0.15 : 0.7));
+      root.querySelectorAll(".em-rain").forEach((e) => { const x = +e.dataset.x, y = ((lt * 1.1 + +e.dataset.p) % 1) * 1920; e.setAttribute("d", `M${x} ${y} l-8 70`); });
+    },
+  }),
 };
