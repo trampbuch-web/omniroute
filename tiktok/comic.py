@@ -403,6 +403,26 @@ def p_tent():
     return im
 
 
+def p_ship():
+    im, d = _c()
+    d.polygon([(10, 300), (500, 300), (470, 400), (60, 400)], fill=(20, 20, 26), outline=INK, width=OW)
+    d.rectangle((60, 380, 470, 400), fill=(170, 40, 40))
+    d.rectangle((70, 250, 450, 300), fill=(240, 240, 236), outline=INK, width=OW)
+    for k in range(4):
+        x = 110 + k * 85; d.rectangle((x, 150, x + 44, 250), fill=(240, 170, 60), outline=INK, width=8); d.rectangle((x, 150, x + 44, 172), fill=INK)
+    for x in range(30, 490, 28): d.ellipse((x, 320, x + 12, 332), fill=(255, 230, 140))
+    return im
+
+
+def p_iceberg():
+    im, d = _c()
+    d.polygon([(40, 430), (130, 180), (210, 230), (280, 60), (370, 200), (440, 160), (500, 430)], fill=(220, 236, 250), outline=INK, width=OW)
+    d.polygon([(280, 60), (300, 430), (370, 200)], fill=(170, 200, 230)); d.polygon([(130, 180), (160, 430), (210, 230)], fill=(170, 200, 230))
+    pts = [(x, 430 + 14 * math.sin(x / 26)) for x in range(0, 521, 10)]
+    d.polygon(pts + [(520, 520), (0, 520)], fill=(20, 40, 90), outline=INK); d.line(pts, fill="white", width=6)
+    return im
+
+
 PROPS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 EMOJI2PROP = {"🕴️": "person", "👤": "person", "👷": "person", "🧑‍💻": "person", "👥": "crowd", "✈️": "plane", "🛫": "plane",
               "🚪": "door", "💰": "money", "💵": "money", "💸": "money", "📱": "phone", "✉️": "letter", "⏳": "clock",

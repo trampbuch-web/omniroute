@@ -1,0 +1,539 @@
+{
+ "id": "titanic-1912",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "smith": {
+   "top": "uniform",
+   "hair": "cap",
+   "color": [
+    30,
+    34,
+    60
+   ],
+   "pants": [
+    24,
+    26,
+    40
+   ],
+   "mustache": true,
+   "hair_color": [
+    230,
+    230,
+    230
+   ],
+   "skin": [
+    236,
+    196,
+    166
+   ]
+  },
+  "fleet": {
+   "top": "coat",
+   "hair": "beanie",
+   "color": [
+    50,
+    60,
+    90
+   ],
+   "pants": [
+    30,
+    30,
+    40
+   ]
+  },
+  "radio": {
+   "top": "shirt",
+   "hair": "short",
+   "color": [
+    230,
+    230,
+    236
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "hair_color": [
+    60,
+    40,
+    30
+   ]
+  },
+  "lady": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    150,
+    40,
+    80
+   ],
+   "hair_color": [
+    200,
+    160,
+    90
+   ],
+   "pants": [
+    60,
+    30,
+    50
+   ]
+  },
+  "boy": {
+   "top": "hoodie",
+   "hair": "short",
+   "color": [
+    110,
+    90,
+    60
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "hair_color": [
+    200,
+    150,
+    80
+   ],
+   "skin": [
+    240,
+    200,
+    170
+   ]
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "РЕЙС",
+   "date": "10.04.1912",
+   "music": "m3"
+  },
+  "2": {
+   "title": "АЙСБЕРГ",
+   "date": "14.04 · 23:40",
+   "music": "m1"
+  },
+  "3": {
+   "title": "ШЛЮПКИ",
+   "date": "15.04 · 00:30",
+   "music": "m2"
+  },
+  "4": {
+   "title": "02:20",
+   "date": "15.04.1912",
+   "music": "m3"
+  }
+ },
+ "description": "Его называли непотопляемым. Он утонул в первом же рейсе 🧊 Титаник: 2 часа 40 минут\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #титаник #катастрофа #1912",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Его называли непотопляемым. Он утонул в первом же рейсе.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "navy",
+    "set": "sea",
+    "big": "НЕПОТОПЛЯЕМЫЙ",
+    "props": [
+     {
+      "name": "ship",
+      "x": 500,
+      "y": 740,
+      "s": 1.0
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Апрель тысяча девятьсот двенадцатого. Титаник идёт в Нью-Йорк.",
+   "scene": {
+    "bg": "navy",
+    "set": "sea",
+    "sub": "АПРЕЛЬ 1912",
+    "props": [
+     {
+      "name": "ship",
+      "x": 420,
+      "y": 740,
+      "s": 0.8
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "На борту больше двух тысяч человек.",
+   "scene": {
+    "bg": "navy",
+    "set": "deck",
+    "actors": [
+     {
+      "who": "lady",
+      "x": 260,
+      "pose": "talk",
+      "mood": "happy"
+     },
+     {
+      "who": "boy",
+      "x": 520,
+      "pose": "idle",
+      "mood": "happy",
+      "s": 0.8
+     },
+     {
+      "who": "smith",
+      "x": 780,
+      "pose": "idle",
+      "face": "l"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Весь день по радио приходят предупреждения о льдах.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "radio",
+      "x": 500,
+      "pose": "knock",
+      "mood": "normal"
+     }
+    ]
+   },
+   "sfx": [
+    "static",
+    "typing"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Корабль не сбавляет ход.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "navy",
+    "set": "deck",
+    "actors": [
+     {
+      "who": "smith",
+      "x": 500,
+      "pose": "point",
+      "mood": "normal"
+     }
+    ]
+   },
+   "say": {
+    "who": "smith",
+    "text": "Полный вперёд."
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Четырнадцатое апреля. Без двадцати полночь.",
+   "scene": {
+    "bg": "dark",
+    "set": "deck",
+    "sub": "14.04 · 23:40",
+    "actors": [
+     {
+      "who": "fleet",
+      "x": 500,
+      "pose": "lookup",
+      "mood": "wide"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Впередсмотрящий видит в темноте белую стену.",
+   "scene": {
+    "bg": "dark",
+    "set": "sea",
+    "props": [
+     {
+      "name": "iceberg",
+      "x": 500,
+      "y": 760,
+      "s": 0.9
+     }
+    ]
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Айсберг прямо по курсу!",
+   "tag": "dramatic",
+   "say": {
+    "who": "fleet",
+    "text": "АЙСБЕРГ ПРЯМО ПО КУРСУ!"
+   },
+   "scene": {
+    "bg": "red",
+    "set": "deck",
+    "fx": "alarm",
+    "actors": [
+     {
+      "who": "fleet",
+      "x": 500,
+      "pose": "shock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Удар. Будто корабль просто чиркнул бортом.",
+   "scene": {
+    "bg": "dark",
+    "set": "deck",
+    "fx": "shake",
+    "actors": [
+     {
+      "who": "lady",
+      "x": 320,
+      "pose": "shock",
+      "mood": "wide"
+     },
+     {
+      "who": "boy",
+      "x": 620,
+      "pose": "shock",
+      "mood": "wide",
+      "s": 0.8
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Но под водой вспороты пять отсеков.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "5 ОТСЕКОВ",
+    "prop": "ship"
+   },
+   "sfx": [
+    "hit"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Конструктор считает: у корабля меньше двух часов.",
+   "ad_before": true,
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "smith",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "А шлюпок — только на половину людей.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "ШЛЮПОК НА ПОЛОВИНУ"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Первые шлюпки уходят полупустыми. Люди не верят, что тонут.",
+   "scene": {
+    "bg": "navy",
+    "set": "sea",
+    "props": [
+     {
+      "name": "boat",
+      "x": 380,
+      "y": 800,
+      "s": 0.5
+     },
+     {
+      "name": "ship",
+      "x": 760,
+      "y": 700,
+      "s": 0.6
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Радист без конца шлёт сигнал бедствия.",
+   "scene": {
+    "bg": "dark",
+    "set": "office",
+    "actors": [
+     {
+      "who": "radio",
+      "x": 500,
+      "pose": "knock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "static",
+    "typing"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Ближайший корабль — в четырёх часах пути.",
+   "scene": {
+    "bg": "navy",
+    "prop": "clock",
+    "big": "4 ЧАСА"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "На палубе играет оркестр. До самого конца.",
+   "scene": {
+    "bg": "navy",
+    "set": "deck",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "smith",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "lady",
+      "x": 260,
+      "pose": "lookup",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Два часа двадцать минут ночи. Корма встаёт вертикально.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "sea",
+    "props": [
+     {
+      "name": "ship",
+      "x": 500,
+      "y": 760,
+      "s": 0.9
+     }
+    ],
+    "sub": "15.04 · 02:20"
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "И Титаник уходит под воду.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "sea",
+    "big": "ТИШИНА"
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Около полутора тысяч человек погибли. Спаслись около семисот.",
+   "scene": {
+    "bg": "steel",
+    "big_top": "ИТОГ",
+    "items": [
+     "Погибли: около 1500",
+     "Спаслись: около 700"
+    ]
+   },
+   "sfx": [
+    "gavel"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "После этого закон обязал брать шлюпки на всех.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "radio",
+      "x": 500,
+      "pose": "talk"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "А ты бы поверил, что непотопляемый корабль тонет? Пиши в комментариях.",
+   "scene": {
+    "bg": "navy",
+    "set": "sea",
+    "big": "ПОВЕРИЛ БЫ?",
+    "props": [
+     {
+      "name": "iceberg",
+      "x": 500,
+      "y": 760,
+      "s": 0.8
+     }
+    ]
+   }
+  }
+ ]
+}

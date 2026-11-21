@@ -425,6 +425,21 @@ def _set_new(d, name, t, W_, H_):
                 y = GROUND - 60 * s_ - k * 90 * s_; d.polygon([(x - 110 * s_ + k * 22, y), (x + 110 * s_ - k * 22, y), (x, y - 150 * s_)], fill=(24, 60, 50), outline=INK, width=6)
         d.rectangle((0, GROUND, W_, H_), fill=(226, 232, 244), outline=INK, width=OW)
         return True
+    if name == "deck":
+        for y in range(0, GROUND, 6):
+            k = y / GROUND; d.rectangle((0, y, W_, y + 6), fill=(int(8 + 20 * k), int(10 + 26 * k), int(30 + 50 * k)))
+        rr = np.random.default_rng(9)
+        for k in range(90):
+            x, y = rr.integers(0, W_), rr.integers(0, 500); d.ellipse((x - 2, y - 2, x + 2, y + 2), fill=(255, 255, 240))
+        d.rectangle((0, 520, W_, 600), fill=(20, 30, 60))
+        d.rectangle((600, 150, 720, 560), fill=(240, 170, 60), outline=INK, width=OW); d.rectangle((600, 150, 720, 200), fill=(30, 30, 30))  # funnel
+        for k in range(6): d.ellipse((60 + k * 90, 440, 110 + k * 90, 490), fill=(255, 230, 140), outline=INK, width=5)  # portholes glow
+        d.rectangle((0, 600, W_, GROUND), fill=(150, 110, 70)); d.line((0, 600, W_, 600), fill=INK, width=OW)
+        for x in range(0, W_, 60): d.line((x, 600, x, GROUND), fill=(120, 86, 54), width=4)
+        d.rectangle((0, 700, W_, 712), fill=(230, 230, 230), outline=INK, width=4)  # railing
+        for x in range(20, W_, 70): d.line((x, 712, x, GROUND), fill=(230, 230, 230), width=8)
+        d.rectangle((0, GROUND, W_, H_), fill=(110, 80, 50), outline=INK, width=OW)
+        return True
     if name == "tunnel":
         d.rectangle((0, 0, W_, H_), fill=(54, 40, 30))
         for k in range(30):
