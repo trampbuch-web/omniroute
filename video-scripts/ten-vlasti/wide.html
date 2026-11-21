@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <title>Тень власти · 16:9</title>
+    <style>
+      html, body { margin: 0; width: 1920px; height: 1080px; overflow: hidden; background: transparent; font-family: "DejaVu Sans", Arial, sans-serif; }
+      .panel { position: absolute; top: 0; height: 1080px; width: 640px; box-sizing: border-box; padding: 60px 56px; }
+      #left { left: 0; }
+      #right { right: 0; text-align: right; }
+      #brand { display: inline-block; color: #e2b25a; font-size: 34px; font-weight: 900; letter-spacing: 8px; border: 3px solid #e2b25a; padding: 12px 18px; background: rgba(0, 0, 0, 0.55); }
+      #epi { color: #cfd5e2; font-size: 22px; letter-spacing: 2px; margin-top: 14px; }
+      #chap { margin-top: 70px; color: #fff; }
+      #chap small { display: block; color: #e3262f; font-size: 26px; font-weight: 900; letter-spacing: 6px; }
+      #chap b { display: block; font-size: 52px; line-height: 1.1; margin-top: 10px; text-shadow: 0 4px 18px #000; }
+      #toc { margin-top: 46px; font-size: 21px; line-height: 1.75; color: rgba(255, 255, 255, 0.4); }
+      #toc div.on { color: #ffd98a; font-weight: 900; }
+      #toc div.done { color: rgba(255, 255, 255, 0.7); }
+      #place { color: #fff; font-size: 30px; font-weight: 900; letter-spacing: 3px; border-right: 8px solid #e3262f; padding-right: 16px; margin-top: 8px; min-height: 40px; }
+      #stamp { display: inline-block; font-size: 30px; font-weight: 900; letter-spacing: 4px; padding: 10px 18px; border: 4px solid; transform: rotate(3deg); margin-top: 48px; background: rgba(0, 0, 0, 0.45); }
+      #src { color: rgba(255, 255, 255, 0.75); font-size: 22px; margin-top: 30px; line-height: 1.4; }
+      #who { margin-top: 70px; }
+      #who span { display: inline-block; background: #e3262f; color: #fff; font-size: 26px; font-weight: 900; letter-spacing: 3px; padding: 8px 16px; }
+      #caps { position: absolute; left: 120px; right: 120px; bottom: 56px; text-align: center; font-size: 50px; font-weight: 900; line-height: 1.2; color: #fff; text-shadow: 0 4px 0 #000, 0 0 30px rgba(0, 0, 0, 0.95); }
+      #caps.q { font-style: italic; color: #ffe9b8; }
+      #capbg { position: absolute; left: 0; right: 0; bottom: 0; height: 230px; background: linear-gradient(transparent, rgba(0, 0, 0, 0.75)); }
+    </style>
+  </head>
+  <body>
+    <div id="capbg"></div>
+    <div class="panel" id="left"><div id="brand"></div><div id="epi"></div><div id="chap"><small></small><b></b></div><div id="toc"></div></div>
+    <div class="panel" id="right"><div id="place"></div><div id="stamp"></div><div id="src"></div><div id="who"></div></div>
+    <div id="caps"></div>
+    <script>
+      const EP = __EP__;
+      const $ = (id) => document.getElementById(id), EN = EP.lang === "en";
+      const STAMP = { "ПОДТВЕРЖДЕНО": "#4fd38a", "ВЕРСИЯ": "#ffb03a", "РЕКОНСТРУКЦИЯ": "#9fc4ff", CONFIRMED: "#4fd38a", VERSION: "#ffb03a", RECONSTRUCTION: "#9fc4ff" };
+      $("brand").textContent = EN ? "SHADOW OF POWER" : "ТЕНЬ ВЛАСТИ";
+      $("epi").textContent = EP.subtitle || "";
+      const CH = EP.scenes.map((s, i) => [s.chapter, i]).filter(([c]) => c);
+      $("toc").innerHTML = CH.map(([c], k) => `<div data-k="${k}">${String(k + 1).padStart(2, "0")} · ${c}</div>`).join("");
+      const lines = EP.scenes.flatMap((s) => s.lines);
+      window.render = (t) => {
+        let si = EP.scenes.findIndex((s) => t < s.t1);
+        if (si === -1) si = EP.scenes.length - 1;
+        const seg = EP.scenes[si], end = t >= EP.out0;
+        let k = -1;
+        CH.forEach(([, i], j) => { if (i <= si) k = j; });
+        document.body.style.visibility = end ? "hidden" : "visible";
+        $("chap").querySelector("small").textContent = k >= 0 ? (EN ? "CHAPTER " : "ГЛАВА ") + (k + 1) : "";
+        $("chap").querySelector("b").textContent = k >= 0 ? CH[k][0] : "";
+        $("toc").querySelectorAll("div").forEach((d) => (d.className = +d.dataset.k === k ? "on" : +d.dataset.k < k ? "done" : ""));
+        $("place").textContent = seg.place || "";
+        $("place").style.visibility = seg.place ? "visible" : "hidden";
+        $("stamp").style.display = seg.stamp ? "inline-block" : "none";
+        $("stamp").textContent = seg.stamp || "";
+        $("stamp").style.color = $("stamp").style.borderColor = STAMP[seg.stamp] || "#e2b25a";
+        $("src").textContent = seg.src ? (EN ? "source: " : "источник: ") + seg.src : "";
+        const line = lines.find((l) => t >= l.t0 && t < l.t1 + 0.2);
+        $("who").innerHTML = line && line.label ? `<span>${EN ? "QUOTE" : "ЦИТАТА"} · ${line.label}</span>` : "";
+        let html = "";
+        if (line) {
+          const ch = line.chunks.find((c) => t >= c.t0 && t < c.t1) || line.chunks[line.chunks.length - 1];
+          html = ch.words.map((w) => w[2]).join(" ");
+        }
+        $("caps").textContent = html;
+        $("caps").className = line && line.who !== "N" ? "q" : "";
+      };
+    </script>
+  </body>
+</html>

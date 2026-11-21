@@ -1,0 +1,917 @@
+{
+ "title": "Shenzhen. The Full Story",
+ "season": 1,
+ "episode": 5,
+ "date": "November 20, 2026",
+ "lang": "en",
+ "wide": false,
+ "max_len": 720,
+ "chunk": [
+  7,
+  44
+ ],
+ "subtitle": "the trilateral summit, fully explained",
+ "next": "SUBSCRIBE — THE NEXT EPISODE IS COMING",
+ "voices": {
+  "Q1": "male, middle-aged, low pitch",
+  "Q2": "male, elderly, low pitch, american accent",
+  "Q3": "male, middle-aged, moderate pitch",
+  "Q4": "male, elderly, moderate pitch",
+  "Q5": "male, young adult, moderate pitch, american accent",
+  "Q6": "male, middle-aged, high pitch"
+ },
+ "sources": [
+  "BBC News Russian: “A new Yalta?” (12.11); “It was not agreed with us” (17.11); “APEC summit: leaders meet before trilateral talks” (18.11); “What did they say?” (19.11); “No ceasefire and an invitation to Moscow” (19.11); “Putin and Xi are not our friends” (20.11)",
+  "RIA Novosti, 12–19.11",
+  "New York Times, Axios, Bloomberg, NBC, Guardian, Times, Chatham House, RUSI — as reported by BBC and RIA"
+ ],
+ "scenes": [
+  {
+   "chapter": "Prologue",
+   "type": "host",
+   "bg": "newsroom",
+   "title": true,
+   "lines": [
+    [
+     "N",
+     "I'm Timofey, and this is Shadow of Power — the show about what happens behind the closed doors of big politics. Today: the full story of the Shenzhen summit — what led up to it, what happened at the table, and what comes next."
+    ]
+   ]
+  },
+  {
+   "stamp": "RECONSTRUCTION",
+   "type": "street",
+   "city": "shenzhen",
+   "motorcade": true,
+   "lines": [
+    [
+     "N",
+     "On November nineteenth, in Shenzhen, China, the leaders of Russia, China and the United States sat at one table for the first time in history."
+    ]
+   ]
+  },
+  {
+   "stamp": "RECONSTRUCTION",
+   "type": "summit",
+   "lines": [
+    [
+     "N",
+     "Ninety minutes. Three powers. One declaration. And not a single word about Ukraine."
+    ]
+   ]
+  },
+  {
+   "type": "clock",
+   "big": "90:00",
+   "stamp": "CONFIRMED",
+   "src": "RIA, BBC · 19.11",
+   "lines": [
+    [
+     "N",
+     "In this episode: everything. Where this meeting came from, what happened in the two weeks before it, what was signed, and what was said afterwards."
+    ],
+    [
+     "N",
+     "And the key question: what comes next. We will mark on screen what is confirmed and what is only a version."
+    ]
+   ]
+  },
+  {
+   "chapter": "The shadow of Yalta",
+   "type": "yalta",
+   "stamp": "ARCHIVE · 1945",
+   "lines": [
+    [
+     "N",
+     "To understand why Europe was so nervous, we need to go back to February nineteen forty-five."
+    ],
+    [
+     "N",
+     "Yalta. Roosevelt, Churchill and Stalin shape the post-war world."
+    ],
+    [
+     "N",
+     "Stalin promises to join the war against Japan. In return: a sphere of influence in Eastern Europe and secret deals in the Far East."
+    ]
+   ]
+  },
+  {
+   "stamp": "CONFIRMED",
+   "src": "BBC · 12.11",
+   "type": "host",
+   "bg": "skyline",
+   "lines": [
+    [
+     "N",
+     "Ever since, in Eastern Europe, the word Yalta means one thing: great powers carving up the world without asking anyone else."
+    ],
+    [
+     "N",
+     "So when a meeting of the three leaders was announced, Kyiv answered like this."
+    ]
+   ]
+  },
+  {
+   "type": "empty",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 12.11",
+   "lines": [
+    [
+     "Q3",
+     "I really don't want this to be Yalta two.",
+     "VOLODYMYR ZELENSKY"
+    ]
+   ]
+  },
+  {
+   "type": "leader",
+   "who": "putin",
+   "place": "MOSCOW · MANEGE",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 12.11",
+   "lines": [
+    [
+     "N",
+     "Meanwhile in Moscow, Putin showed schoolchildren a sculpture of that very meeting in Yalta."
+    ],
+    [
+     "Q1",
+     "The leaders of the three main states came together to discuss how to arrange the world after the war.",
+     "VLADIMIR PUTIN"
+    ]
+   ]
+  },
+  {
+   "chapter": "The road to the table",
+   "type": "timeline",
+   "stamp": "CONFIRMED",
+   "src": "BBC, RIA",
+   "items": [
+    [
+     "1945",
+     "Yalta"
+    ],
+    [
+     "2025",
+     "Alaska"
+    ],
+    [
+     "10.11",
+     "Abu Dhabi"
+    ],
+    [
+     "12.11",
+     "The Kremlin"
+    ],
+    [
+     "16.11",
+     "“not agreed”"
+    ],
+    [
+     "19.11",
+     "Shenzhen"
+    ]
+   ],
+   "lines": [
+    [
+     "N",
+     "The road to Shenzhen took less than two weeks."
+    ],
+    [
+     "N",
+     "Putin and Trump last met in person in the summer of last year, in Alaska. Since then: only phone calls and envoys."
+    ]
+   ]
+  },
+  {
+   "type": "plates",
+   "place": "ABU DHABI · 10–11 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 13.11",
+   "items": [
+    [
+     "de",
+     "GERMANY"
+    ],
+    [
+     "fr",
+     "FRANCE"
+    ],
+    [
+     "it",
+     "ITALY"
+    ],
+    [
+     "gb",
+     "UK"
+    ],
+    [
+     "eu",
+     "EU"
+    ]
+   ],
+   "lines": [
+    [
+     "N",
+     "On November tenth and eleventh, Russia, Ukraine and the United States held trilateral talks in Abu Dhabi, the first since February."
+    ],
+    [
+     "N",
+     "The Europeans came, but they were not allowed at the main table. The head of the Russian delegation called them tourists."
+    ]
+   ]
+  },
+  {
+   "place": "ABU DHABI · 10–11 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 13.11",
+   "type": "host",
+   "bg": "studio",
+   "lines": [
+    [
+     "N",
+     "The only concrete result: an agreement on a new prisoner exchange."
+    ]
+   ]
+  },
+  {
+   "place": "MOSCOW · 12 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 13.11",
+   "type": "street",
+   "city": "moscow",
+   "lines": [
+    [
+     "N",
+     "On November twelfth, Trump's envoys Steve Witkoff and Jared Kushner spent two and a half hours with Putin in the Kremlin."
+    ],
+    [
+     "N",
+     "Putin proposed a humanitarian mission in Kostiantynivka and asked them to thank Trump for arranging the contacts."
+    ]
+   ]
+  },
+  {
+   "type": "map",
+   "big": "19.11",
+   "stamp": "CONFIRMED",
+   "src": "RIA · 14.11",
+   "lines": [
+    [
+     "N",
+     "Two days later, the Kremlin announced the deal: November nineteenth, Shenzhen, the APEC summit."
+    ],
+    [
+     "N",
+     "The White House first said the main topic would be nuclear weapons, not Ukraine. Then Trump said he would discuss Ukraine too."
+    ]
+   ]
+  },
+  {
+   "chapter": "Two versions",
+   "place": "12–13 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 17.11",
+   "type": "street",
+   "city": "washington",
+   "lines": [
+    [
+     "N",
+     "And then came the story of two different accounts of the same meeting."
+    ],
+    [
+     "N",
+     "After the Kremlin, Witkoff told reporters:"
+    ]
+   ]
+  },
+  {
+   "type": "press",
+   "city": "washington",
+   "place": "12–13 NOV",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 17.11",
+   "lines": [
+    [
+     "Q5",
+     "At the next meeting, the Europeans will join us.",
+     "STEVE WITKOFF"
+    ]
+   ]
+  },
+  {
+   "type": "press",
+   "city": "moscow",
+   "place": "MOSCOW · 16 NOV",
+   "stamp": "CONFIRMED",
+   "src": "Interfax, BBC · 16.11",
+   "lines": [
+    [
+     "N",
+     "Four days later, the Kremlin replied."
+    ],
+    [
+     "Q4",
+     "Some people talk about expanding the format, but this was not agreed with us.",
+     "YURI USHAKOV"
+    ]
+   ]
+  },
+  {
+   "place": "MOSCOW · 16 NOV",
+   "stamp": "CONFIRMED",
+   "src": "Interfax, BBC · 16.11",
+   "type": "host",
+   "bg": "kremlin",
+   "lines": [
+    [
+     "N",
+     "And Foreign Minister Lavrov added that he did not know which of today's European leaders could be a sensible partner."
+    ]
+   ]
+  },
+  {
+   "type": "papers",
+   "head": "NON-PAPER",
+   "sub": "10 NOVEMBER · UNSIGNED",
+   "mark": "NATO — back to 1997",
+   "stamp": "VERSION",
+   "src": "New York Times · 14.11",
+   "lines": [
+    [
+     "N",
+     "According to the New York Times, two days before the visit Moscow handed the Americans an unsigned document."
+    ],
+    [
+     "N",
+     "It almost repeats Russia's demands from December twenty twenty-one: NATO infrastructure back to where it stood before nineteen ninety-seven."
+    ],
+    [
+     "N",
+     "A second source confirmed the document to the paper. Moscow has not commented on it officially."
+    ]
+   ]
+  },
+  {
+   "type": "press",
+   "city": "kyiv",
+   "place": "KYIV · 15 NOV",
+   "stamp": "ACCORDING TO ZELENSKY",
+   "src": "Interfax-Ukraine, BBC",
+   "lines": [
+    [
+     "N",
+     "Zelensky, meanwhile, said the Americans had asked him about a different kind of trade for the first time."
+    ],
+    [
+     "Q3",
+     "And if Ukraine is in NATO, will Ukraine leave Donbas? That was the first time.",
+     "VOLODYMYR ZELENSKY"
+    ],
+    [
+     "N",
+     "Washington did not comment."
+    ]
+   ]
+  },
+  {
+   "chapter": "Summit day",
+   "type": "airport",
+   "place": "SHENZHEN · AIRPORT",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 18.11",
+   "lines": [
+    [
+     "N",
+     "November eighteenth. Xi Jinping personally greets Trump at the plane: red carpet, honour guard, dancers with American flags."
+    ],
+    [
+     "N",
+     "Putin gets a red carpet too. At the evening banquet, the three leaders shake hands for the first time."
+    ]
+   ]
+  },
+  {
+   "type": "clock",
+   "big": "60:00",
+   "stamp": "CONFIRMED",
+   "src": "RIA, Interfax · 18.11",
+   "lines": [
+    [
+     "N",
+     "The Kremlin says one hour has been set aside for the trilateral meeting. Putin's aide Ushakov gently disagrees."
+    ],
+    [
+     "Q4",
+     "If the discussion carries these three leaders away, you probably won't be able to stop them.",
+     "YURI USHAKOV"
+    ]
+   ]
+  },
+  {
+   "type": "photo",
+   "place": "APEC SUMMIT",
+   "stamp": "CONFIRMED",
+   "src": "RIA · 19.11",
+   "lines": [
+    [
+     "N",
+     "The morning of the nineteenth. The APEC family photo. Putin stands to Xi's right, Trump to his left."
+    ],
+    [
+     "N",
+     "Then Putin and Trump talk one on one for the first time since last summer. About forty minutes. Ushakov calls it a good conversation."
+    ]
+   ]
+  },
+  {
+   "chapter": "Ninety minutes",
+   "stamp": "RECONSTRUCTION",
+   "src": "BBC · 19.11",
+   "type": "summit",
+   "lines": [
+    [
+     "N",
+     "The trilateral meeting starts late: at the scheduled time, Xi is still having lunch with Trump."
+    ],
+    [
+     "N",
+     "The public part lasts about ten minutes. Each leader talks about his own priorities."
+    ]
+   ]
+  },
+  {
+   "place": "PUBLIC SESSION",
+   "stamp": "RECONSTRUCTION",
+   "src": "BBC · 19.11",
+   "type": "summit",
+   "focus": "xi",
+   "active": "xi",
+   "lines": [
+    [
+     "N",
+     "Xi calls on the three countries to set an example for the rest of the world. Humanity, he says, lives in a global village, and the three powers bear a special responsibility."
+    ]
+   ]
+  },
+  {
+   "place": "PUBLIC SESSION",
+   "stamp": "RECONSTRUCTION",
+   "src": "BBC · 19.11",
+   "type": "summit",
+   "focus": "putin",
+   "active": "putin",
+   "lines": [
+    [
+     "N",
+     "Putin speaks about international law, the economy, food and energy security. And separately about Ukraine: that morning, he says, he and Trump paid it a lot of attention."
+    ]
+   ]
+  },
+  {
+   "place": "PUBLIC SESSION",
+   "stamp": "RECONSTRUCTION",
+   "src": "BBC · 19.11",
+   "type": "summit",
+   "focus": "trump",
+   "active": "trump",
+   "lines": [
+    [
+     "N",
+     "Trump talks about nuclear arsenals: the three countries, he says, have a unique chance to reduce them. And about the International Criminal Court, which, in his words, is out of control."
+    ],
+    [
+     "N",
+     "The doors close. The meeting runs ninety minutes instead of sixty."
+    ]
+   ]
+  },
+  {
+   "stamp": "CONFIRMED",
+   "src": "BBC, SIPRI · 19.11",
+   "type": "host",
+   "bg": "newsroom",
+   "lines": [
+    [
+     "N",
+     "Why is Beijing cool on the nuclear topic? For years China has refused to discuss its arsenal with Washington."
+    ],
+    [
+     "N",
+     "Beijing's logic: Russia and the United States must cut first, because they have far more warheads. According to the Stockholm institute SIPRI, Russia has the largest arsenal, followed by the US, then China."
+    ]
+   ]
+  },
+  {
+   "chapter": "The declaration",
+   "type": "papers",
+   "head": "DECLARATION ON PEACE",
+   "sub": "19.11 · RUSSIA · CHINA · USA",
+   "mark": "Ukraine — not mentioned",
+   "seal": "ADOPTED",
+   "stamp": "CONFIRMED",
+   "src": "Kremlin, BBC · 19.11",
+   "lines": [
+    [
+     "N",
+     "The outcome: a Declaration of the Heads of State of Russia, China and the United States on Peace."
+    ],
+    [
+     "N",
+     "A nuclear war cannot be won and must never be fought. The three countries will hold a dialogue on reducing nuclear risks."
+    ]
+   ]
+  },
+  {
+   "type": "folder",
+   "items": [
+    [
+     "CONFIRMED",
+     "UN reform, oil, the ICC"
+    ],
+    [
+     "NOT MENTIONED",
+     "Ukraine and Iran"
+    ]
+   ],
+   "lines": [
+    [
+     "N",
+     "They back reform of the United Nations, plan to increase production and supply of oil products, and say the International Criminal Court must not abuse its powers."
+    ],
+    [
+     "N",
+     "Ukraine is not in the declaration. Neither is Iran."
+    ]
+   ]
+  },
+  {
+   "chapter": "Putin's word",
+   "type": "press",
+   "city": "moscow",
+   "place": "PRESS CONFERENCE",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 19.11",
+   "lines": [
+    [
+     "N",
+     "Only Putin spoke to the press afterwards: Xi and Trump did not. A BBC correspondent asked him: is this a new world order or just a pretty picture?"
+    ],
+    [
+     "Q1",
+     "Neither one nor the other. This is not a picture, it is serious joint work.",
+     "VLADIMIR PUTIN"
+    ],
+    [
+     "Q1",
+     "We did not agree to meet regularly in this format.",
+     "VLADIMIR PUTIN"
+    ]
+   ]
+  },
+  {
+   "type": "yalta",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 19.11",
+   "lines": [
+    [
+     "N",
+     "On the comparison with Yalta, Putin said:"
+    ],
+    [
+     "Q1",
+     "Nobody divided the world in Yalta. It simply recorded the realities.",
+     "VLADIMIR PUTIN"
+    ]
+   ]
+  },
+  {
+   "place": "PRESS CONFERENCE",
+   "stamp": "CONFIRMED",
+   "src": "BBC, RIA · 19.11",
+   "type": "street",
+   "city": "shenzhen",
+   "lines": [
+    [
+     "N",
+     "On a ceasefire, he was blunt. Putin said he had discussed a partial ceasefire with his Security Council, but after the strikes on the Crimean Bridge there would be no deal."
+    ],
+    [
+     "N",
+     "Ukraine and Europe, he said, are not ready for compromise. Russia, he said, accepts the compromises the Americans offered before the Anchorage summit. He did not say what they were."
+    ]
+   ]
+  },
+  {
+   "stamp": "VERSION",
+   "src": "The Times — via BBC · 19.11",
+   "type": "host",
+   "bg": "kremlin",
+   "lines": [
+    [
+     "N",
+     "Britain's Times, citing a Ukrainian officer, reports that the strikes on the Crimean Bridge were meant as a symbolic gesture before the meeting, to show that Putin is weak."
+    ],
+    [
+     "N",
+     "Kyiv considers the bridge a legitimate military target. Putin calls it a purely civilian structure."
+    ]
+   ]
+  },
+  {
+   "type": "empty",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 19.11",
+   "lines": [
+    [
+     "N",
+     "And the headline for Europe: you can join the talks. But first, come to Moscow."
+    ],
+    [
+     "Q1",
+     "It would be strange to discuss Europe's security without Europe.",
+     "VLADIMIR PUTIN"
+    ]
+   ]
+  },
+  {
+   "chapter": "The world reacts",
+   "type": "leader",
+   "who": "trump",
+   "place": "NBC INTERVIEW",
+   "stamp": "CONFIRMED",
+   "src": "NBC, BBC · 19.11",
+   "lines": [
+    [
+     "N",
+     "Trump rated the meeting twelve out of ten. About Putin, he was brief."
+    ],
+    [
+     "Q2",
+     "He's my friend.",
+     "DONALD TRUMP"
+    ]
+   ]
+  },
+  {
+   "place": "NBC INTERVIEW",
+   "stamp": "CONFIRMED",
+   "src": "NBC, BBC · 19.11",
+   "type": "host",
+   "bg": "skyline",
+   "lines": [
+    [
+     "N",
+     "From Air Force One he called the Europeans gathered in Berlin and advised them to talk to Putin directly."
+    ]
+   ]
+  },
+  {
+   "type": "plates",
+   "place": "BERLIN · COALITION OF THE WILLING",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 19–20.11",
+   "items": [
+    [
+     "de",
+     "GERMANY"
+    ],
+    [
+     "fr",
+     "FRANCE"
+    ],
+    [
+     "pl",
+     "POLAND"
+    ],
+    [
+     "gb",
+     "UK"
+    ],
+    [
+     "it",
+     "ITALY"
+    ],
+    [
+     "eu",
+     "EU"
+    ]
+   ],
+   "lines": [
+    [
+     "N",
+     "The coalition of the willing met in Berlin the same day. Chancellor Merz called Shenzhen a photo shoot."
+    ],
+    [
+     "Q6",
+     "The Yalta format will not bring peace to Europe.",
+     "FRIEDRICH MERZ"
+    ],
+    [
+     "N",
+     "Polish Prime Minister Tusk noted: even if Trump sees Putin as a friend, the friend of my friend is not my friend here."
+    ]
+   ]
+  },
+  {
+   "place": "WASHINGTON",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 20.11",
+   "type": "street",
+   "city": "washington",
+   "lines": [
+    [
+     "N",
+     "In Washington, both parties were unhappy. Republican Senator John Curtis welcomed the pledge on nuclear war, but wrote: Putin and Xi are not our friends."
+    ],
+    [
+     "N",
+     "NATO Secretary General Rutte, by contrast, was completely relaxed: for nuclear powers, he said, it is normal to meet."
+    ]
+   ]
+  },
+  {
+   "place": "WASHINGTON",
+   "stamp": "CONFIRMED",
+   "src": "BBC · 20.11",
+   "type": "host",
+   "bg": "newsroom",
+   "lines": [
+    [
+     "N",
+     "And China's Foreign Minister Wang Yi called it a summit of peace."
+    ]
+   ]
+  },
+  {
+   "chapter": "Who got what",
+   "type": "leader",
+   "who": "putin",
+   "place": "ANALYSTS' VIEWS",
+   "stamp": "VERSION",
+   "src": "Carnegie, RUSI — via BBC",
+   "lines": [
+    [
+     "N",
+     "Now the assessments. These are not facts, but analysts' opinions."
+    ],
+    [
+     "N",
+     "Putin, according to Alexander Gabuev of the Carnegie Russia Eurasia Center, got the main prize: simply sitting as an equal with the US and China is a diplomatic win."
+    ],
+    [
+     "N",
+     "Jonathan Eyal of the British institute RUSI put it this way: Putin gained credibility and avoided pariah status."
+    ]
+   ]
+  },
+  {
+   "place": "ANALYSTS' VIEWS",
+   "stamp": "VERSION",
+   "src": "BBC, RUSI",
+   "type": "host",
+   "bg": "studio",
+   "lines": [
+    [
+     "N",
+     "Trump, in the view of the BBC's Anthony Zurcher, arrived with a thin agenda and got little out of it. But the pomp and ceremony may have been exactly what he wanted most."
+    ],
+    [
+     "N",
+     "According to Gabuev, it was above all Trump who wanted this meeting: a chance to raise nuclear weapons with Putin and Xi at the same time."
+    ]
+   ]
+  },
+  {
+   "type": "leader",
+   "who": "xi",
+   "place": "ANALYSTS' VIEWS",
+   "stamp": "VERSION",
+   "src": "BBC",
+   "lines": [
+    [
+     "N",
+     "Xi, according to the BBC's Laura Bicker, got the picture: the Communist Party congress is next year, and a photo with Putin and Trump shows that China now writes the rules."
+    ],
+    [
+     "N",
+     "At the same time, Beijing insists it is neutral in the war, and does not want to fall out with the European Union, its key market."
+    ]
+   ]
+  },
+  {
+   "chapter": "What comes next",
+   "type": "timeline",
+   "stamp": "VERSION",
+   "src": "RIA, BBC",
+   "items": [
+    [
+     "?",
+     "Europeans in Moscow"
+    ],
+    [
+     "?",
+     "prisoner exchange"
+    ],
+    [
+     "?",
+     "G20 in Miami"
+    ],
+    [
+     "?",
+     "nuclear dialogue"
+    ]
+   ],
+   "lines": [
+    [
+     "N",
+     "What happens next? Four questions to watch."
+    ],
+    [
+     "N",
+     "One. Will the Europeans go to Moscow? There is no answer yet, and Putin added that without a change of political elites in some European countries, full normalisation is impossible."
+    ]
+   ]
+  },
+  {
+   "type": "plane",
+   "big": "PRISONER EXCHANGE",
+   "stamp": "CONFIRMED",
+   "src": "RIA · 19.11",
+   "lines": [
+    [
+     "N",
+     "Two. The prisoner exchange. The Kremlin says it is in the final stage of approval, with security services checking the lists."
+    ]
+   ]
+  },
+  {
+   "type": "map",
+   "big": "G20",
+   "stamp": "VERSION",
+   "src": "RIA · 16.11",
+   "lines": [
+    [
+     "N",
+     "Three. The G20 summit in Miami. Ushakov said the decision on Putin's attendance would depend on Shenzhen. If Putin travels to Trump's America, that will be the clearest signal of all."
+    ]
+   ]
+  },
+  {
+   "stamp": "VERSION",
+   "src": "BBC · 19.11",
+   "type": "host",
+   "bg": "skyline",
+   "lines": [
+    [
+     "N",
+     "Four. The nuclear dialogue. In February, New START, the last arms control treaty between Russia and the United States, expired. Gabuev believes Shenzhen could have launched talks at least at expert level, but that chance was missed."
+    ],
+    [
+     "N",
+     "On Iran, Trump was blunt: the United States will not allow Iran to get a nuclear weapon. Yet Iran is not in the declaration either."
+    ]
+   ]
+  },
+  {
+   "chapter": "Epilogue",
+   "type": "folder",
+   "items": [
+    [
+     "CONFIRMED",
+     "meeting, declaration, 90 min"
+    ],
+    [
+     "VERSION",
+     "“Yalta 2.0” or a photo shoot"
+    ]
+   ],
+   "lines": [
+    [
+     "N",
+     "For the Kremlin, a page in the history of diplomacy. For Britain's Guardian, a footnote in any future book about the twenty-first century."
+    ],
+    [
+     "N",
+     "Professor John Delury told the New York Times: in two years Trump will probably leave the world stage, while Putin and Xi may well be dining together again."
+    ]
+   ]
+  },
+  {
+   "type": "door",
+   "big": "NEXT",
+   "stamp": "RECONSTRUCTION",
+   "lines": [
+    [
+     "N",
+     "The three chairs in Shenzhen are empty now. The fourth, Europe's, still stands to one side."
+    ],
+    [
+     "N",
+     "Whether Europe takes a seat at the table, and on whose terms, we will find out in the next episodes. This was Shadow of Power. Subscribe."
+    ]
+   ]
+  }
+ ],
+ "land": true
+}
