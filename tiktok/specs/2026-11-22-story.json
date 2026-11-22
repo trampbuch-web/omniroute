@@ -1,0 +1,540 @@
+{
+ "id": "chernobyl-1986",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "op": {
+   "top": "coat",
+   "hair": "short",
+   "color": [
+    236,
+    236,
+    240
+   ],
+   "pants": [
+    60,
+    60,
+    70
+   ],
+   "hair_color": [
+    50,
+    40,
+    30
+   ],
+   "glasses": true
+  },
+  "chief": {
+   "top": "suit",
+   "hair": "bald",
+   "color": [
+    60,
+    60,
+    70
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "skin": [
+    220,
+    176,
+    140
+   ]
+  },
+  "fire1": {
+   "top": "uniform",
+   "hair": "helmet",
+   "color": [
+    40,
+    50,
+    70
+   ],
+   "pants": [
+    30,
+    30,
+    40
+   ]
+  },
+  "fire2": {
+   "top": "uniform",
+   "hair": "helmet",
+   "color": [
+    50,
+    40,
+    40
+   ],
+   "pants": [
+    30,
+    30,
+    40
+   ],
+   "mustache": true
+  },
+  "mom": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    80,
+    120,
+    90
+   ],
+   "hair_color": [
+    140,
+    90,
+    50
+   ],
+   "pants": [
+    50,
+    50,
+    60
+   ]
+  },
+  "kid": {
+   "top": "hoodie",
+   "hair": "short",
+   "color": [
+    200,
+    120,
+    40
+   ],
+   "pants": [
+    40,
+    40,
+    50
+   ],
+   "hair_color": [
+    200,
+    150,
+    80
+   ],
+   "skin": [
+    240,
+    200,
+    170
+   ]
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ИСПЫТАНИЕ",
+   "date": "26.04.1986",
+   "music": "m3"
+  },
+  "2": {
+   "title": "01:23",
+   "date": "26.04.1986",
+   "music": "m1"
+  },
+  "3": {
+   "title": "ПРИПЯТЬ",
+   "date": "27.04.1986",
+   "music": "m3"
+  },
+  "4": {
+   "title": "ПРИЗНАНИЕ",
+   "date": "28.04.1986",
+   "music": "m1"
+  }
+ },
+ "description": "Им сказали: уезжаем на три дня. Они не вернулись никогда ☢️ Чернобыль, 26 апреля 1986\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #чернобыль #припять #катастрофа",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Им сказали: уезжаем на три дня. Они не вернулись никогда.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "street",
+    "weather": "fog",
+    "big": "НА ТРИ ДНЯ",
+    "actors": [
+     {
+      "who": "mom",
+      "x": 400,
+      "pose": "walk",
+      "face": "l",
+      "from": 700,
+      "to": 400,
+      "t0": 0,
+      "t1": 2
+     },
+     {
+      "who": "kid",
+      "x": 600,
+      "s": 0.75,
+      "pose": "walk",
+      "face": "l",
+      "from": 900,
+      "to": 600,
+      "t0": 0,
+      "t1": 2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Двадцать шестое апреля восемьдесят шестого. Чернобыльская станция.",
+   "scene": {
+    "bg": "dark",
+    "set": "plant",
+    "sub": "26.04.1986"
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Ночью на четвёртом блоке проводят испытание.",
+   "scene": {
+    "bg": "dark",
+    "set": "booth",
+    "actors": [
+     {
+      "who": "op",
+      "x": 320,
+      "pose": "point"
+     },
+     {
+      "who": "chief",
+      "x": 680,
+      "pose": "talk",
+      "face": "l",
+      "mood": "angry"
+     }
+    ]
+   },
+   "say": {
+    "who": "chief",
+    "text": "Продолжаем испытание."
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Мощность реактора падает. Потом начинает расти.",
+   "scene": {
+    "bg": "dark",
+    "set": "booth",
+    "actors": [
+     {
+      "who": "op",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Оператор жмёт аварийную кнопку.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "booth",
+    "fx": "alarm",
+    "actors": [
+     {
+      "who": "op",
+      "x": 500,
+      "pose": "knock",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Один час двадцать три минуты. Взрыв.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "plant",
+    "fx": "shake",
+    "big": "01:23"
+   },
+   "sfx": [
+    "boom",
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Крышу реактора весом в сотни тонн подбрасывает в воздух.",
+   "scene": {
+    "bg": "dark",
+    "set": "plant",
+    "big": "КРЫШИ НЕТ"
+   },
+   "sfx": [
+    "hit"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Пожарные едут тушить «обычный пожар».",
+   "scene": {
+    "bg": "dark",
+    "set": "plant",
+    "actors": [
+     {
+      "who": "fire1",
+      "pose": "run",
+      "from": -120,
+      "to": 320,
+      "t0": 0,
+      "t1": 1.6
+     },
+     {
+      "who": "fire2",
+      "pose": "run",
+      "from": -320,
+      "to": 560,
+      "t0": 0.2,
+      "t1": 1.8
+     }
+    ]
+   },
+   "sfx": [
+    "siren"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Им никто не говорит про радиацию.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "plant",
+    "actors": [
+     {
+      "who": "fire1",
+      "x": 320,
+      "pose": "hold",
+      "hold": "flashlight"
+     },
+     {
+      "who": "fire2",
+      "x": 600,
+      "pose": "point",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Они тушат крышу голыми руками. Почти без защиты.",
+   "scene": {
+    "bg": "dark",
+    "set": "plant",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "fire1",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "А в Припяти — обычная суббота. Свадьбы. Дети во дворах.",
+   "ad_before": true,
+   "scene": {
+    "bg": "amber",
+    "set": "street",
+    "actors": [
+     {
+      "who": "kid",
+      "x": 400,
+      "s": 0.75,
+      "pose": "jump",
+      "mood": "happy"
+     },
+     {
+      "who": "mom",
+      "x": 650,
+      "pose": "idle",
+      "face": "l",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Город в трёх километрах от реактора.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "plant",
+    "big": "3 КМ"
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Только через тридцать шесть часов объявляют эвакуацию.",
+   "scene": {
+    "bg": "steel",
+    "set": "street",
+    "actors": [
+     {
+      "who": "chief",
+      "x": 500,
+      "pose": "talk",
+      "mood": "sad"
+     }
+    ]
+   },
+   "say": {
+    "who": "chief",
+    "text": "Взять документы. На три дня."
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Почти пятьдесят тысяч человек садятся в автобусы.",
+   "scene": {
+    "bg": "steel",
+    "set": "street",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "mom",
+      "pose": "walk",
+      "from": -120,
+      "to": 420,
+      "t0": 0,
+      "t1": 2.2
+     },
+     {
+      "who": "kid",
+      "s": 0.75,
+      "pose": "walk",
+      "from": -300,
+      "to": 260,
+      "t0": 0,
+      "t1": 2.2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Игрушки, тарелки, котята — всё остаётся в квартирах.",
+   "scene": {
+    "bg": "steel",
+    "set": "apartment",
+    "weather": "dust"
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Мир узнаёт о катастрофе не из Москвы.",
+   "scene": {
+    "bg": "navy",
+    "set": "office",
+    "actors": [
+     {
+      "who": "op",
+      "x": 500,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "В Швеции, за тысячу километров, срабатывают датчики радиации на станции.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "fx": "alarm",
+    "big": "ШВЕЦИЯ",
+    "sub": "ДАТЧИКИ СРАБОТАЛИ"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Только тогда СССР признаёт: авария.",
+   "scene": {
+    "bg": "steel",
+    "prop": "folder",
+    "big": "АВАРИЯ"
+   },
+   "sfx": [
+    "gavel"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Припять пуста до сих пор. Колесо обозрения так и не запустили.",
+   "scene": {
+    "bg": "dark",
+    "set": "street",
+    "weather": "fog",
+    "big": "ПУСТО"
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "А ты бы поверил, что уезжаешь всего на три дня? Пиши в комментариях.",
+   "scene": {
+    "bg": "purple",
+    "set": "street",
+    "weather": "fog",
+    "big": "ПОВЕРИЛ БЫ?",
+    "actors": [
+     {
+      "who": "kid",
+      "x": 500,
+      "s": 0.8,
+      "pose": "lookup",
+      "mood": "sad"
+     }
+    ]
+   }
+  }
+ ]
+}

@@ -440,6 +440,19 @@ def _set_new(d, name, t, W_, H_):
         for x in range(20, W_, 70): d.line((x, 712, x, GROUND), fill=(230, 230, 230), width=8)
         d.rectangle((0, GROUND, W_, H_), fill=(110, 80, 50), outline=INK, width=OW)
         return True
+    if name == "plant":
+        for y in range(0, GROUND, 6):
+            k = y / GROUND; d.rectangle((0, y, W_, y + 6), fill=(int(20 + 40 * k), int(16 + 20 * k), int(30 + 20 * k)))
+        _glow(d, 560, 460, 360, (120, 200, 255))  # blue ionisation glow over the core
+        d.rectangle((200, 420, 900, GROUND), fill=(120, 120, 128), outline=INK, width=OW)
+        d.polygon([(520, 420), (560, 360), (610, 430), (660, 380), (700, 420)], fill=(30, 20, 20), outline=INK, width=6)  # torn roof
+        for x in range(240, 880, 70): d.rectangle((x, 500, x + 40, 560), fill=(60, 60, 70), outline=INK, width=4)
+        d.rectangle((300, 120, 360, 420), fill=(236, 236, 236), outline=INK, width=OW)  # striped vent stack
+        for y in range(140, 420, 60): d.rectangle((300, y, 360, y + 30), fill=(200, 40, 40))
+        for k in range(5):
+            y = 360 - k * 70; d.ellipse((560 + k * 20, y - 40, 680 + k * 30, y + 30), fill=(60, 56, 60, 170))  # smoke
+        d.rectangle((0, GROUND, W_, H_), fill=(60, 58, 54), outline=INK, width=OW)
+        return True
     if name == "tunnel":
         d.rectangle((0, 0, W_, H_), fill=(54, 40, 30))
         for k in range(30):
