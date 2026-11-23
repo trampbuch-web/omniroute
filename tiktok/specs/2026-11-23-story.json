@@ -1,0 +1,590 @@
+{
+ "id": "lustig-eiffel-1925",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "lustig": {
+   "top": "suit",
+   "hair": "fedora",
+   "color": [
+    40,
+    40,
+    50
+   ],
+   "pants": [
+    30,
+    30,
+    38
+   ],
+   "mustache": true,
+   "hair_color": [
+    40,
+    30,
+    24
+   ]
+  },
+  "poisson": {
+   "top": "suit",
+   "hair": "short",
+   "color": [
+    110,
+    90,
+    70
+   ],
+   "pants": [
+    60,
+    50,
+    40
+   ],
+   "glasses": true,
+   "hair_color": [
+    120,
+    90,
+    60
+   ],
+   "skin": [
+    240,
+    200,
+    170
+   ]
+  },
+  "dealer": {
+   "top": "coat",
+   "hair": "fedora",
+   "color": [
+    90,
+    90,
+    100
+   ],
+   "pants": [
+    50,
+    50,
+    60
+   ]
+  },
+  "cop": {
+   "top": "uniform",
+   "hair": "cap",
+   "color": [
+    40,
+    50,
+    80
+   ],
+   "pants": [
+    30,
+    30,
+    40
+   ],
+   "mustache": true
+  },
+  "wife": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    150,
+    60,
+    90
+   ],
+   "hair_color": [
+    60,
+    40,
+    30
+   ],
+   "pants": [
+    60,
+    40,
+    60
+   ]
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ИДЕЯ",
+   "date": "1925",
+   "music": "m3"
+  },
+  "2": {
+   "title": "ТОРГИ",
+   "date": "ПАРИЖ",
+   "music": "m2"
+  },
+  "3": {
+   "title": "ПОБЕГ",
+   "date": "ВЕНА",
+   "music": "m1"
+  },
+  "4": {
+   "title": "ВТОРОЙ РАЗ",
+   "date": "1925 — 1935",
+   "music": "m2"
+  }
+ },
+ "description": "Этот человек продал Эйфелеву башню. Дважды 🗼 Афера века\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #афера #эйфелевабашня #мошенник",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Этот человек продал Эйфелеву башню. Дважды.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "big": "ПРОДАНО",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 330,
+      "pose": "idle",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Париж. Тысяча девятьсот двадцать пятый год.",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "sub": "ПАРИЖ · 1925",
+    "actors": [
+     {
+      "who": "lustig",
+      "pose": "walk",
+      "from": -120,
+      "to": 330,
+      "t0": 0,
+      "t1": 2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Виктор Люстиг читает в газете: башня ржавеет, ремонт стоит безумных денег.",
+   "scene": {
+    "bg": "amber",
+    "set": "room",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 420,
+      "pose": "hold",
+      "hold": "folder",
+      "mood": "normal"
+     }
+    ]
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "И у него появляется идея.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "amber",
+    "set": "room",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "happy"
+     }
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Он печатает поддельные бланки министерства.",
+   "scene": {
+    "bg": "steel",
+    "prop": "folder",
+    "big": "ПОДДЕЛКА"
+   },
+   "sfx": [
+    "typing"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "И приглашает шестерых торговцев металлом в лучший отель города.",
+   "scene": {
+    "bg": "amber",
+    "set": "office",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 500,
+      "pose": "talk"
+     },
+     {
+      "who": "dealer",
+      "x": 200,
+      "pose": "idle",
+      "face": "r"
+     },
+     {
+      "who": "poisson",
+      "x": 800,
+      "pose": "idle",
+      "face": "l"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 2,
+   "text": "Сообщает им секрет. Башню снесут. На металлолом.",
+   "say": {
+    "who": "lustig",
+    "text": "Строго между нами, господа."
+   },
+   "scene": {
+    "bg": "red",
+    "set": "office",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 500,
+      "pose": "point",
+      "mood": "angry"
+     },
+     {
+      "who": "poisson",
+      "x": 800,
+      "pose": "shock",
+      "face": "l",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Семь тысяч тонн железа достанутся тому, кто предложит больше.",
+   "scene": {
+    "bg": "green",
+    "prop": "eiffel",
+    "big": "7 000 ТОНН"
+   },
+   "sfx": [
+    "coins"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Андре Пуассон очень хочет выиграть.",
+   "scene": {
+    "bg": "amber",
+    "set": "office",
+    "actors": [
+     {
+      "who": "poisson",
+      "x": 500,
+      "pose": "talk",
+      "mood": "happy"
+     }
+    ]
+   },
+   "say": {
+    "who": "poisson",
+    "text": "Я заплачу больше всех!"
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Он платит за башню. И ещё сверху — взятку «чиновнику».",
+   "ad_before": true,
+   "tag": "dramatic",
+   "scene": {
+    "bg": "green",
+    "set": "office",
+    "actors": [
+     {
+      "who": "poisson",
+      "x": 330,
+      "pose": "hold",
+      "hold": "money"
+     },
+     {
+      "who": "lustig",
+      "x": 700,
+      "pose": "idle",
+      "face": "l",
+      "mood": "happy"
+     }
+    ]
+   },
+   "sfx": [
+    "coins"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "В тот же день Люстиг садится на поезд в Вену.",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "who": "lustig",
+      "pose": "run",
+      "face": "l",
+      "hold": "suitcase",
+      "from": 700,
+      "to": -150,
+      "t0": 0,
+      "t1": 1.8
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Пуассон понимает, что его обманули.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "office",
+    "actors": [
+     {
+      "who": "poisson",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "hit"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Но в полицию не идёт. Ему слишком стыдно.",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "who": "poisson",
+      "x": 330,
+      "pose": "idle",
+      "mood": "sad"
+     },
+     {
+      "who": "cop",
+      "x": 700,
+      "pose": "idle",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Люстиг ждёт месяц. Газеты молчат.",
+   "scene": {
+    "bg": "steel",
+    "set": "room",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 500,
+      "pose": "hold",
+      "hold": "folder",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "И он возвращается. Чтобы продать башню ещё раз.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "big": "ЕЩЁ РАЗ",
+    "actors": [
+     {
+      "who": "lustig",
+      "pose": "walk",
+      "from": -120,
+      "to": 360,
+      "t0": 0,
+      "t1": 2
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "На этот раз покупатель идёт в полицию. Люстиг снова сбегает.",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "actors": [
+     {
+      "who": "cop",
+      "pose": "run",
+      "from": -120,
+      "to": 400,
+      "t0": 0.3,
+      "t1": 2.3
+     },
+     {
+      "who": "lustig",
+      "pose": "run",
+      "from": 300,
+      "to": 1150,
+      "t0": 0,
+      "t1": 2
+     }
+    ]
+   },
+   "sfx": [
+    "siren"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Поймают его только через десять лет. В Америке. За фальшивые доллары.",
+   "scene": {
+    "bg": "steel",
+    "set": "corridor",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "gavel"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Срок он отбывал в Алькатрасе.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "cell",
+    "big": "АЛЬКАТРАС",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 600,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "А ты бы купил Эйфелеву башню у человека из министерства? Пиши в комментариях.",
+   "scene": {
+    "bg": "blue",
+    "set": "street",
+    "props": [
+     {
+      "name": "eiffel",
+      "x": 800,
+      "y": 900,
+      "s": 1.1
+     }
+    ],
+    "big": "КУПИЛ БЫ?",
+    "actors": [
+     {
+      "who": "lustig",
+      "x": 330,
+      "pose": "point",
+      "mood": "happy"
+     }
+    ]
+   }
+  }
+ ]
+}

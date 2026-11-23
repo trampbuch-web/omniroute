@@ -423,6 +423,19 @@ def p_iceberg():
     return im
 
 
+def p_eiffel():
+    im, d = _c()
+    col = (120, 90, 60)
+    d.polygon([(110, 500), (230, 260), (290, 260), (410, 500), (350, 500), (275, 330), (245, 330), (170, 500)], fill=col, outline=INK, width=8)
+    d.rectangle((200, 250, 320, 272), fill=col, outline=INK, width=6)
+    d.polygon([(225, 250), (245, 120), (275, 120), (295, 250)], fill=col, outline=INK, width=8)
+    d.rectangle((232, 112, 288, 128), fill=col, outline=INK, width=6)
+    d.polygon([(250, 112), (258, 20), (262, 20), (270, 112)], fill=col, outline=INK, width=6)
+    d.arc((170, 400, 350, 560), 180, 360, fill=INK, width=8)
+    for y in range(290, 500, 30): d.line((210 - (y - 290) * 0.4, y, 310 + (y - 290) * 0.4, y), fill=INK, width=3)
+    return im
+
+
 PROPS = {k[2:]: v for k, v in globals().items() if k.startswith("p_")}
 EMOJI2PROP = {"🕴️": "person", "👤": "person", "👷": "person", "🧑‍💻": "person", "👥": "crowd", "✈️": "plane", "🛫": "plane",
               "🚪": "door", "💰": "money", "💵": "money", "💸": "money", "📱": "phone", "✉️": "letter", "⏳": "clock",
