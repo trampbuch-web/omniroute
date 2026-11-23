@@ -58,6 +58,7 @@ const BODY = `M0 -880 q-62 0 -66 70 q-2 44 14 72 q8 30 30 42 v30 l-58 22 q-70 26
 // a generic suited figure, backlit
 const suit = (x, y, k, tint, tie = "#3a1418") => G(`translate(${x} ${y}) scale(${k})`, P(BODY, "none", `stroke="${tint}" stroke-width="14" filter="url(#t-blur2)" opacity="0.85"`) + P(BODY, "#04050a") + P("M-10 -640 h20 l8 150 l-18 26 l-18 -26 Z", tie) + P("M-34 -664 L0 -620 L34 -664 L20 -690 L0 -660 L-20 -690 Z", "#cfd5e2", 'opacity="0.55"'));
 
+let UID = 0; // unique svg ids when a scene type repeats in one episode
 const SCENES = {
   // three empty chairs in a shaft of light; the host's shadow falls across the floor
   chairs: () => ({
@@ -217,7 +218,7 @@ const SCENES = {
 
   // press approach: a lectern with a bundle of microphones, flashes from the press pack in the foreground
   press: (seg) => {
-    const C2 = { washington: ["#1a2442", "#ffd98a", "#2b4ac8"], moscow: ["#2a0e12", "#9fc4ff", "#8a1016"], kyiv: ["#0e2236", "#ffe27a", "#1f5fae"] }[seg.city || "washington"];
+    const C2 = { washington: ["#1a2442", "#ffd98a", "#2b4ac8"], moscow: ["#2a0e12", "#9fc4ff", "#8a1016"], kyiv: ["#0e2236", "#ffe27a", "#1f5fae"], helsinki: ["#0e1a36", "#cfe0ff", "#1f4fae"] }[seg.city || "washington"];
     const mics = times(7, (i) => { const a = -0.6 + i * 0.2; return L(`M540 1160 L${540 + Math.sin(a) * 120} ${1010 - Math.cos(a) * 30}`, "#1d1f27", 7) + E(540 + Math.sin(a) * 124, 1004 - Math.cos(a) * 30, 18, 24, ["#e3262f", "#1d1f27", "#2b4ac8", "#e2b25a", "#1d1f27", "#f4f4f4", "#3a6fb8"][i]) + R(526 + Math.sin(a) * 124, 1024 - Math.cos(a) * 30, 28, 18, ["#e3262f", "#2b4ac8", "#1d1f27", "#f4f4f4", "#e3262f", "#1d1f27", "#e2b25a"][i], 'rx="3"'); });
     const pack = times(9, (i) => { const x = 40 + i * 125 + (i % 2) * 20, y = 1830 - (i % 3) * 40; return G(`translate(${x} ${y})`, E(0, -150, 70, 84, "#020306") + P("M-120 0 q0 -120 120 -120 q120 0 120 120 Z", "#020306") + (i % 3 !== 1 ? G(`translate(${(i % 2 ? 40 : -50)} -250)`, R(-46, -34, 92, 62, "#0b0d14", 'rx="8"') + C(0, -2, 22, "#1b2233") + `<circle class="flash" data-i="${i}" cx="${i % 2 ? 30 : -30}" cy="-30" r="22" fill="#fff" opacity="0"/>`) : "")); });
     return {
@@ -528,6 +529,48 @@ const SCENES = {
       root.querySelector("#em-car").setAttribute("transform", `translate(${lerp(300, 1500, io((p - 0.3) / 0.7))} 1640)`);
       root.querySelectorAll(".em-w").forEach((e, i) => e.setAttribute("opacity", Math.sin(lt * 0.7 + i * 1.7) > 0.85 ? 0.15 : 0.7));
       root.querySelectorAll(".em-rain").forEach((e) => { const x = +e.dataset.x, y = ((lt * 1.1 + +e.dataset.p) % 1) * 1920; e.setAttribute("d", `M${x} ${y} l-8 70`); });
+    },
+  }),
+  // open sea at night: a cargo ship on the swell, two drones dive, fire and smoke on deck (seg.big, seg.burn)
+  sea: (seg, u = ++UID) => ({
+    svg: `<defs><linearGradient id="se-sky${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#081028"/><stop offset="1" stop-color="#22355e"/></linearGradient>` +
+      `<radialGradient id="se-fireg${u}"><stop offset="0" stop-color="#ffe9a0"/><stop offset="0.4" stop-color="#ff8a2a"/><stop offset="1" stop-color="#ff3a1a" stop-opacity="0"/></radialGradient></defs>` +
+      R(0, 0, 1080, 1920, `url(#se-sky${u})`) + LY(0.1, times(50, () => C(rnd() * 1280 - 100, rnd() * 800, 1 + rnd() * 2, "#fff", `opacity="${0.2 + rnd() * 0.5}"`)) + C(220, 300, 60, "#e9e4c8", 'opacity="0.8"')) +
+      (seg.big ? T(540, 460, seg.big, 80, "#fff", 'text-anchor="middle" font-weight="900" letter-spacing="5" opacity="0.92"') : "") +
+      LY(0.2, R(-100, 1010, 1280, 8, "#3a4a72") + P("M-100 1018 L60 990 L200 1012 L1180 1000 V1030 H-100 Z", "#141c36")) +
+      LY(0.35, R(-100, 1020, 1280, 900, "#0b1430") + times(18, (i) => `<path class="se-wave" data-i="${i}" d="" fill="none" stroke="#4a6aa8" stroke-width="${3 + i * 0.4}" opacity="${0.25 + i * 0.02}"/>`) + E(220, 1100, 40, 300, "#e9e4c8", 'opacity="0.08"')) +
+      LY(0.6, `<g id="se-ship">${P("M180 1180 L900 1180 L860 1290 L230 1290 Z", "#1a1f30")}${R(240, 1150, 600, 30, "#2a3248")}${times(5, (i) => R(270 + i * 110, 1090, 90, 60, ["#8a3a2a", "#2a5a8a", "#6a6a3a", "#3a6a5a", "#7a2a3a"][i]))}${R(760, 1010, 90, 140, "#2e3652")}${R(774, 1030, 60, 24, "#ffe2a0", 'opacity="0.7"')}${R(796, 960, 14, 50, "#2e3652")}` +
+        `<g id="se-fire" opacity="0">${E(470, 1080, 150, 90, `url(#se-fireg${u})`)}${times(8, (i) => `<circle class="se-smoke" data-i="${i}" r="40" fill="#2a2a30" opacity="0.6"/>`)}</g>` + T(540, 1250, seg.ship || "SPARTA II", 30, "#8d95a3", 'text-anchor="middle" letter-spacing="4"') + `</g>`) +
+      LY(0.9, times(2, (i) => `<g class="se-drone" data-i="${i}">${P("M-30 0 L30 0 L0 -10 Z", "#05070d")}${R(-40, -4, 80, 4, "#05070d")}${C(-34, -6, 6, RED, 'class="se-led"')}</g>`)) +
+      LY(1.1, R(-100, 1700, 1280, 220, "#060a18", 'opacity="0.6"')),
+    update(root, p, lt) {
+      root.querySelectorAll(".se-wave").forEach((e) => { const i = +e.dataset.i, y = 1050 + i * 48 + i * i * 2; let d = `M-100 ${y}`; for (let x = -100; x <= 1180; x += 60) d += ` L${x} ${y + Math.sin(x / (90 + i * 6) + lt * (0.8 + i * 0.05) + i) * (4 + i * 0.8)}`; e.setAttribute("d", d); });
+      root.querySelector("#se-ship").setAttribute("transform", `translate(0 ${Math.sin(lt * 0.9) * 8}) rotate(${Math.sin(lt * 0.7) * 1.2} 540 1200)`);
+      const hit = seg.burn ? 0 : 0.45, f = seg.burn ? 1 : ease((p - hit) / 0.12);
+      root.querySelectorAll(".se-drone").forEach((e) => { const i = +e.dataset.i, q = seg.burn ? 2 : clamp(p / hit), x = lerp(i ? 1200 : -150, 430 + i * 90, q), y = lerp(500 + i * 80, 1080, q * q); e.setAttribute("transform", `translate(${x} ${y + Math.sin(lt * 9 + i) * 4}) rotate(${(i ? -1 : 1) * 25 * q})`); e.setAttribute("opacity", q >= 1 ? 0 : 1); });
+      root.querySelector("#se-fire").setAttribute("opacity", f * (0.8 + 0.2 * Math.sin(lt * 13)));
+      root.querySelectorAll(".se-smoke").forEach((e) => { const i = +e.dataset.i, k = (lt * 0.25 + i / 8) % 1; e.setAttribute("cx", 470 + Math.sin(i * 2.1) * 40 + k * 160); e.setAttribute("cy", 1060 - k * 700); e.setAttribute("r", 40 + k * 120); e.setAttribute("opacity", 0.55 * (1 - k)); });
+      root.querySelectorAll(".se-led").forEach((e) => e.setAttribute("opacity", Math.sin(lt * 10) > 0 ? 1 : 0.2));
+    },
+  }),
+
+  // a southern port at night: cranes, a warship at the pier under a column of smoke (seg.big, seg.sign)
+  port: (seg, u = ++UID) => ({
+    svg: `<defs><linearGradient id="po-sky${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1a0f24"/><stop offset="0.6" stop-color="#5a2a3a"/><stop offset="1" stop-color="#8a4a3a"/></linearGradient></defs>` +
+      R(0, 0, 1080, 1920, `url(#po-sky${u})`) + LY(0.1, times(30, () => C(rnd() * 1280 - 100, rnd() * 600, 1 + rnd() * 2, "#fff", `opacity="${0.2 + rnd() * 0.4}"`))) +
+      (seg.big ? T(540, 420, seg.big, 110, "#fff", 'text-anchor="middle" font-weight="900" letter-spacing="6" opacity="0.92"') : "") +
+      LY(0.2, times(9, (i) => { const x = -60 + i * 140, h = 120 + ((i * 97) % 160); return R(x, 1000 - h, 110, h, "#2a1a2a") + (i % 2 ? R(x + 20, 1020 - h, 16, 20, "#ffd98a", 'opacity="0.6"') : ""); }) + P("M700 1000 V760 l14 -60 14 60 V1000 Z", "#2a1a2a")) +
+      LY(0.35, times(3, (i) => { const x = 120 + i * 360; return R(x, 620, 16, 400, "#3a2a3a") + R(x - 140, 620, 300, 14, "#3a2a3a") + L(`M${x - 120} 634 V${760 + i * 40}`, "#3a2a3a", 3) + C(x + 8, 612, 7, RED, 'class="po-blink"'); })) +
+      LY(0.45, `<g id="po-smoke">${times(10, (i) => `<circle class="po-sm" data-i="${i}" r="50" fill="#1a1418"/>`)}</g>`) +
+      LY(0.55, R(-100, 1000, 1280, 920, "#120c18") + R(-100, 1000, 1280, 40, "#4a3a3a") + times(14, (i) => R(-100 + i * 95, 1040, 6, 880, "#e9b27a", `class="po-ref" data-i="${i}" opacity="0.12"`))) +
+      LY(0.7, P("M160 980 L940 980 L900 1080 L210 1080 Z", "#1c1a24") + P("M380 980 V900 h120 v-50 h60 v50 h80 V980 Z", "#24222e") + R(520, 790, 10, 70, "#24222e") + R(300, 950, 60, 30, "#24222e") + R(700, 950, 120, 30, "#24222e") +
+        `<g id="po-glow">${E(560, 930, 220, 110, "#ff7a2a", 'opacity="0.35"')}${E(560, 940, 120, 60, "#ffd08a", 'opacity="0.5"')}</g>` + T(560, 1060, seg.ship || "", 28, "#8d95a3", 'text-anchor="middle" letter-spacing="4"')) +
+      LY(1.1, R(-100, 1640, 1280, 280, "#2a2d3c") + R(-100, 1640, 1280, 8, "#4a4f66") + R(560, 1130, 440, 90, "#0f1428", `stroke="#cfe0ff" stroke-width="3" stroke-opacity="0.5" rx="8"`) + T(780, 1190, seg.sign || tr("ЛИВИЯ · БЕНГАЗИ", "LIBYA · BENGHAZI"), 38, "#cfe0ff", 'text-anchor="middle" font-weight="700" letter-spacing="3"')),
+    update(root, p, lt) {
+      root.querySelectorAll(".po-sm").forEach((e) => { const i = +e.dataset.i, k = (lt * 0.18 + i / 10) % 1; e.setAttribute("cx", 560 + Math.sin(i * 1.7) * 30 - k * 220); e.setAttribute("cy", 900 - k * 800); e.setAttribute("r", 50 + k * 160); e.setAttribute("opacity", 0.75 * (1 - k)); });
+      root.querySelector("#po-glow").setAttribute("opacity", 0.7 + 0.3 * Math.sin(lt * 7) * Math.sin(lt * 3.1));
+      root.querySelectorAll(".po-ref").forEach((e) => e.setAttribute("opacity", 0.06 + 0.1 * Math.abs(Math.sin(lt * 1.3 + +e.dataset.i))));
+      root.querySelectorAll(".po-blink").forEach((e) => e.setAttribute("opacity", Math.sin(lt * 4) > 0 ? 1 : 0.2));
     },
   }),
 };
