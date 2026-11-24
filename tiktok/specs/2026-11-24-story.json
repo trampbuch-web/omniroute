@@ -320,8 +320,7 @@
      {
       "who": "doyle",
       "x": 500,
-      "pose": "hold",
-      "hold": "key",
+      "pose": "talk",
       "mood": "normal"
      }
     ]
