@@ -1,0 +1,541 @@
+{
+ "id": "agatha-christie-1926",
+ "kind": "story",
+ "style": "comic",
+ "horror": true,
+ "voice": "narrator2",
+ "tempo": 1.28,
+ "gap": 0.1,
+ "cast": {
+  "agatha": {
+   "top": "coat",
+   "hair": "long",
+   "color": [
+    120,
+    60,
+    80
+   ],
+   "hair_color": [
+    120,
+    80,
+    50
+   ],
+   "pants": [
+    60,
+    40,
+    50
+   ],
+   "skin": [
+    242,
+    206,
+    180
+   ]
+  },
+  "archie": {
+   "top": "suit",
+   "hair": "short",
+   "color": [
+    50,
+    60,
+    80
+   ],
+   "pants": [
+    40,
+    44,
+    56
+   ],
+   "mustache": true,
+   "hair_color": [
+    70,
+    50,
+    30
+   ]
+  },
+  "det": {
+   "top": "coat",
+   "hair": "fedora",
+   "color": [
+    90,
+    80,
+    70
+   ],
+   "pants": [
+    50,
+    46,
+    40
+   ]
+  },
+  "doyle": {
+   "top": "suit",
+   "hair": "bald",
+   "color": [
+    70,
+    60,
+    50
+   ],
+   "pants": [
+    50,
+    44,
+    36
+   ],
+   "mustache": true,
+   "skin": [
+    236,
+    190,
+    160
+   ]
+  },
+  "musician": {
+   "top": "suit",
+   "hair": "short",
+   "color": [
+    30,
+    30,
+    40
+   ],
+   "pants": [
+    24,
+    24,
+    30
+   ],
+   "hair_color": [
+    20,
+    18,
+    16
+   ],
+   "glasses": true
+  }
+ },
+ "episodes": {
+  "1": {
+   "title": "ИСЧЕЗНОВЕНИЕ",
+   "date": "03.12.1926",
+   "music": "m3"
+  },
+  "2": {
+   "title": "ПОИСКИ",
+   "date": "04—13.12.1926",
+   "music": "m1"
+  },
+  "3": {
+   "title": "ХАРРОГЕЙТ",
+   "date": "14.12.1926",
+   "music": "m2"
+  },
+  "4": {
+   "title": "МОЛЧАНИЕ",
+   "date": "1926 — 1976",
+   "music": "m3"
+  }
+ },
+ "description": "Королева детективов исчезла на 11 дней. А нашлась под именем любовницы мужа 🕵️‍♀️\nРеклама: LuxerVPN — ищи @LuxerVpnBot в Telegram\n#luxerpvn #история #агатакристи #загадка #детектив",
+ "lines": [
+  {
+   "ep": 1,
+   "text": "Самая известная писательница детективов однажды исчезла сама. На одиннадцать дней.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "purple",
+    "set": "room",
+    "weather": "dust",
+    "big": "11 ДНЕЙ",
+    "actors": [
+     {
+      "who": "agatha",
+      "x": 500,
+      "pose": "idle",
+      "mood": "sad"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Англия. Декабрь тысяча девятьсот двадцать шестого.",
+   "scene": {
+    "bg": "navy",
+    "set": "street",
+    "weather": "rain",
+    "reflect": true,
+    "sub": "АНГЛИЯ · 03.12.1926"
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Агата Кристи поздно вечером уходит из дома. Садится в машину.",
+   "scene": {
+    "bg": "navy",
+    "set": "street",
+    "weather": "rain",
+    "reflect": true,
+    "props": [
+     {
+      "name": "car",
+      "x": 760,
+      "y": 930,
+      "s": 0.7
+     }
+    ],
+    "actors": [
+     {
+      "who": "agatha",
+      "pose": "walk",
+      "from": -120,
+      "to": 520,
+      "t0": 0,
+      "t1": 2.2
+     }
+    ]
+   }
+  },
+  {
+   "ep": 1,
+   "text": "Утром её машину находят у обрыва. Фары горят. Внутри — шуба и чемодан.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "forest",
+    "weather": "fog",
+    "props": [
+     {
+      "name": "car",
+      "x": 520,
+      "y": 930,
+      "s": 0.8
+     }
+    ],
+    "actors": [
+     {
+      "who": "det",
+      "x": 200,
+      "pose": "point",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "hit"
+   ]
+  },
+  {
+   "ep": 1,
+   "text": "Самой Агаты нет.",
+   "scene": {
+    "bg": "dark",
+    "set": "forest",
+    "weather": "fog",
+    "big": "НИКОГО"
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Начинаются крупнейшие поиски в истории Англии.",
+   "scene": {
+    "bg": "dark",
+    "set": "forest",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "det",
+      "pose": "sneak",
+      "hold": "flashlight",
+      "from": -120,
+      "to": 450,
+      "t0": 0,
+      "t1": 2.4
+     }
+    ]
+   },
+   "sfx": [
+    "siren"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Тысячи полицейских и добровольцев прочёсывают леса и пруды.",
+   "scene": {
+    "bg": "dark",
+    "set": "forest",
+    "weather": "fog",
+    "actors": [
+     {
+      "who": "det",
+      "x": 250,
+      "pose": "point"
+     },
+     {
+      "who": "archie",
+      "x": 650,
+      "pose": "sneak",
+      "face": "l"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Подозрение падает на мужа. У него есть любовница.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "office",
+    "actors": [
+     {
+      "who": "archie",
+      "x": 600,
+      "pose": "talk",
+      "face": "l",
+      "mood": "angry"
+     },
+     {
+      "who": "det",
+      "x": 300,
+      "pose": "point",
+      "mood": "angry"
+     }
+    ]
+   },
+   "say": {
+    "who": "archie",
+    "text": "Я ничего не знаю!"
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Даже Конан Дойл, отец Шерлока Холмса, относит её перчатку медиуму.",
+   "scene": {
+    "bg": "purple",
+    "set": "room",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "doyle",
+      "x": 500,
+      "pose": "hold",
+      "hold": "key",
+      "mood": "normal"
+     }
+    ]
+   },
+   "sfx": [
+    "whisper"
+   ]
+  },
+  {
+   "ep": 2,
+   "text": "Газеты пишут одно: её убили.",
+   "ad_before": true,
+   "scene": {
+    "bg": "steel",
+    "prop": "folder",
+    "big": "УБИЙСТВО?"
+   },
+   "sfx": [
+    "static"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "А в это время на курорте в Харрогейте живёт тихая гостья.",
+   "scene": {
+    "bg": "amber",
+    "set": "cafe",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "agatha",
+      "x": 320,
+      "pose": "idle",
+      "mood": "happy"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 3,
+   "text": "Она поёт, танцует, читает газеты о собственном исчезновении.",
+   "scene": {
+    "bg": "amber",
+    "set": "cafe",
+    "weather": "dust",
+    "actors": [
+     {
+      "who": "agatha",
+      "x": 500,
+      "pose": "hold",
+      "hold": "folder",
+      "mood": "happy"
+     }
+    ]
+   },
+   "sfx": [
+    "glitch"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Она записалась под чужой фамилией.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "big": "ЧУЖОЕ ИМЯ"
+   },
+   "sfx": [
+    "hit"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Под фамилией любовницы своего мужа.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "red",
+    "set": "cafe",
+    "actors": [
+     {
+      "who": "agatha",
+      "x": 500,
+      "y": 1450,
+      "s": 2.2,
+      "pose": "idle",
+      "mood": "normal"
+     }
+    ]
+   },
+   "sfx": [
+    "impact"
+   ]
+  },
+  {
+   "ep": 3,
+   "text": "Её узнаёт музыкант из гостиничного оркестра.",
+   "scene": {
+    "bg": "amber",
+    "set": "cafe",
+    "actors": [
+     {
+      "who": "musician",
+      "x": 700,
+      "pose": "point",
+      "face": "l",
+      "mood": "wide"
+     },
+     {
+      "who": "agatha",
+      "x": 300,
+      "pose": "idle"
+     }
+    ]
+   },
+   "say": {
+    "who": "musician",
+    "text": "Это же она!"
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Муж приезжает за ней. Она будто не узнаёт его.",
+   "scene": {
+    "bg": "steel",
+    "set": "cafe",
+    "actors": [
+     {
+      "who": "archie",
+      "pose": "walk",
+      "face": "l",
+      "from": 1150,
+      "to": 650,
+      "t0": 0,
+      "t1": 2
+     },
+     {
+      "who": "agatha",
+      "x": 320,
+      "pose": "idle",
+      "mood": "wide"
+     }
+    ]
+   },
+   "sfx": [
+    "heartbeat"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Врачи говорят: потеря памяти.",
+   "scene": {
+    "bg": "steel",
+    "set": "office",
+    "actors": [
+     {
+      "who": "det",
+      "x": 500,
+      "pose": "talk",
+      "mood": "sad"
+     }
+    ]
+   }
+  },
+  {
+   "ep": 4,
+   "text": "Сама Агата за всю жизнь не сказала об этом ни слова.",
+   "tag": "dramatic",
+   "scene": {
+    "bg": "dark",
+    "set": "room",
+    "big": "НИ СЛОВА",
+    "actors": [
+     {
+      "who": "agatha",
+      "x": 500,
+      "pose": "lookup",
+      "mood": "sad"
+     }
+    ]
+   },
+   "sfx": [
+    "boom"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Даже в автобиографии этих одиннадцати дней просто нет.",
+   "scene": {
+    "bg": "dark",
+    "prop": "folder",
+    "big": "ПУСТО"
+   },
+   "sfx": [
+    "ring"
+   ]
+  },
+  {
+   "ep": 4,
+   "text": "Как думаешь, что это было: месть, побег или болезнь? Пиши в комментариях.",
+   "scene": {
+    "bg": "purple",
+    "set": "street",
+    "weather": "rain",
+    "reflect": true,
+    "big": "ЧТО ЭТО БЫЛО?",
+    "actors": [
+     {
+      "who": "agatha",
+      "x": 500,
+      "pose": "idle",
+      "mood": "normal"
+     }
+    ]
+   }
+  }
+ ]
+}
